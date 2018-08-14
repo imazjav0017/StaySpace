@@ -12,10 +12,19 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
+import com.rent.rentmanagement.renttest.TenantFragments.AvailableRoomsFragment;
+import com.rent.rentmanagement.renttest.TenantFragments.MainPageFragment;
 import com.rent.rentmanagement.renttest.TenantFragments.TenantProfileFragment;
+
+import java.net.URISyntaxException;
 
 public class TenantActivity extends AppCompatActivity {
 
@@ -41,15 +50,19 @@ public class TenantActivity extends AppCompatActivity {
             Fragment fragment=null;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    fragment=new MainPageFragment();
+                    loadFragment(fragment);
                     return true;
                 case R.id.navigation_dashboard:
+                    fragment=new AvailableRoomsFragment(getApplicationContext());
+                    loadFragment(fragment);
                     return true;
                 case R.id.navigation_notifications:
                     fragment=new TenantProfileFragment();
                     loadFragment(fragment);
                     return true;
             }
-            return false;
+            return true;
         }
     };
 
@@ -57,12 +70,20 @@ public class TenantActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tenant);
-
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("Tenant Side");
+        loadFragment(new MainPageFragment());
+
+
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -80,9 +101,9 @@ public class TenantActivity extends AppCompatActivity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
                             Log.i("status","logout");
                             LoginActivity.sharedPreferences.edit().clear().apply();
+                            //socket.disconnect();
                             Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(i);
 
@@ -105,5 +126,6 @@ public class TenantActivity extends AppCompatActivity {
                     }
                 }).setNegativeButton("No",null).show();
     }
+
 }
 

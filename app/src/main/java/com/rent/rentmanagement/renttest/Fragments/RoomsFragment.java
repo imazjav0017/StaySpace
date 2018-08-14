@@ -309,10 +309,7 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
         adapter3.notifyDataSetChanged();
 
 
-        /*else {
-        EmptyRoomsFragment.emptyList.setVisibility(View.VISIBLE);
-        EmptyRoomsFragment.emptyList.setClickable(true);
-    }*/
+
     }
 
 

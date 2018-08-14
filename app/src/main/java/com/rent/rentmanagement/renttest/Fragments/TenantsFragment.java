@@ -1,6 +1,8 @@
 package com.rent.rentmanagement.renttest.Fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,10 +23,14 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 import com.rent.rentmanagement.renttest.Adapters.TotalTenantsAdapter;
 import com.rent.rentmanagement.renttest.DataModels.StudentModel;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
+import com.rent.rentmanagement.renttest.Tenants.TenantActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +43,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +65,7 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
     public TenantsFragment(Context context) {
         this.context = context;
     }
+
     RecyclerView totalTenants;
     public static List<StudentModel> studentModelList;
   public static TotalTenantsAdapter adapter;
@@ -218,6 +226,8 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
         setHasOptionsMenu(true);
 
     }
+
+
     //to check if string has only numbers
     boolean isNumber(String s)
     {
