@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin=".1dp"
+    android:layout_marginTop="2dp"
+    app:cardBackgroundColor="#fff"
+    android:layout_height="wrap_content">
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_margin=".1dp"
+        android:id="@+id/c3"
+        android:background="#ffffff">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ima"
+                android:id="@+id/circleImageView" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+
+                >
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    >
+                    <TextView
+                        android:id="@+id/studentRequestName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Nitish Kumar"
+                        android:textColor="#424242"
+                        android:textSize="18sp" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                       android:textColor="#0e2efd"
+                        android:text="Room no :10"
+                        android:id="@+id/requestingRoomNo"
+                        android:textSize="20sp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Accept"
+                            android:id="@+id/acceptRequestBtn"
+                            android:layout_gravity="center"
+                            />
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Reject"
+                            android:id="@+id/rejectRequestButton"
+                            android:layout_gravity="center"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/callRequestingButton"
+                    android:layout_width="35dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/ic_action_call" />
+
+                <Button
+                    android:id="@+id/messageRequestButton"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/ic_action_name" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

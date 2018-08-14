@@ -1,4 +1,4 @@
-package com.rent.rentmanagement.renttest.TenantFragments;
+package com.rent.rentmanagement.renttest.Tenants.TenantFragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.rent.rentmanagement.renttest.DataModels.AvailableRoomModel;
-import com.rent.rentmanagement.renttest.DataModels.RoomModel;
+import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Tenants.Adapters.AvailableRoomsAdapter;
 import com.rent.rentmanagement.renttest.Tenants.Async.GetAvailableRoomsTask;
@@ -72,10 +72,13 @@ public class AvailableRoomsFragment extends Fragment {
 
     public void getData() throws JSONException {
         JSONObject obj=new JSONObject();
-        obj.put("auth","abc");
-        GetAvailableRoomsTask task=new GetAvailableRoomsTask(context);
-        task.execute("https://sleepy-atoll-65823.herokuapp.com/students/getEmptyRooms",obj.toString());
-    }
+        String auth= LoginActivity.sharedPreferences.getString("token",null);
+        if(auth!=null) {
+            obj.put("auth", auth);
+            GetAvailableRoomsTask task = new GetAvailableRoomsTask(context);
+            task.execute("https://sleepy-atoll-65823.herokuapp.com/students/getEmptyRooms", obj.toString());
+        }
+        }
     public static void setData(String s,Context c) throws JSONException
     {
         if(s!=null)

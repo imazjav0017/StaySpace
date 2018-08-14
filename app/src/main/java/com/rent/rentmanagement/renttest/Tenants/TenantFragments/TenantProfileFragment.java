@@ -1,6 +1,5 @@
-package com.rent.rentmanagement.renttest.TenantFragments;
+package com.rent.rentmanagement.renttest.Tenants.TenantFragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;

@@ -68,14 +68,16 @@ public class LoginActivity extends AppCompatActivity {
             Log.i("respone111",jsonObject.toString());
             sharedPreferences.edit().putBoolean("isOwner",jsonObject.getBoolean("isOwner")).apply();
             sharedPreferences.edit().putString("ownerDetails",jsonObject.toString()).apply();
-            LoginActivity.sharedPreferences.edit().putInt("occupiedRoomsCount", tokenJson.getInt("occupiedRoomsCount")).apply();
-            LoginActivity.sharedPreferences.edit().putInt("emptyRoomsCount", tokenJson.getInt("emptyRoomsCount")).apply();
-            LoginActivity.sharedPreferences.edit().putInt("notCollected", tokenJson.getInt("notCollected")).apply();
-            LoginActivity.sharedPreferences.edit().putInt("totalRooms", Integer.parseInt(tokenJson.getString("totalRooms"))).apply();
-            LoginActivity.sharedPreferences.edit().putInt("totalTenants",tokenJson.getInt("totalStudents")).apply();
-            LoginActivity.sharedPreferences.edit().putString("totalIncome", tokenJson.getString("totalIncome")).apply();
-            LoginActivity.sharedPreferences.edit().putString("todayIncome", tokenJson.getString("todayIncome")).apply();
-            LoginActivity.sharedPreferences.edit().putString("collected",tokenJson.getString("collected")).apply();
+            if(jsonObject.getBoolean("isOwner")==true) {
+                LoginActivity.sharedPreferences.edit().putInt("occupiedRoomsCount", tokenJson.getInt("occupiedRoomsCount")).apply();
+                LoginActivity.sharedPreferences.edit().putInt("emptyRoomsCount", tokenJson.getInt("emptyRoomsCount")).apply();
+                LoginActivity.sharedPreferences.edit().putInt("notCollected", tokenJson.getInt("notCollected")).apply();
+                LoginActivity.sharedPreferences.edit().putInt("totalRooms", Integer.parseInt(tokenJson.getString("totalRooms"))).apply();
+                LoginActivity.sharedPreferences.edit().putInt("totalTenants", tokenJson.getInt("totalStudents")).apply();
+                LoginActivity.sharedPreferences.edit().putString("totalIncome", tokenJson.getString("totalIncome")).apply();
+                LoginActivity.sharedPreferences.edit().putString("todayIncome", tokenJson.getString("todayIncome")).apply();
+                LoginActivity.sharedPreferences.edit().putString("collected", tokenJson.getString("collected")).apply();
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

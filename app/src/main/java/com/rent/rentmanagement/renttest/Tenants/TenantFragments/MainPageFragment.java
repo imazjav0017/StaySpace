@@ -1,4 +1,4 @@
-package com.rent.rentmanagement.renttest.TenantFragments;
+package com.rent.rentmanagement.renttest.Tenants.TenantFragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

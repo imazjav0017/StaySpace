@@ -15,12 +15,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.rent.rentmanagement.renttest.AsyncTasks.GetRoomRequestsTask;
+import com.rent.rentmanagement.renttest.DataModels.TenantRequestModel;
+import com.rent.rentmanagement.renttest.Fragments.AllTenantsFragment;
 import com.rent.rentmanagement.renttest.Fragments.OwnerProfileFragment;
 import com.rent.rentmanagement.renttest.Fragments.ProfileFragment;
 import com.rent.rentmanagement.renttest.Fragments.RoomsFragment;
 import com.rent.rentmanagement.renttest.Fragments.TenantsFragment;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
    public static BottomNavigationView bottomNavigationView;
@@ -93,6 +102,18 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         loadFragment(new ProfileFragment(MainActivity.this));
         else
             loadFragment(new RoomsFragment(MainActivity.this));
+        //getRoomRequestsList
+        JSONObject object=new JSONObject();
+        if(LoginActivity.sharedPreferences.getString("token",null)!=null)
+        {
+            try {
+                object.put("auth",LoginActivity.sharedPreferences.getString("token",null));
+                GetRoomRequestsTask task=new GetRoomRequestsTask(getApplicationContext());
+                task.execute("https://sleepy-atoll-65823.herokuapp.com/students/getRoomRequest",object.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -111,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.tenantsViewiTem:
                 fab.setVisibility(View.INVISIBLE);
 
-                fragment=new TenantsFragment(MainActivity.this);
+                fragment=new AllTenantsFragment(MainActivity.this);
                 Log.i("current","tenants");
                 break;
             case R.id.myProfileViewTab:
@@ -175,6 +196,29 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                         }
                     }).setNegativeButton("No",null).show();
         }
+    }
+
+   public static ArrayList<TenantRequestModel> tenantRequestModels;
+    public static int REQUESTSSET=0;
+    //store RoomRequests in a static arrayList
+    public static void setRequestsData(String s) throws JSONException {
+       tenantRequestModels=new ArrayList<>();
+       JSONObject object=new JSONObject(s);
+       String _id,name,roomNo;
+        JSONArray tenants=object.getJSONArray("tenant");
+        JSONArray roomNoArray=object.getJSONArray("roomNo");
+        tenantRequestModels.clear();
+        for(int i=0;i<tenants.length();i++)
+        {
+            JSONObject tenantDetails=tenants.getJSONObject(i);;
+            roomNo=roomNoArray.getString(i);
+            _id=tenantDetails.getString("_id");
+            name=tenantDetails.getString("name");
+            tenantRequestModels.add(new TenantRequestModel(name,_id,roomNo));
+
+        }
+        REQUESTSSET=1;
+
     }
 
 }

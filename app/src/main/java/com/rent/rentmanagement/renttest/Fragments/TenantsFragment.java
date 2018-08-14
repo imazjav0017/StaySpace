@@ -333,7 +333,7 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v=inflater.inflate(R.layout.activity_total_tenantsctivity,container,false);
+        View v=inflater.inflate(R.layout.owner_tenant_all,container,false);
         totalTenants=(RecyclerView)v.findViewById(R.id.totalStudentsList);
         empty=(TextView)v.findViewById(R.id.noTenantsText);
         onlyRooms=(CheckBox)v.findViewById(R.id.roomsOnlySearchFilter);

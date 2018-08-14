@@ -5,10 +5,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.rent.rentmanagement.renttest.Tenants.TenantFragments.AvailableRoomsFragment;
-
-import org.json.JSONException;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -18,10 +14,10 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
-public class GetAvailableRoomsTask extends AsyncTask<String,Integer,String> {
+public class RoomRequestTask extends AsyncTask<String,Integer,String> {
     Context context;
 
-    public GetAvailableRoomsTask(Context context) {
+    public RoomRequestTask(Context context) {
         this.context = context;
     }
 
@@ -39,7 +35,7 @@ public class GetAvailableRoomsTask extends AsyncTask<String,Integer,String> {
             outputStream.writeBytes(params[1]);
             Log.i("data", params[1]);
             int resp = connection.getResponseCode();
-            Log.i("getAvaRoomsResp",String.valueOf(resp));
+            Log.i("RoomRequestSentResp",String.valueOf(resp));
             if(resp==200)
             {
                 String response=getResponse(connection);
@@ -65,13 +61,8 @@ public class GetAvailableRoomsTask extends AsyncTask<String,Integer,String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         if (s != null) {
-
-            Log.i("availableRooms", s);
-            try {
-                AvailableRoomsFragment.setData(s,context);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            Toast.makeText(context, "Request Sent!", Toast.LENGTH_SHORT).show();
+            Log.i("RoomRequestTask", s);
         }
         else
         {

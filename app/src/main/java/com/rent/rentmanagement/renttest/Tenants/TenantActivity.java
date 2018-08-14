@@ -12,19 +12,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
-import com.github.nkzawa.emitter.Emitter;
-import com.github.nkzawa.socketio.client.IO;
-import com.github.nkzawa.socketio.client.Socket;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
-import com.rent.rentmanagement.renttest.TenantFragments.AvailableRoomsFragment;
-import com.rent.rentmanagement.renttest.TenantFragments.MainPageFragment;
-import com.rent.rentmanagement.renttest.TenantFragments.TenantProfileFragment;
-
-import java.net.URISyntaxException;
+import com.rent.rentmanagement.renttest.Tenants.TenantFragments.AvailableRoomsFragment;
+import com.rent.rentmanagement.renttest.Tenants.TenantFragments.MainPageFragment;
+import com.rent.rentmanagement.renttest.Tenants.TenantFragments.TenantProfileFragment;
 
 public class TenantActivity extends AppCompatActivity {
 

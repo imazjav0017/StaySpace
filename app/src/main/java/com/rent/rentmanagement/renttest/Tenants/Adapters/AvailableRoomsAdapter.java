@@ -11,7 +11,12 @@ import android.widget.TextView;
 
 import com.rent.rentmanagement.renttest.DataModels.AvailableRoomModel;
 import com.rent.rentmanagement.renttest.DataModels.RoomModel;
+import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
+import com.rent.rentmanagement.renttest.Tenants.Async.RoomRequestTask;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -29,7 +34,7 @@ public class AvailableRoomsAdapter extends RecyclerView.Adapter<AvailableRoomsAd
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final AvailableRoomModel model=roomModelList.get(position);
         holder.roomNo.setText("RoomNo. "+model.getRoomNo());
         holder.roomType.setText(", "+model.getRoomType());
@@ -39,6 +44,23 @@ public class AvailableRoomsAdapter extends RecyclerView.Adapter<AvailableRoomsAd
             @Override
             public void onClick(View view) {
                 Log.i("sending ","request");
+                //making JSON with auth, tenantName,roomId
+                JSONObject requestObject=new JSONObject();
+                try {
+                    String auth=LoginActivity.sharedPreferences.getString("token",null);
+                    String userDetails=LoginActivity.sharedPreferences.getString("ownerDetails",null);
+                    //to extract tenant name
+                    JSONObject user=new JSONObject(userDetails);
+                    String tenantName=user.getString("name");
+                    if(auth!=null && tenantName!=null)
+                    requestObject.put("auth",auth);
+                    requestObject.put("roomId",model.get_id());
+                    requestObject.put("name",tenantName);
+                    RoomRequestTask task=new RoomRequestTask(holder.context);
+                    task.execute("https://sleepy-atoll-65823.herokuapp.com/students/sendRoomRequest",requestObject.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
