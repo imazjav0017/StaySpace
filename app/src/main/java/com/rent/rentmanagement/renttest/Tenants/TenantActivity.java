@@ -1,6 +1,7 @@
 package com.rent.rentmanagement.renttest.Tenants;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,11 +14,19 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.rent.rentmanagement.renttest.DataModels.AvailableRoomModel;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Tenants.TenantFragments.AvailableRoomsFragment;
 import com.rent.rentmanagement.renttest.Tenants.TenantFragments.MainPageFragment;
 import com.rent.rentmanagement.renttest.Tenants.TenantFragments.TenantProfileFragment;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TenantActivity extends AppCompatActivity {
 
@@ -69,10 +78,39 @@ public class TenantActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setTitle("Tenant Side");
         loadFragment(new MainPageFragment());
-
-
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(getApplicationContext(),GetAvailableRoomsService.class));
+    }
+    //store the available rooms in static array list
+    public static List<AvailableRoomModel> availableRooms;
+    public static void setAvailableroomsData(String s,Context c) throws JSONException
+    {
+        if(s!=null)
+        {
+            availableRooms=new ArrayList<>();
+            JSONObject response=new JSONObject(s);
+            availableRooms.clear();
+            JSONArray room=response.getJSONArray("room");
+            if(room.length()>0)
+            {
+                for(int i=0;i<room.length();i++)
+                {
+                    JSONObject object=room.getJSONObject(i);
+                    JSONObject userDetails=object.getJSONObject("user");
+                    String userId=userDetails.getString("_id");
+                    String ownerName=userDetails.getString("name");
+                    availableRooms.add(new AvailableRoomModel(object.getString("roomType"),
+                            object.getString("roomNo"),String.valueOf(object.getInt("roomRent")),
+                            object.getString("_id"),userId,ownerName));
+                }
+                AvailableRoomsFragment.updateNow();
+            }
+        }
+    }
 
     @Override
     protected void onDestroy() {

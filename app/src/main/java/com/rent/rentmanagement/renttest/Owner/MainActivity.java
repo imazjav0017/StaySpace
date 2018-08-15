@@ -199,7 +199,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
    public static ArrayList<TenantRequestModel> tenantRequestModels;
-    public static int REQUESTSSET=0;
     //store RoomRequests in a static arrayList
     public static void setRequestsData(String s) throws JSONException {
        tenantRequestModels=new ArrayList<>();
@@ -217,7 +216,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             tenantRequestModels.add(new TenantRequestModel(name,_id,roomNo));
 
         }
-        REQUESTSSET=1;
 
     }
 

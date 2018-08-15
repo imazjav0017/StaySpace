@@ -10,7 +10,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.rent.rentmanagement.renttest.DataModels.TenantRequestModel;
+import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -32,13 +36,26 @@ List<TenantRequestModel>tenantRequestModels;
     public void onBindViewHolder(ViewHolder holder, int position) {
         TenantRequestModel model=tenantRequestModels.get(position);
         holder.name.setText(model.getTenantname());
-        holder.roomNo.setText(model.getRoomNo());
-
+        holder.roomNo.setText("Room no "+model.getRoomNo());
+        final JSONObject requestResponse=new JSONObject();
+        try {
+            requestResponse.put("auth", LoginActivity.sharedPreferences.getString("token",null));
+            //requestResponse.put("roomId",model.getRoomId());
+            requestResponse.put("tenantId",model.getTenantId());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         //accept request
         holder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("Accept","request");
+                try {
+                    requestResponse.put("response",true);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 
@@ -46,6 +63,11 @@ List<TenantRequestModel>tenantRequestModels;
             @Override
             public void onClick(View view) {
                 Log.i("rejected","request");
+                try {
+                    requestResponse.put("response",false);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

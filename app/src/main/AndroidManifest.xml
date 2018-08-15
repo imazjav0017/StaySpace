@@ -88,7 +88,11 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Tenants.TenantActivity"
-            android:label="@string/title_activity_tenant"></activity>
+            android:label="@string/title_activity_tenant" />
+
+        <service
+            android:name=".Tenants.GetAvailableRoomsService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

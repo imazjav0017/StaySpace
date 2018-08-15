@@ -1,12 +1,11 @@
-package com.rent.rentmanagement.renttest.Tenants.Async;
+package com.rent.rentmanagement.renttest.AsyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.rent.rentmanagement.renttest.Tenants.TenantActivity;
-import com.rent.rentmanagement.renttest.Tenants.TenantFragments.AvailableRoomsFragment;
+import com.rent.rentmanagement.renttest.Owner.MainActivity;
 
 import org.json.JSONException;
 
@@ -19,10 +18,10 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
-public class GetAvailableRoomsTask extends AsyncTask<String,Integer,String> {
+public class SendRoomRequestResponseTask extends AsyncTask<String,Integer,String>{
     Context context;
 
-    public GetAvailableRoomsTask(Context context) {
+    public SendRoomRequestResponseTask(Context context) {
         this.context = context;
     }
 
@@ -38,9 +37,9 @@ public class GetAvailableRoomsTask extends AsyncTask<String,Integer,String> {
             connection.connect();
             DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
             outputStream.writeBytes(params[1]);
-            Log.i("data", params[1]);
+            Log.i("data_SendRoomResponse", params[1]);
             int resp = connection.getResponseCode();
-            Log.i("getAvaRoomsResp",String.valueOf(resp));
+            Log.i("RoomRequestResponse",String.valueOf(resp));
             if(resp==200)
             {
                 String response=getResponse(connection);
@@ -66,12 +65,11 @@ public class GetAvailableRoomsTask extends AsyncTask<String,Integer,String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         if (s != null) {
-
-            Log.i("availableRooms", s);
+            Log.i("RoomRequestResponse", s);
             try {
-                TenantActivity.setAvailableroomsData(s,context);
+                MainActivity.setRequestsData(s);
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.i("JSONException",e.toString());
             }
         }
         else
@@ -103,3 +101,4 @@ public class GetAvailableRoomsTask extends AsyncTask<String,Integer,String> {
         }
     }
 }
+

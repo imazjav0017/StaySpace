@@ -2,6 +2,7 @@ package com.rent.rentmanagement.renttest.Tenants.TenantFragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,9 +15,12 @@ import android.view.ViewGroup;
 
 import com.rent.rentmanagement.renttest.DataModels.AvailableRoomModel;
 import com.rent.rentmanagement.renttest.LoginActivity;
+import com.rent.rentmanagement.renttest.Owner.MainActivity;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Tenants.Adapters.AvailableRoomsAdapter;
 import com.rent.rentmanagement.renttest.Tenants.Async.GetAvailableRoomsTask;
+import com.rent.rentmanagement.renttest.Tenants.GetAvailableRoomsService;
+import com.rent.rentmanagement.renttest.Tenants.TenantActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,43 +67,27 @@ public class AvailableRoomsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.i("in 2","frag");
-        try {
-            getData();
-        } catch (JSONException e) {
-            e.printStackTrace();
+        setView();
+
+    }
+    //called by tenantActivity when loading complete
+    public static void updateNow()
+    {
+        //if updateView is called by activity before opening fragment
+        // will lead to null pointer
+        if(availableRooms!=null)
+        {
+            setView();
         }
     }
-
-    public void getData() throws JSONException {
-        JSONObject obj=new JSONObject();
-        String auth= LoginActivity.sharedPreferences.getString("token",null);
-        if(auth!=null) {
-            obj.put("auth", auth);
-            GetAvailableRoomsTask task = new GetAvailableRoomsTask(context);
-            task.execute("https://sleepy-atoll-65823.herokuapp.com/students/getEmptyRooms", obj.toString());
-        }
-        }
-    public static void setData(String s,Context c) throws JSONException
-    {
-        if(s!=null)
-        {
-            JSONObject response=new JSONObject(s);
+    public static void setView() {
+        if (TenantActivity.availableRooms != null) {
             availableRooms.clear();
-            JSONArray room=response.getJSONArray("room");
-            if(room.length()>0)
-            {
-             for(int i=0;i<room.length();i++)
-             {
-                 JSONObject object=room.getJSONObject(i);
-                 JSONObject userDetails=object.getJSONObject("user");
-                 String userId=userDetails.getString("_id");
-                 String ownerName=userDetails.getString("name");
-                 availableRooms.add(new AvailableRoomModel(object.getString("roomType"),
-                         object.getString("roomNo"),String.valueOf(object.getInt("roomRent")),
-                         object.getString("_id"),userId,ownerName));
-             }
-            }
+            availableRooms.addAll(TenantActivity.availableRooms);
             adapter.notifyDataSetChanged();
         }
     }
+
+
+
 }
