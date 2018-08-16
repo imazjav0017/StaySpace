@@ -20,4 +20,10 @@ public class TenantRequestModel {
     public String getTenantId() {
         return tenantId;
     }
+
+    @Override
+    public String toString() {
+        String x="name "+this.tenantname+" id "+this.tenantId+" roomNo "+this.roomNo;
+        return x;
+    }
 }

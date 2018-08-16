@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.rent.rentmanagement.renttest.Tenants.Services.GetAvailableRoomsService;
 import com.rent.rentmanagement.renttest.Tenants.TenantActivity;
 import com.rent.rentmanagement.renttest.Tenants.TenantFragments.AvailableRoomsFragment;
 
@@ -69,7 +70,7 @@ public class GetAvailableRoomsTask extends AsyncTask<String,Integer,String> {
 
             Log.i("availableRooms", s);
             try {
-                TenantActivity.setAvailableroomsData(s,context);
+                GetAvailableRoomsService.setAvailableroomsData(s,context);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

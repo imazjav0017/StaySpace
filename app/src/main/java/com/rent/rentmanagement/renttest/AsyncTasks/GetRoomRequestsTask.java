@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.rent.rentmanagement.renttest.GetRoomRequestsService;
 import com.rent.rentmanagement.renttest.Owner.MainActivity;
 
 import org.json.JSONException;
@@ -66,7 +67,7 @@ public class GetRoomRequestsTask extends AsyncTask<String,Integer,String> {
         if (s != null) {
             Log.i("RoomRequestsTaskGet", s);
             try {
-                MainActivity.setRequestsData(s);
+                GetRoomRequestsService.setRequestsData(s);
             } catch (JSONException e) {
                Log.i("JSONException",e.toString());
             }

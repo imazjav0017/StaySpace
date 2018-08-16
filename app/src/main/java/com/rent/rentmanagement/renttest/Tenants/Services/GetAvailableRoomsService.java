@@ -1,28 +1,20 @@
-package com.rent.rentmanagement.renttest.Tenants;
+package com.rent.rentmanagement.renttest.Tenants.Services;
 
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
-import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.rent.rentmanagement.renttest.AsyncTasks.GetRoomRequestsTask;
+import com.rent.rentmanagement.renttest.DataModels.AvailableRoomModel;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.Tenants.Async.GetAvailableRoomsTask;
 import com.rent.rentmanagement.renttest.Tenants.TenantFragments.AvailableRoomsFragment;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -94,6 +86,32 @@ public class GetAvailableRoomsService extends IntentService {
             }
             GetAvailableRoomsTask task = new GetAvailableRoomsTask(getApplicationContext());
             task.execute("https://sleepy-atoll-65823.herokuapp.com/students/getEmptyRooms", obj.toString());
+        }
+    }
+    //store the available rooms in static array list
+    public static List<AvailableRoomModel> availableRooms;
+    public static void setAvailableroomsData(String s,Context c) throws JSONException
+    {
+        if(s!=null)
+        {
+            availableRooms=new ArrayList<>();
+            JSONObject response=new JSONObject(s);
+            availableRooms.clear();
+            JSONArray room=response.getJSONArray("room");
+            if(room.length()>0)
+            {
+                for(int i=0;i<room.length();i++)
+                {
+                    JSONObject object=room.getJSONObject(i);
+                    JSONObject userDetails=object.getJSONObject("user");
+                    String userId=userDetails.getString("_id");
+                    String ownerName=userDetails.getString("name");
+                    availableRooms.add(new AvailableRoomModel(object.getString("roomType"),
+                            object.getString("roomNo"),String.valueOf(object.getInt("roomRent")),
+                            object.getString("_id"),userId,ownerName));
+                }
+                AvailableRoomsFragment.updateNow();
+            }
         }
     }
 }

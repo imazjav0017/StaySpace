@@ -66,11 +66,7 @@ public class SendRoomRequestResponseTask extends AsyncTask<String,Integer,String
         super.onPostExecute(s);
         if (s != null) {
             Log.i("RoomRequestResponse", s);
-            try {
-                MainActivity.setRequestsData(s);
-            } catch (JSONException e) {
-                Log.i("JSONException",e.toString());
-            }
+
         }
         else
         {

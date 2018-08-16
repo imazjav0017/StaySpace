@@ -91,7 +91,13 @@
             android:label="@string/title_activity_tenant" />
 
         <service
-            android:name=".Tenants.GetAvailableRoomsService"
+            android:name=".Tenants.Services.GetAvailableRoomsService"
+            android:exported="false" />
+
+        <activity android:name=".Owner.ownerTenantRequestDetails" />
+
+        <service
+            android:name=".GetRoomRequestsService"
             android:exported="false"></service>
     </application>
 

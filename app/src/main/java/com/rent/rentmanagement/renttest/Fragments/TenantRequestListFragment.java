@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.rent.rentmanagement.renttest.Adapters.TenantRequestAdapter;
 import com.rent.rentmanagement.renttest.DataModels.TenantRequestModel;
+import com.rent.rentmanagement.renttest.GetRoomRequestsService;
 import com.rent.rentmanagement.renttest.Owner.MainActivity;
 import com.rent.rentmanagement.renttest.R;
 
@@ -25,8 +26,8 @@ public class TenantRequestListFragment extends Fragment{
     RecyclerView requestList;
     TextView noRequest;
     Context context;
-    public ArrayList<TenantRequestModel> tenantRequestModels;
-    public TenantRequestAdapter adapter;
+    public static ArrayList<TenantRequestModel> tenantRequestModels;
+    public static TenantRequestAdapter adapter;
 
     public TenantRequestListFragment(Context context) {
         this.context = context;
@@ -55,12 +56,18 @@ public class TenantRequestListFragment extends Fragment{
         super.onResume();
         setView();
     }
-    public void setView()
+    public static void upateView()
     {
-
-        tenantRequestModels.clear();
-            tenantRequestModels.addAll(MainActivity.tenantRequestModels);
+        if(tenantRequestModels!=null)
+        setView();
+    }
+    public static void setView()
+    {
+        if(GetRoomRequestsService.tenantRequestModels!=null) {
+            tenantRequestModels.clear();
+            tenantRequestModels.addAll(GetRoomRequestsService.tenantRequestModels);
             adapter.notifyDataSetChanged();
+        }
 
     }
 }

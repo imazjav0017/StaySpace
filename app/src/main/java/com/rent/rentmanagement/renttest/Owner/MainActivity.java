@@ -21,7 +21,9 @@ import com.rent.rentmanagement.renttest.Fragments.AllTenantsFragment;
 import com.rent.rentmanagement.renttest.Fragments.OwnerProfileFragment;
 import com.rent.rentmanagement.renttest.Fragments.ProfileFragment;
 import com.rent.rentmanagement.renttest.Fragments.RoomsFragment;
+import com.rent.rentmanagement.renttest.Fragments.TenantRequestListFragment;
 import com.rent.rentmanagement.renttest.Fragments.TenantsFragment;
+import com.rent.rentmanagement.renttest.GetRoomRequestsService;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 
@@ -103,17 +105,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         else
             loadFragment(new RoomsFragment(MainActivity.this));
         //getRoomRequestsList
-        JSONObject object=new JSONObject();
-        if(LoginActivity.sharedPreferences.getString("token",null)!=null)
-        {
-            try {
-                object.put("auth",LoginActivity.sharedPreferences.getString("token",null));
-                GetRoomRequestsTask task=new GetRoomRequestsTask(getApplicationContext());
-                task.execute("https://sleepy-atoll-65823.herokuapp.com/students/getRoomRequest",object.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -198,26 +190,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
     }
 
-   public static ArrayList<TenantRequestModel> tenantRequestModels;
-    //store RoomRequests in a static arrayList
-    public static void setRequestsData(String s) throws JSONException {
-       tenantRequestModels=new ArrayList<>();
-       JSONObject object=new JSONObject(s);
-       String _id,name,roomNo;
-        JSONArray tenants=object.getJSONArray("tenant");
-        JSONArray roomNoArray=object.getJSONArray("roomNo");
-        tenantRequestModels.clear();
-        for(int i=0;i<tenants.length();i++)
-        {
-            JSONObject tenantDetails=tenants.getJSONObject(i);;
-            roomNo=roomNoArray.getString(i);
-            _id=tenantDetails.getString("_id");
-            name=tenantDetails.getString("name");
-            tenantRequestModels.add(new TenantRequestModel(name,_id,roomNo));
-
-        }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(getApplicationContext(), GetRoomRequestsService.class));
     }
+
+
 
 }
 

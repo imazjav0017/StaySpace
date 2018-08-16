@@ -1,16 +1,19 @@
 package com.rent.rentmanagement.renttest.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rent.rentmanagement.renttest.DataModels.TenantRequestModel;
 import com.rent.rentmanagement.renttest.LoginActivity;
+import com.rent.rentmanagement.renttest.Owner.ownerTenantRequestDetails;
 import com.rent.rentmanagement.renttest.R;
 
 import org.json.JSONException;
@@ -33,10 +36,23 @@ List<TenantRequestModel>tenantRequestModels;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        TenantRequestModel model=tenantRequestModels.get(position);
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final TenantRequestModel model=tenantRequestModels.get(position);
         holder.name.setText(model.getTenantname());
         holder.roomNo.setText("Room no "+model.getRoomNo());
+
+        //clicking the tenant shuld open info
+        holder.bg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(holder.context,ownerTenantRequestDetails.class);
+                i.putExtra("name",model.getTenantname());
+                i.putExtra("roomNo",model.getRoomNo());
+                i.putExtra("tenantId",model.getTenantId());
+                holder.context.startActivity(i);
+
+            }
+        });
         final JSONObject requestResponse=new JSONObject();
         try {
             requestResponse.put("auth", LoginActivity.sharedPreferences.getString("token",null));
@@ -88,9 +104,11 @@ List<TenantRequestModel>tenantRequestModels;
         Context context;
         TextView name,roomNo;
         Button accept,reject,call,message;
+        RelativeLayout bg;
         public ViewHolder(View itemView) {
             super(itemView);
             context=itemView.getContext();
+            bg=(RelativeLayout)itemView.findViewById(R.id.tenantRequestListBg);
             name=(TextView)itemView.findViewById(R.id.studentRequestName);
             roomNo=(TextView)itemView.findViewById(R.id.requestingRoomNo);
             accept=(Button)itemView.findViewById(R.id.acceptRequestBtn);
