@@ -4,7 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
 
-import com.rent.rentmanagement.renttest.DataModels.AvailableRoomModel;
+import com.rent.rentmanagement.renttest.Tenants.DataModels.AvailableRoomModel;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.Tenants.Async.GetAvailableRoomsTask;
 import com.rent.rentmanagement.renttest.Tenants.TenantFragments.AvailableRoomsFragment;
@@ -103,12 +103,13 @@ public class GetAvailableRoomsService extends IntentService {
                 for(int i=0;i<room.length();i++)
                 {
                     JSONObject object=room.getJSONObject(i);
-                    JSONObject userDetails=object.getJSONObject("user");
-                    String userId=userDetails.getString("_id");
+                    JSONObject userDetails=object.getJSONObject("owner");
+                    String ownerId=userDetails.getString("_id");
                     String ownerName=userDetails.getString("name");
+                    String mobileNo=userDetails.getString("mobileNo");
                     availableRooms.add(new AvailableRoomModel(object.getString("roomType"),
                             object.getString("roomNo"),String.valueOf(object.getInt("roomRent")),
-                            object.getString("_id"),userId,ownerName));
+                            object.getString("_id"),ownerId,ownerName,mobileNo));
                 }
                 AvailableRoomsFragment.updateNow();
             }

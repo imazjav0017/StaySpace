@@ -43,7 +43,7 @@ public class BuildActivity extends AppCompatActivity {
     EditText rentInput,roomNo;
     Button addRoomsbutton;
     String accessToken,rooms=null,rentAmount=null,roomType=null;
-
+    int roomCapacity=0;
 
     @Override
     public void onBackPressed() {
@@ -109,9 +109,13 @@ public class BuildActivity extends AppCompatActivity {
                 roomsData.put("roomRent",Integer.parseInt(rentAmount));
                 roomsData.put("noOfRooms",Integer.parseInt(rooms));
                 roomsData.put("date",dateFormat.format(new Date()).toString());
+                if(roomCapacity!=0)
+                    roomsData.put("roomCapacity",roomCapacity);
                 Log.i( "response",dateFormat.format(new Date()).toString());
                 if(accessToken!=null)
                     roomsData.put("auth",accessToken);
+                roomsData.put("ownerId",LoginActivity.sharedPreferences.getString(
+                        "ownerId",null));
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.addRequestProperty("Accept","application/json");
@@ -183,14 +187,17 @@ public class BuildActivity extends AppCompatActivity {
                 if(checkedId==R.id.single)
                 {
                    roomType=items[1];
+                    roomCapacity=1;
                 }
                 else if(checkedId==R.id.doubleBtn)
                 {
                     roomType=items[2];
+                    roomCapacity=2;
                 }
                 else if(checkedId==R.id.triple)
                 {
                     roomType=items[3];
+                    roomCapacity=3;
                 }
 
             }

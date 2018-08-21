@@ -472,7 +472,7 @@ public class roomDetailActivity extends AppCompatActivity {
         paymentsHistoryList.setHasFixedSize(true);
         paymentsHistoryList.setAdapter(pAdapter);
         setPaymentHistory(LoginActivity.sharedPreferences.getString("roomsDetails",null));
-        setStudentsData(LoginActivity.sharedPreferences.getString("roomsDetails",null));
+        setStudentsData(LoginActivity.sharedPreferences.getString("allTenantsInfo",null));
     }
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void expandStudents(View v)

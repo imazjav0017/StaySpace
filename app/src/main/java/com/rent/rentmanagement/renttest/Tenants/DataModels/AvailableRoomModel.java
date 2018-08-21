@@ -1,15 +1,24 @@
-package com.rent.rentmanagement.renttest.DataModels;
+package com.rent.rentmanagement.renttest.Tenants.DataModels;
 
 public class AvailableRoomModel {
-    String roomType,roomNo,roomRent,_id,user_id,ownerName;
+    String roomType,roomNo,roomRent,_id,owner_id,ownerName,phoneNo;
 
-    public AvailableRoomModel(String roomType, String roomNo, String roomRent, String _id, String user_id, String ownerName) {
+    public AvailableRoomModel(String roomType, String roomNo, String roomRent, String _id, String owner_id, String ownerName, String phoneNo) {
         this.roomType = roomType;
         this.roomNo = roomNo;
         this.roomRent = roomRent;
         this._id = _id;
-        this.user_id = user_id;
+        this.owner_id = owner_id;
         this.ownerName = ownerName;
+        this.phoneNo = phoneNo;
+    }
+
+    public String getOwner_id() {
+        return owner_id;
+    }
+
+    public String getPhoneNo() {
+        return phoneNo;
     }
 
     public String getRoomType() {
@@ -26,10 +35,6 @@ public class AvailableRoomModel {
 
     public String get_id() {
         return _id;
-    }
-
-    public String getUser_id() {
-        return user_id;
     }
 
     public String getOwnerName() {

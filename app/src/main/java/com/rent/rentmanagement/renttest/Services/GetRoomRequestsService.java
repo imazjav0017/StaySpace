@@ -1,13 +1,13 @@
-package com.rent.rentmanagement.renttest;
+package com.rent.rentmanagement.renttest.Services;
 
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
-import android.util.Log;
 
 import com.rent.rentmanagement.renttest.AsyncTasks.GetRoomRequestsTask;
 import com.rent.rentmanagement.renttest.DataModels.TenantRequestModel;
 import com.rent.rentmanagement.renttest.Fragments.TenantRequestListFragment;
+import com.rent.rentmanagement.renttest.LoginActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -92,17 +92,21 @@ public class GetRoomRequestsService extends IntentService {
     public static void setRequestsData(String s) throws JSONException {
         tenantRequestModels=new ArrayList<>();
         JSONObject object=new JSONObject(s);
-        String _id,name,roomNo;
-        JSONArray tenants=object.getJSONArray("tenant");
-        JSONArray roomNoArray=object.getJSONArray("roomNo");
+        String _id,name,roomNo,studentId,phoneNo,emailId;
+        JSONArray roomRequest=object.getJSONArray("roomRequest");
         tenantRequestModels.clear();
-        for(int i=0;i<tenants.length();i++)
+        for(int i=0;i<roomRequest.length();i++)
         {
-            JSONObject tenantDetails=tenants.getJSONObject(i);
-            roomNo=roomNoArray.getString(i);
-            _id=tenantDetails.getString("_id");
+            _id=roomRequest.getString(i);
+            JSONObject mainObject=roomRequest.getJSONObject(i);
+            JSONObject tenantDetails=mainObject.getJSONObject("tenantDetail");
+            studentId=tenantDetails.getString("_id");
+            phoneNo=tenantDetails.getString("mobileNo");
+            emailId=tenantDetails.getString("email");
             name=tenantDetails.getString("name");
-            tenantRequestModels.add(new TenantRequestModel(name,_id,roomNo));
+            JSONObject roomDetails=mainObject.getJSONObject("roomDetail");
+            roomNo=roomDetails.getString("roomNo");
+            tenantRequestModels.add(new TenantRequestModel(name,studentId,roomNo,_id,phoneNo,emailId));
         }
         TenantRequestListFragment.upateView();
 

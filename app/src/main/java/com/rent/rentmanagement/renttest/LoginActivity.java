@@ -62,13 +62,17 @@ public class LoginActivity extends AppCompatActivity {
     {
         try {
             tokenJson=new JSONObject(token);
+            Log.i("respone111",token);
             accessToken=tokenJson.getString("token");
             sharedPreferences.edit().putString("token",accessToken).apply();
-            JSONObject jsonObject=tokenJson.getJSONObject("user");
-            Log.i("respone111",jsonObject.toString());
-            sharedPreferences.edit().putBoolean("isOwner",jsonObject.getBoolean("isOwner")).apply();
-            sharedPreferences.edit().putString("ownerDetails",jsonObject.toString()).apply();
-            if(jsonObject.getBoolean("isOwner")==true) {
+            boolean isOwner=tokenJson.getBoolean("isOwner");
+            if(isOwner==true)
+            {
+                JSONObject ownerObject=tokenJson.getJSONObject("owner");
+                String _id=ownerObject.getString("_id");
+                sharedPreferences.edit().putString("ownerId",_id).apply();
+                sharedPreferences.edit().putBoolean("isOwner",true).apply();
+                sharedPreferences.edit().putString("ownerDetails",ownerObject.toString());
                 LoginActivity.sharedPreferences.edit().putInt("occupiedRoomsCount", tokenJson.getInt("occupiedRoomsCount")).apply();
                 LoginActivity.sharedPreferences.edit().putInt("emptyRoomsCount", tokenJson.getInt("emptyRoomsCount")).apply();
                 LoginActivity.sharedPreferences.edit().putInt("notCollected", tokenJson.getInt("notCollected")).apply();
@@ -77,7 +81,20 @@ public class LoginActivity extends AppCompatActivity {
                 LoginActivity.sharedPreferences.edit().putString("totalIncome", tokenJson.getString("totalIncome")).apply();
                 LoginActivity.sharedPreferences.edit().putString("todayIncome", tokenJson.getString("todayIncome")).apply();
                 LoginActivity.sharedPreferences.edit().putString("collected", tokenJson.getString("collected")).apply();
+
             }
+            else
+            {
+                JSONObject tenantObject=tokenJson.getJSONObject("tenant");
+                String _id=tenantObject.getString("_id");
+                sharedPreferences.edit().putString("tenantId",_id).apply();
+                Log.i("ten1",sharedPreferences.getString("tenantId",null));
+                sharedPreferences.edit().putBoolean("isOwner",false).apply();
+                sharedPreferences.edit().putString("tenantDetails",tenantObject.toString()).apply();
+            }
+
+            //sharedPreferences.edit().putString("ownerDetails",jsonObject.toString()).apply();
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

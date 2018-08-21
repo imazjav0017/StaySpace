@@ -12,11 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.rent.rentmanagement.renttest.DataModels.AvailableRoomModel;
+import com.rent.rentmanagement.renttest.Tenants.DataModels.AvailableRoomModel;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Tenants.Adapters.AvailableRoomsAdapter;
 import com.rent.rentmanagement.renttest.Tenants.Services.GetAvailableRoomsService;
-import com.rent.rentmanagement.renttest.Tenants.TenantActivity;
 
 import java.util.ArrayList;
 

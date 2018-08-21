@@ -9,8 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.rent.rentmanagement.renttest.DataModels.AvailableRoomModel;
-import com.rent.rentmanagement.renttest.DataModels.RoomModel;
+import com.rent.rentmanagement.renttest.Tenants.DataModels.AvailableRoomModel;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Tenants.Async.RoomRequestTask;
@@ -48,7 +47,7 @@ public class AvailableRoomsAdapter extends RecyclerView.Adapter<AvailableRoomsAd
                 JSONObject requestObject=new JSONObject();
                 try {
                     String auth=LoginActivity.sharedPreferences.getString("token",null);
-                    String userDetails=LoginActivity.sharedPreferences.getString("ownerDetails",null);
+                    String userDetails=LoginActivity.sharedPreferences.getString("tenantDetails",null);
                     //to extract tenant name
                     JSONObject user=new JSONObject(userDetails);
                     String tenantName=user.getString("name");

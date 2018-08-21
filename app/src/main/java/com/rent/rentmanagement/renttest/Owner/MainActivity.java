@@ -15,23 +15,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.rent.rentmanagement.renttest.AsyncTasks.GetRoomRequestsTask;
-import com.rent.rentmanagement.renttest.DataModels.TenantRequestModel;
 import com.rent.rentmanagement.renttest.Fragments.AllTenantsFragment;
 import com.rent.rentmanagement.renttest.Fragments.OwnerProfileFragment;
 import com.rent.rentmanagement.renttest.Fragments.ProfileFragment;
 import com.rent.rentmanagement.renttest.Fragments.RoomsFragment;
-import com.rent.rentmanagement.renttest.Fragments.TenantRequestListFragment;
 import com.rent.rentmanagement.renttest.Fragments.TenantsFragment;
-import com.rent.rentmanagement.renttest.GetRoomRequestsService;
+import com.rent.rentmanagement.renttest.Services.GetRoomRequestsService;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
    public static BottomNavigationView bottomNavigationView;
@@ -193,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i("onResume",ACTIVITY_SERVICE);
         startService(new Intent(getApplicationContext(), GetRoomRequestsService.class));
     }
 

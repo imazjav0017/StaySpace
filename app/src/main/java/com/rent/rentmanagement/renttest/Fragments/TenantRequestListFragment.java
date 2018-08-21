@@ -6,17 +6,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.rent.rentmanagement.renttest.Adapters.TenantRequestAdapter;
 import com.rent.rentmanagement.renttest.DataModels.TenantRequestModel;
-import com.rent.rentmanagement.renttest.GetRoomRequestsService;
-import com.rent.rentmanagement.renttest.Owner.MainActivity;
+import com.rent.rentmanagement.renttest.Services.GetRoomRequestsService;
 import com.rent.rentmanagement.renttest.R;
 
 import java.util.ArrayList;

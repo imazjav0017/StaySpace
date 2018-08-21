@@ -1,11 +1,12 @@
-package com.rent.rentmanagement.renttest.AsyncTasks;
+package com.rent.rentmanagement.renttest.Tenants.Async;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.rent.rentmanagement.renttest.Services.GetRoomRequestsService;
+import com.rent.rentmanagement.renttest.LoginActivity;
+import com.rent.rentmanagement.renttest.Tenants.Services.GetAvailableRoomsService;
 
 import org.json.JSONException;
 
@@ -18,12 +19,13 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
-public class GetRoomRequestsTask extends AsyncTask<String,Integer,String> {
-    Context context;
+public class TenantUpdateTask extends AsyncTask<String,Integer,String> {
+Context context;
 
-    public GetRoomRequestsTask(Context context) {
+    public TenantUpdateTask(Context context) {
         this.context = context;
     }
+
     @Override
     protected String doInBackground(String... params) {
         try {
@@ -36,9 +38,9 @@ public class GetRoomRequestsTask extends AsyncTask<String,Integer,String> {
             connection.connect();
             DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
             outputStream.writeBytes(params[1]);
-            Log.i("data", params[1]);
+            Log.i("dataUpdation", params[1]);
             int resp = connection.getResponseCode();
-            Log.i("RoomRequestsGetResp",String.valueOf(resp));
+            Log.i("updateDataResp",String.valueOf(resp));
             if(resp==200)
             {
                 String response=getResponse(connection);
@@ -64,12 +66,9 @@ public class GetRoomRequestsTask extends AsyncTask<String,Integer,String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         if (s != null) {
-            Log.i("RoomRequestsTaskGet", s);
-            try {
-                GetRoomRequestsService.setRequestsData(s);
-            } catch (JSONException e) {
-               Log.i("JSONException",e.toString());
-            }
+            Toast.makeText(context, "updated!", Toast.LENGTH_SHORT).show();
+            LoginActivity.sharedPreferences.edit().putString("tenantDetails",s).apply();
+            Log.i("updatedData", s);
         }
         else
         {

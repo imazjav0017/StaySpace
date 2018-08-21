@@ -75,6 +75,8 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
         try {
             if(LoginActivity.sharedPreferences.getString("token",null)!=null) {
                 JSONObject token = new JSONObject();
+                token.put("ownerId",LoginActivity.sharedPreferences.getString(
+                        "ownerId",null));
                 token.put("auth",LoginActivity.sharedPreferences.getString("token", null));
                 GetTentantsTask task = new GetTentantsTask();
                 task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/getAllStudents", token.toString());
@@ -164,7 +166,8 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
     {
         if(s!=null) {
             JSONObject jsonObject = new JSONObject(s);
-            JSONArray array = jsonObject.getJSONArray("data");
+            JSONArray array = jsonObject.getJSONArray("student");
+            JSONArray tenantArray=jsonObject.getJSONArray("tenant");
             JSONArray roomNo = jsonObject.getJSONArray("roomNo");
             studentModelList.clear();
             for (int k = 0; k < array.length(); k++) {
@@ -176,6 +179,17 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
                             , detail.getString("_id"),detail.getString("adharNo")));
                 }
             }
+            for(int i=0;i<tenantArray.length();i++)
+            {
+                String rNo=roomNo.getString(i);
+                JSONArray array2=tenantArray.getJSONArray(i);
+                for (int i1 = 0; i1 < array2.length(); i1++) {
+                    JSONObject detail = array2.getJSONObject(i1);
+                    studentModelList.add(new StudentModel(detail.getString("name"),detail.getString("mobileNo"),rNo
+                            ,detail.getString("_id"),detail.getString("adharNo")));
+                }
+
+            }
             adapter.notifyDataSetChanged();
         }
 
@@ -184,9 +198,13 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
         Log.i("getAllStudents", s);
         LoginActivity.sharedPreferences.edit().putString("allTenantsinfo",s).apply();
         JSONObject jsonObject=new JSONObject(s);
-        JSONArray array=jsonObject.getJSONArray("data");
+        //tenants checked in through requests
+        JSONArray tenantArray=jsonObject.getJSONArray("tenant");
+
+        JSONArray array=jsonObject.getJSONArray("student");
         JSONArray roomNo=jsonObject.getJSONArray("roomNo");
         studentModelList.clear();
+        //adding the "students"
         for(int k=0;k<array.length();k++)
         {
             String rNo=roomNo.getString(k);
@@ -196,6 +214,17 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
                 studentModelList.add(new StudentModel(detail.getString("name"),detail.getString("mobileNo"),rNo
                         ,detail.getString("_id"),detail.getString("adharNo")));
             }
+        }
+        for(int i=0;i<tenantArray.length();i++)
+        {
+            String rNo=roomNo.getString(i);
+            JSONArray array2=tenantArray.getJSONArray(i);
+            for (int i1 = 0; i1 < array2.length(); i1++) {
+                JSONObject detail = array2.getJSONObject(i1);
+                studentModelList.add(new StudentModel(detail.getString("name"),detail.getString("mobileNo"),rNo
+                        ,detail.getString("_id"),detail.getString("adharNo")));
+            }
+
         }
         adapter.notifyDataSetChanged();
         if(studentModelList.size()==0)

@@ -97,8 +97,10 @@
         <activity android:name=".Owner.ownerTenantRequestDetails" />
 
         <service
-            android:name=".GetRoomRequestsService"
-            android:exported="false"></service>
+            android:name=".Services.GetRoomRequestsService"
+            android:exported="false" />
+
+        <activity android:name=".UpdateProfileActivity"></activity>
     </application>
 
 </manifest>

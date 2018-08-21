@@ -62,10 +62,13 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
     public void setTokenJson()
     {
         try {
-            if(LoginActivity.sharedPreferences.getString("token",null)!=null) {
+            if(LoginActivity.sharedPreferences.getString("token",null)!=null
+                    &&(LoginActivity.sharedPreferences.getString("ownerId",null)!=null)) {
                 progressBar.setVisibility(View.VISIBLE);
                 JSONObject token = new JSONObject();
                 token.put("auth",LoginActivity.sharedPreferences.getString("token", null));
+                token.put("ownerId"
+                        ,LoginActivity.sharedPreferences.getString("ownerId",null));
                 GetRoomsTask task = new GetRoomsTask(context);
                 task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/getRooms", token.toString());
                 Log.i("status","fini");
@@ -84,6 +87,7 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
             oRooms.clear();
             tRooms.clear();
             JSONObject jsonObject = new JSONObject(s);
+            Log.i("reponse",s);
             LoginActivity.sharedPreferences.edit().putInt("totalTenants", jsonObject.getInt("totalStudents")).apply();
             JSONArray array = jsonObject.getJSONArray("room");
             Log.i("array", array.toString());
@@ -97,8 +101,7 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
             ProfileFragment.setData();
             LoginActivity.sharedPreferences.edit().putString("roomsDetails", s).apply();
             if (array.length() == 0) {
-
-
+                Log.i("array","empty");
             } else {
                 Toast.makeText(context, "Refreshed!", Toast.LENGTH_SHORT).show();
                 for (int i = 0; i < array.length(); i++) {
