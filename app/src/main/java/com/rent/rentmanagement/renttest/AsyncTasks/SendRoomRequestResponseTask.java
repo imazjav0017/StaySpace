@@ -20,9 +20,13 @@ import java.net.URL;
 
 public class SendRoomRequestResponseTask extends AsyncTask<String,Integer,String>{
     Context context;
+    String name;
+    boolean response;
 
-    public SendRoomRequestResponseTask(Context context) {
+    public SendRoomRequestResponseTask(Context context, String name, boolean response) {
         this.context = context;
+        this.name = name;
+        this.response = response;
     }
 
     @Override
@@ -66,7 +70,12 @@ public class SendRoomRequestResponseTask extends AsyncTask<String,Integer,String
         super.onPostExecute(s);
         if (s != null) {
             Log.i("RoomRequestResponse", s);
-
+            if(response)
+            Toast.makeText(context, "Added "+name+" Successfully!", Toast.LENGTH_SHORT).show();
+            else
+            {
+                Toast.makeText(context, "Rejected "+name+" !", Toast.LENGTH_SHORT).show();
+            }
         }
         else
         {

@@ -2,6 +2,8 @@ package com.rent.rentmanagement.renttest.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,10 +13,12 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.rent.rentmanagement.renttest.AsyncTasks.SendRoomRequestResponseTask;
 import com.rent.rentmanagement.renttest.DataModels.TenantRequestModel;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.Owner.ownerTenantRequestDetails;
 import com.rent.rentmanagement.renttest.R;
+import com.rent.rentmanagement.renttest.Services.GetRoomRequestsService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,7 +40,7 @@ List<TenantRequestModel>tenantRequestModels;
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final TenantRequestModel model=tenantRequestModels.get(position);
         holder.name.setText(model.getTenantname());
         holder.roomNo.setText("Room no "+model.getRoomNo());
@@ -49,6 +53,7 @@ List<TenantRequestModel>tenantRequestModels;
                 i.putExtra("name",model.getTenantname());
                 i.putExtra("roomNo",model.getRoomNo());
                 i.putExtra("tenantId",model.getTenantId());
+                i.putExtra("mobileNo",model.getPhoneNo());
                 holder.context.startActivity(i);
 
             }
@@ -56,7 +61,7 @@ List<TenantRequestModel>tenantRequestModels;
         final JSONObject requestResponse=new JSONObject();
         try {
             requestResponse.put("auth", LoginActivity.sharedPreferences.getString("token",null));
-            //requestResponse.put("roomId",model.getRoomId());
+            requestResponse.put("requestId",model.get_id());
             requestResponse.put("tenantId",model.getTenantId());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -68,8 +73,14 @@ List<TenantRequestModel>tenantRequestModels;
                 Log.i("Accept","request");
                 try {
                     requestResponse.put("response",true);
+                    SendRoomRequestResponseTask task=new SendRoomRequestResponseTask(holder.context,model.getTenantname(),true);
+                    task.execute("https://sleepy-atoll-65823.herokuapp.com/users/responseToRoomRequest",requestResponse.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
+                }finally {
+                    tenantRequestModels.remove(position);
+                    GetRoomRequestsService.removeElement(position);
+                    notifyDataSetChanged();
                 }
 
             }
@@ -81,8 +92,14 @@ List<TenantRequestModel>tenantRequestModels;
                 Log.i("rejected","request");
                 try {
                     requestResponse.put("response",false);
+                    SendRoomRequestResponseTask task=new SendRoomRequestResponseTask(holder.context,model.getTenantname(),false);
+                    task.execute("https://sleepy-atoll-65823.herokuapp.com/users/responseToRoomRequest",requestResponse.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
+                }finally {
+                    tenantRequestModels.remove(position);
+                    GetRoomRequestsService.removeElement(position);
+                    notifyDataSetChanged();
                 }
             }
         });
@@ -91,6 +108,9 @@ List<TenantRequestModel>tenantRequestModels;
             @Override
             public void onClick(View view) {
                 Log.i("Calling","phno");
+                Intent i=new Intent(Intent.ACTION_DIAL);
+                i.setData(Uri.parse("tel:"+model.getPhoneNo()));
+                holder.context.startActivity(i);
             }
         });
     }
@@ -99,6 +119,7 @@ List<TenantRequestModel>tenantRequestModels;
     public int getItemCount() {
         return tenantRequestModels.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         Context context;

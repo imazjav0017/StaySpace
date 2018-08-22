@@ -375,50 +375,47 @@ public class roomDetailActivity extends AppCompatActivity {
             }
         }
     }
-    public void setStudentsData(String s) {
+    public void setStudentsData(String s) throws JSONException {
         studentsList.clear();
         if(s!=null) {
-            if (s.equals("0")) {
-                Toast.makeText(this, "Fetching!", Toast.LENGTH_SHORT).show();
+            JSONObject jsonObject=new JSONObject(s);
+            //tenants checked in through requests
+            JSONArray tenantArray=jsonObject.getJSONArray("tenant");
 
-            } else {
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(s);
-                    JSONArray array = jsonObject.getJSONArray("room");
+            JSONArray array=jsonObject.getJSONArray("student");
+            JSONArray roomNo=jsonObject.getJSONArray("roomNo");
+            studentsList.clear();
+            //adding the "students"
+            for(int k=0;k<array.length();k++)
+            {
+                String rNo=roomNo.getString(k);
+                JSONArray array1=array.getJSONArray(k);
+                for (int i = 0; i < array1.length(); i++) {
+                    JSONObject detail = array1.getJSONObject(i);
+                    studentsList.add(new StudentModel(detail.getString("name"),detail.getString("mobileNo"),rNo
+                            ,detail.getString("_id"),detail.getString("adharNo")));
+                }
+            }
+            for(int i=0;i<tenantArray.length();i++)
+            {
+                String rNo=roomNo.getString(i);
+                JSONArray array2=tenantArray.getJSONArray(i);
+                for (int i1 = 0; i1 < array2.length(); i1++) {
+                    JSONObject detail = array2.getJSONObject(i1);
+                    studentsList.add(new StudentModel(detail.getString("name"),detail.getString("mobileNo"),rNo
+                            ,detail.getString("_id"),detail.getString("adharNo")));
+                }
 
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject detail = array.getJSONObject(i);
-                        if(detail.getBoolean("isEmpty")==false && detail.getString("_id").equals(_id))
-                        {
-                            JSONArray students=detail.getJSONArray("students");
-                            Log.i("StudentsInfo",students.toString());
-                            if(students.length()>0)
-                            {
-
-                                for(int k=0;k<students.length();k++) {
-                                    JSONObject studentDetails = students.getJSONObject(k);
-                                     studentsList.add(new StudentModel(studentDetails.getString("name"),studentDetails.getString("mobileNo"),roomNo,
-                                             studentDetails.getString("_id"),_id,studentDetails.getString("adharNo")));
-                                }
-                                adapter.notifyDataSetChanged();
-
-                            }
-
-                        }
-
-                    }
-                    if(studentsList.size()==0)
+            }
+         if(studentsList.size()==0)
                     {
 
                             checkOut.setText("Checkin");
 
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
+                    adapter.notifyDataSetChanged();
         }
+
     }
 
     @Override
@@ -472,7 +469,11 @@ public class roomDetailActivity extends AppCompatActivity {
         paymentsHistoryList.setHasFixedSize(true);
         paymentsHistoryList.setAdapter(pAdapter);
         setPaymentHistory(LoginActivity.sharedPreferences.getString("roomsDetails",null));
-        setStudentsData(LoginActivity.sharedPreferences.getString("allTenantsInfo",null));
+        try {
+            setStudentsData(LoginActivity.sharedPreferences.getString("allTenantsinfo",null));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void expandStudents(View v)

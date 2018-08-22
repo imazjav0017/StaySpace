@@ -28,7 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class RegisterActivity extends AppCompatActivity {
-    EditText username,email,password,mobileNo,buildingName;
+    EditText username,email,password,mobileNo;
     Button register;
     ProgressBar progressBar;
     RadioGroup rg;
@@ -110,7 +110,6 @@ public class RegisterActivity extends AppCompatActivity {
             userDetails.put("email", email.getText().toString());
             userDetails.put("password", password.getText().toString());
             userDetails.put("mobileNo",mobileNo.getText().toString());
-            userDetails.put("buildingName",buildingName.getText().toString());
             userDetails.put("date",dateFormat.format(new Date()).toString());
             userDetails.put("isOwner",isOwner);
             RegisterTask task=new RegisterTask();
@@ -145,7 +144,6 @@ public class RegisterActivity extends AppCompatActivity {
         password=(EditText)findViewById(R.id.newPasswordInput);
         register=(Button)findViewById(R.id.submitRegister);
         mobileNo=(EditText)findViewById(R.id.mobileNo);
-        buildingName=(EditText)findViewById(R.id.buildingName);
         rg=(RadioGroup)findViewById(R.id.registerRadioGroup);
         RadioButton defaultButton=(RadioButton)findViewById(R.id.tenantRadioRegister);
         defaultButton.setChecked(true);

@@ -1,9 +1,12 @@
 package com.rent.rentmanagement.renttest.Tenants.Async;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.rent.rentmanagement.renttest.Tenants.UpdateProfileActivity;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -41,6 +44,10 @@ public class RoomRequestTask extends AsyncTask<String,Integer,String> {
                 String response=getResponse(connection);
                 return response;
             }
+            else if(resp==422)
+            {
+                return "adhaar";
+            }
             else
             {
                 return null;
@@ -61,8 +68,17 @@ public class RoomRequestTask extends AsyncTask<String,Integer,String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         if (s != null) {
-            Toast.makeText(context, "Request Sent!", Toast.LENGTH_SHORT).show();
-            Log.i("RoomRequestTask", s);
+            if(s.equals("adhaar"))
+            {
+                Toast.makeText(context, "Please Update Your adhaar to send request!", Toast.LENGTH_SHORT).show();
+                Intent i=new Intent(context, UpdateProfileActivity.class);
+                i.putExtra("sendingRequest",true);
+                (context).startActivity(i);
+            }
+            else {
+                Toast.makeText(context, "Request Sent!", Toast.LENGTH_SHORT).show();
+                Log.i("RoomRequestTask", s);
+            }
         }
         else
         {

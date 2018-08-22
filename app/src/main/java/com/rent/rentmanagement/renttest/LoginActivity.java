@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                 String _id=ownerObject.getString("_id");
                 sharedPreferences.edit().putString("ownerId",_id).apply();
                 sharedPreferences.edit().putBoolean("isOwner",true).apply();
-                sharedPreferences.edit().putString("ownerDetails",ownerObject.toString());
+                sharedPreferences.edit().putString("ownerDetails",ownerObject.toString()).apply();
                 LoginActivity.sharedPreferences.edit().putInt("occupiedRoomsCount", tokenJson.getInt("occupiedRoomsCount")).apply();
                 LoginActivity.sharedPreferences.edit().putInt("emptyRoomsCount", tokenJson.getInt("emptyRoomsCount")).apply();
                 LoginActivity.sharedPreferences.edit().putInt("notCollected", tokenJson.getInt("notCollected")).apply();

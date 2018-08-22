@@ -78,8 +78,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView=(BottomNavigationView)findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
-        setTitle(LoginActivity.sharedPreferences.getString("buildingName","Rent App"));
-
         fab = (FloatingActionButton) findViewById(R.id.fab_btn);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

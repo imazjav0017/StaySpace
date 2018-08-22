@@ -187,18 +187,21 @@
                                 android:layout_marginTop="5dp"/>
 
                             <ImageButton
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
                                 android:layout_gravity="right"
+                                android:background="#ffff"
                                 android:id="@+id/callRequestingTenantInfo"
-                                android:src="@drawable/phone" />
+                                android:src="@drawable/ic_action_call"
+                                android:onClick="call"/>
                             <ImageButton
+                                android:background="#fff"
                                 android:layout_marginLeft="15dp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
                                 android:id="@+id/messageRequestingTenantInfo"
                                 android:layout_gravity="right"
-                                android:src="@drawable/email" />
+                                android:src="@drawable/ic_action_name" />
                         </LinearLayout>
 
 

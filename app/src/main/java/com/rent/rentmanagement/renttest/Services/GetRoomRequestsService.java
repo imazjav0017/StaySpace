@@ -97,8 +97,8 @@ public class GetRoomRequestsService extends IntentService {
         tenantRequestModels.clear();
         for(int i=0;i<roomRequest.length();i++)
         {
-            _id=roomRequest.getString(i);
             JSONObject mainObject=roomRequest.getJSONObject(i);
+            _id=mainObject.getString("_id");
             JSONObject tenantDetails=mainObject.getJSONObject("tenantDetail");
             studentId=tenantDetails.getString("_id");
             phoneNo=tenantDetails.getString("mobileNo");
@@ -110,5 +110,10 @@ public class GetRoomRequestsService extends IntentService {
         }
         TenantRequestListFragment.upateView();
 
+    }
+    public static void removeElement(int i)
+    {
+        tenantRequestModels.remove(i);
+        TenantRequestListFragment.upateView();
     }
 }
