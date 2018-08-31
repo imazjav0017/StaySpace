@@ -377,6 +377,7 @@ public class roomDetailActivity extends AppCompatActivity {
     }
     public void setStudentsData(String s) throws JSONException {
         studentsList.clear();
+       Log.i("setStudentsData",s);
         if(s!=null) {
             JSONObject jsonObject=new JSONObject(s);
             //tenants checked in through requests

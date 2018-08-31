@@ -100,7 +100,9 @@
             android:name=".Services.GetRoomRequestsService"
             android:exported="false" />
 
-        <activity android:name=".Tenants.UpdateProfileActivity"></activity>
+        <activity android:name=".Tenants.UpdateProfileActivity" />
+        <activity android:name=".Owner.UpdateOwnerProfileActivity" />
+        <activity android:name=".Owner.UpdateOwnerExtraActivity"></activity>
     </application>
 
 </manifest>

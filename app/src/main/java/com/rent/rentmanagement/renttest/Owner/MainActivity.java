@@ -24,6 +24,9 @@ import com.rent.rentmanagement.renttest.Services.GetRoomRequestsService;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
    public static BottomNavigationView bottomNavigationView;
     public static FloatingActionButton fab;
@@ -41,17 +44,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
                                 Log.i("status","logout");
                                 LoginActivity.sharedPreferences.edit().clear().apply();
-                                /*LoginActivity.sharedPreferences.edit().putBoolean("isLoggedIn", false).apply();
-                                Log.i("status", "Logging out");
-                                LoginActivity.sharedPreferences.edit().putString("token", null).apply();
-                                LoginActivity.sharedPreferences.edit().putString("roomsDetails", "0").apply();
-                                LoginActivity.sharedPreferences.edit().putInt("totalTenants", 0).apply();
-                                LoginActivity.sharedPreferences.edit().putInt("totalRooms", 0).apply();
-                                LoginActivity.sharedPreferences.edit().putString("totalIncome", null).apply();
-                                LoginActivity.sharedPreferences.edit().putString("todayIncome", null).apply();
-                                LoginActivity.sharedPreferences.edit().putString("collected", null).apply();
-                                LoginActivity.sharedPreferences.edit().putString("buildingName", null).apply();
-                                LoginActivity.sharedPreferences.edit().putString("allTenantsInfo", null).apply();*/
                                 Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                                 startActivity(i);
 
@@ -83,8 +75,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(MainActivity.this,automanualActivity.class);
-                startActivity(intent);
+                try {
+                    JSONArray buildings=new JSONArray(LoginActivity.sharedPreferences.getString("buildingName",null));
+                    if(buildings.length()==0)
+                    {
+                      Intent i=new Intent(getApplicationContext(),UpdateOwnerExtraActivity.class);
+                      startActivity(i);
+                    }
+                    else
+                    {
+                        Intent i=new Intent(getApplicationContext(),automanualActivity.class);
+                        startActivity(i);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
         });

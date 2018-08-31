@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -18,9 +20,22 @@ import org.json.JSONObject;
 public class UpdateProfileActivity extends AppCompatActivity {
     EditText adhaarNoInput;
     boolean sendingRequest;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==android.R.id.home)
+        {
+            onBackPressed();
+            return true;
+        }
+        return false;
+    }
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tenant_activity_update_profile);
+        Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        setTitle("Owner Name");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent i=getIntent();
 
         //if the user has been made to come to this activity by sending request

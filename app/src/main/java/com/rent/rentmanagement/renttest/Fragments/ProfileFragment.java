@@ -82,16 +82,6 @@ public class ProfileFragment extends Fragment {
     public static void setData(){
         pList.clear();
         String s= LoginActivity.sharedPreferences.getString("ownerDetails",null);
-        if(s!=null)
-        {
-            try {
-            JSONObject jsonObject=new JSONObject(s);
-                oName=jsonObject.getString("buildingName");
-                LoginActivity.sharedPreferences.edit().putString("buildingName",oName).apply();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
        rooms=String.valueOf(LoginActivity.sharedPreferences.getInt("totalRooms",0));
         tenants=String.valueOf(LoginActivity.sharedPreferences.getInt("totalTenants",0));
         int notColl=(LoginActivity.sharedPreferences.getInt("notCollected",0));

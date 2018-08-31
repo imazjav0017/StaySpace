@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -41,45 +41,16 @@
                 android:orientation="vertical"
                 android:weightSum="4"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-
+                android:layout_weight="2"
                 android:padding="2dp">
 
-
-
-
-                <TextView
+                <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="1"
-
-                    android:gravity="center"
-                    android:textColor="#000000"/>
-                    android:textSize="16sp" />
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:gravity="center"
-                    android:text="no. of Building"
-                    android:background="@android:color/transparent"
-
-                    android:inputType="textPersonName"
-                    android:layout_marginTop="5dp"/>
-
-
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="2dp"
-                    android:background="#d9d7d7"
-
-                    />
-
+                    android:text="Edit Profile"
+                    android:layout_margin="5dp"
+                    android:layout_weight="0.75"
+                    android:id="@+id/editOwnerProfileButton"/>
 
 
             </LinearLayout>
@@ -148,6 +119,7 @@
         android:layout_height="wrap_content"
          android:layout_marginLeft="5dp"
         android:padding="5dp"
+        android:id="@+id/l5"
         android:orientation="vertical"
         >
 
@@ -197,13 +169,33 @@
             android:inputType="number"
             android:layout_marginTop="5dp"/>
 
-
-
-
-
     </LinearLayout>
     </android.support.v7.widget.CardView>
-
+<android.support.v7.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/c3"
+    android:padding="5dp"
+    android:visibility="invisible"
+    app:cardCornerRadius="2dp"
+    app:cardElevation="3dp"
+    android:id="@+id/updateOwnerDetailsExtraBg"
+    android:layout_marginTop="35dp"
+    android:background="#ffff">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Updates Needed! Click Here"
+            android:textSize="22sp"
+            android:gravity="center"
+            android:textColor="@color/colorAccent"/>
+    </LinearLayout>
+</android.support.v7.widget.CardView>
 
 
 </RelativeLayout>

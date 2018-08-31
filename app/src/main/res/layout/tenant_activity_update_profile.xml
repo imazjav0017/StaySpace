@@ -7,14 +7,49 @@
     tools:context=".Tenants.UpdateProfileActivity">
     <include
         layout="@layout/actionbarlayout"/>
+    <ScrollView
+        android:layout_marginTop="55dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:lines="1"
+            android:inputType="textPersonName"
+            android:id="@+id/updateOwnerNameInput"/>
+        <EditText
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:lines="1"
+            android:inputType="textPersonName"
+            android:id="@+id/updateOwnerPasswordInput"/>
+        <EditText
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:inputType="textPersonName"
+            android:hint=" Re Enter Password"
+            android:id="@+id/updateOwnerReenterPasswordInput"/>
     <EditText
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Adhaar no"
+        android:inputType="textPersonName"
         android:id="@+id/tenantAdhaarNoUpdate"
         android:layout_centerInParent="true"/>
 <Button
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@+id/tenantAdhaarNoUpdate"
     android:id="@+id/submitUpdationBtn"
@@ -22,4 +57,6 @@
     android:layout_centerHorizontal="true"
     android:layout_marginTop="20dp"
     android:onClick="submit"/>
+    </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

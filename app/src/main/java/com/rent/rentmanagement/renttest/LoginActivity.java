@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.rent.rentmanagement.renttest.Owner.MainActivity;
 import com.rent.rentmanagement.renttest.Tenants.TenantActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -69,6 +70,8 @@ public class LoginActivity extends AppCompatActivity {
             if(isOwner==true)
             {
                 JSONObject ownerObject=tokenJson.getJSONObject("owner");
+                JSONArray buildings=tokenJson.getJSONArray("buildName");
+                sharedPreferences.edit().putString("buildingName",buildings.toString()).apply();
                 String _id=ownerObject.getString("_id");
                 sharedPreferences.edit().putString("ownerId",_id).apply();
                 sharedPreferences.edit().putBoolean("isOwner",true).apply();
@@ -81,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                 LoginActivity.sharedPreferences.edit().putString("totalIncome", tokenJson.getString("totalIncome")).apply();
                 LoginActivity.sharedPreferences.edit().putString("todayIncome", tokenJson.getString("todayIncome")).apply();
                 LoginActivity.sharedPreferences.edit().putString("collected", tokenJson.getString("collected")).apply();
+
 
             }
             else
@@ -239,7 +243,6 @@ public class LoginActivity extends AppCompatActivity {
         emailInput=(EditText)findViewById(R.id.emailInput);
         passwordInput=(EditText)findViewById(R.id.passwordInput);
         loginButton=(Button)findViewById(R.id.loginButton);
-
 
 
 
