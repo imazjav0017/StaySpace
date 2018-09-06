@@ -53,7 +53,7 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
 
     @Override
     public TotalRoomsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.total_rooms_list,parent,false);
+        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.owner_total_rooms_item,parent,false);
         return new TotalRoomsHolder(v);
     }
 
@@ -121,7 +121,7 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
                         break;
                     case "Collect":
                         AlertDialog.Builder builder=new AlertDialog.Builder(context);
-                        View view=LayoutInflater.from(context).inflate(R.layout.collect_dialog,null,false);
+                        View view=LayoutInflater.from(context).inflate(R.layout.owner_dialog_collect,null,false);
                         final EditText rentCollectedInput=(EditText)view.findViewById(R.id.rentcollectedinput);
                         final EditText payee=(EditText)view.findViewById(R.id.payee);
                         rentCollectedInput.setText(model.getDueAmount());

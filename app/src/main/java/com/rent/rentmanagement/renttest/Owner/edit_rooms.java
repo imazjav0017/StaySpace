@@ -161,7 +161,7 @@ String roomNo,roomType,roomRent,_id,response,type;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_rooms);
+        setContentView(R.layout.owner_activity_edit_rooms);
         Intent i=getIntent();
         _id=i.getStringExtra("id");
         roomNo=i.getStringExtra("roomNo");

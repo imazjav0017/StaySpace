@@ -28,14 +28,15 @@ public class AvailableRoomsAdapter extends RecyclerView.Adapter<AvailableRoomsAd
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.available_rooms_item,parent,false);
+        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.tenant_available_rooms_item,parent,false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final AvailableRoomModel model=roomModelList.get(position);
-        holder.roomNo.setText("RoomNo. "+model.getRoomNo());
+        holder.roomNo.setText(model.getBuildingName()+" ,"+
+                model.getFloors()+" floors ,roomNo. "+model.getRoomNo());
         holder.roomType.setText(", "+model.getRoomType());
         holder.rent.setText(" \u20B9"+model.getRoomRent());
         holder.ownerName.setText("Mr./Mrs."+model.getOwnerName());
@@ -47,14 +48,13 @@ public class AvailableRoomsAdapter extends RecyclerView.Adapter<AvailableRoomsAd
                 JSONObject requestObject=new JSONObject();
                 try {
                     String auth=LoginActivity.sharedPreferences.getString("token",null);
-                    String userDetails=LoginActivity.sharedPreferences.getString("tenantDetails",null);
-                    //to extract tenant name
-                    JSONObject user=new JSONObject(userDetails);
-                    String tenantName=user.getString("name");
-                    if(auth!=null && tenantName!=null)
+                    String _id=LoginActivity.sharedPreferences.getString("tenantId",null);
+                    if(auth!=null)
                     requestObject.put("auth",auth);
                     requestObject.put("roomId",model.get_id());
-                    requestObject.put("name",tenantName);
+                    requestObject.put("ownerId",model.getOwner_id());
+                    requestObject.put("buildingId",model.getBuildingId());
+                    requestObject.put("tenantId",_id);
                     RoomRequestTask task=new RoomRequestTask(holder.context);
                     task.execute("https://sleepy-atoll-65823.herokuapp.com/students/sendRoomRequest",requestObject.toString());
                 } catch (JSONException e) {

@@ -33,13 +33,14 @@ public class ProfileFragment extends Fragment {
     Context context;
     LinearLayout totalRooms;
     LinearLayout totalStudents;
-    TextView name;
+    static TextView name;
    // TextView noOfRooms;
    // TextView noOfTenants;
     static String oName,rooms,tenants;
     RecyclerView detailsRv;
     RecyclerView roomsRv;
-    ProfileDetailsAdapter adapter,adapter2;
+    static ProfileDetailsAdapter adapter;
+    static ProfileDetailsAdapter adapter2;
     static List<ProfileDetailsModel>pList,rList;
     public ProfileFragment() {
 
@@ -51,11 +52,8 @@ public class ProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v=inflater.inflate(R.layout.activity_newprofile,container,false);
+        v=inflater.inflate(R.layout.owner_fragment_main_details_page,container,false);
         name=(TextView)v.findViewById(R.id.ownerNameTextView);
-        //roomActivity.mode=2;
-        //noOfRooms=(TextView)v.findViewById(R.id.totalRoomsTextView);
-      //  noOfTenants=(TextView)v.findViewById(R.id.totalTenantsTextView);
         detailsRv=(RecyclerView)v.findViewById(R.id.profileDetailsRv);
         roomsRv=(RecyclerView)v.findViewById(R.id.roomsdetailsRv) ;
         pList=new ArrayList<>();
@@ -70,39 +68,59 @@ public class ProfileFragment extends Fragment {
         roomsRv.setLayoutManager(lm2);
         roomsRv.setHasFixedSize(true);
         roomsRv.setAdapter(adapter2);
-            setData();
-            name.setText(oName);
-         getActivity().setTitle(oName);
-           // noOfRooms.setText(rooms);
-        //noOfTenants.setText(tenants);
-        adapter.notifyDataSetChanged();
-        adapter2.notifyDataSetChanged();
+
+
         return v;
     }
-    public static void setData(){
-        pList.clear();
-        String s= LoginActivity.sharedPreferences.getString("ownerDetails",null);
-       rooms=String.valueOf(LoginActivity.sharedPreferences.getInt("totalRooms",0));
-        tenants=String.valueOf(LoginActivity.sharedPreferences.getInt("totalTenants",0));
-        int notColl=(LoginActivity.sharedPreferences.getInt("notCollected",0));
-        int empty=LoginActivity.sharedPreferences.getInt("emptyRoomsCount",0);
-        int occupied=LoginActivity.sharedPreferences.getInt("occupiedRoomsCount",0);
-        Log.i("not",String.valueOf(notColl));
-        String ti=LoginActivity.sharedPreferences.getString("totalIncome",null);
-        String todI=LoginActivity.sharedPreferences.getString("todayIncome",null);
-        String col=LoginActivity.sharedPreferences.getString("collected",null);
-        if(ti!=null)
-        pList.add(new ProfileDetailsModel("Total Income","₹"+ti));
-        if(todI!=null)
-        pList.add(new ProfileDetailsModel("Today's Income","₹"+todI));
-        if(notColl!=0)
-        pList.add(new ProfileDetailsModel("Total Rent Due","₹"+String.valueOf(notColl)));
-        if(col!=null)
-        pList.add(new ProfileDetailsModel("Total Rent Collected","₹"+col));
 
-        rList.add(new ProfileDetailsModel("Total Rooms",rooms));
-        rList.add(new ProfileDetailsModel("Total Tenants",tenants));
-        rList.add(new ProfileDetailsModel("Empty Rooms",String.valueOf(empty)));
-        rList.add(new ProfileDetailsModel("Occupied Rooms",String.valueOf(occupied)));
+    @Override
+    public void onResume() {
+        super.onResume();
+        setData();
+    }
+
+    public static void setData(){
+        if(pList!=null) {
+            pList.clear();
+            rList.clear();
+            String s = LoginActivity.sharedPreferences.getString("ownerDetails", null);
+            try {
+                JSONObject object = new JSONObject(s);
+                JSONObject ownerNameObject = object.getJSONObject("name");
+                String ownerName = ownerNameObject.getString("firstName") + " " + ownerNameObject.getString("lastName");
+                name.setText(ownerName);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String totalRooms = LoginActivity.sharedPreferences.getString("totalRooms", null);
+            String emptyCount = LoginActivity.sharedPreferences.getString("emptyCount", null);
+            String tenantCount = LoginActivity.sharedPreferences.getString("tenantCount", null);
+            String occupiedRoomsCount = LoginActivity.sharedPreferences.getString("occupiedRoomsCount", null);
+            String totalCollectedAmount = LoginActivity.sharedPreferences.getString("totalCollectedAmount", null);
+            String totalRent = LoginActivity.sharedPreferences.getString("totalRent", null);
+            String totalDueAmount = LoginActivity.sharedPreferences.getString("totalDueAmount", null);
+
+
+            if (totalRooms != null)
+                rList.add(new ProfileDetailsModel("Total Rooms", totalRooms));
+            if (occupiedRoomsCount != null)
+                rList.add(new ProfileDetailsModel("Occupied Rooms", occupiedRoomsCount));
+            if (emptyCount != null)
+                rList.add(new ProfileDetailsModel("Empty Rooms", emptyCount));
+
+
+            if (totalRent != null)
+                pList.add(new ProfileDetailsModel("Total Rent", "₹" + totalRent));
+            if (totalCollectedAmount != null)
+                pList.add(new ProfileDetailsModel("Rent Collected", "₹" + totalCollectedAmount));
+            if (totalDueAmount != null) {
+                pList.add(new ProfileDetailsModel("Due Rent", "₹" + totalDueAmount));
+            }
+            if (tenantCount != null) {
+                rList.add(new ProfileDetailsModel("Total Tenants", tenantCount));
+            }
+            adapter.notifyDataSetChanged();
+            adapter2.notifyDataSetChanged();
+        }
     }
 }

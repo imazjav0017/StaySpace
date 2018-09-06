@@ -31,7 +31,7 @@ public class TotalTenantsAdapter extends RecyclerView.Adapter<TotalTenantsAdapte
 
     @Override
     public TotalTenantsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.total_students,parent,false);
+        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.owner_all_tenants_item,parent,false);
         return new TotalTenantsHolder(v);
     }
 

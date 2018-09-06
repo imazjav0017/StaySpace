@@ -29,7 +29,7 @@ public class AllTenantsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v=inflater.inflate(R.layout.activity_total_tenantsctivity,container,false);
+        v=inflater.inflate(R.layout.owner_activity_total_tenantsctivity,container,false);
         tabLayout=(TabLayout)v.findViewById(R.id.tenantsListTabLayout);
         viewPager=(ViewPager)v.findViewById(R.id.tenantsViewPager);
         viewPagerAdapter=new ViewPagerAdapter(getChildFragmentManager(),context);

@@ -41,7 +41,7 @@ public class EmptyRoomsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v=inflater.inflate(R.layout.empty_rooms_tab,container,false);
+        v=inflater.inflate(R.layout.owner_empty_rooms_tab,container,false);
         emptyRoomsListView=(RecyclerView)v. findViewById(R.id.emptyRoomsList);
         empty=(TextView)v.findViewById(R.id.noEmptyRoomsText);
         LinearLayoutManager lm=new LinearLayoutManager(context);

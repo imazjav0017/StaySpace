@@ -17,14 +17,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class UpdateOwnerExtraActivity extends AppCompatActivity {
-EditText buildingName,address;
-    String buildingVal,addressVal;
+EditText buildingName,address,floors;
+    String buildingVal,addressVal,floorVal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_owner_extra);
+        setContentView(R.layout.owner_activity_update_owner_extra);
         buildingName=(EditText)findViewById(R.id.updateOwnerBuildingNameInput);
         address=(EditText)findViewById(R.id.updateOwnerAddressInput);
+        floors=(EditText)findViewById(R.id.updateOwnerFloorsInput);
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("Update Profile");
@@ -44,7 +45,8 @@ EditText buildingName,address;
         Log.i("update","1");
         buildingVal=buildingName.getText().toString();
         addressVal=address.getText().toString();
-        if(buildingVal.matches("") || addressVal.matches(""))
+        floorVal=floors.getText().toString();
+        if(buildingVal.matches("") || addressVal.matches("")||floorVal.matches(""))
         {
             Toast.makeText(getApplicationContext(), "Missing Fields!", Toast.LENGTH_SHORT).show();
         }
@@ -54,7 +56,7 @@ EditText buildingName,address;
             try {
                 data.put("name",buildingVal);
                 data.put("address",addressVal);
-                data.put("floor",2);
+                data.put("floor",floorVal);
                 data.put("ownerId", LoginActivity.sharedPreferences.getString("ownerId",null));
                 data.put("auth",LoginActivity.sharedPreferences.getString("token",null));
             } catch (JSONException e) {
@@ -70,7 +72,7 @@ EditText buildingName,address;
                     }
                 }
             });
-            task.execute("https://sleepy-atoll-65823.herokuapp.com/build/getBuild",data.toString());
+            task.execute("https://sleepy-atoll-65823.herokuapp.com/build/addBuild",data.toString());
         }
     }
 }

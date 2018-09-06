@@ -142,7 +142,7 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View  v=inflater.inflate(R.layout.activity_room,container,false);
+        View  v=inflater.inflate(R.layout.owner_fragment_room_tabs,container,false);
         erooms=new ArrayList<>();
         oRooms=new ArrayList<>();
         tRooms=new ArrayList<>();

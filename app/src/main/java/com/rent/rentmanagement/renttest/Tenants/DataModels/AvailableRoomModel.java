@@ -1,9 +1,13 @@
 package com.rent.rentmanagement.renttest.Tenants.DataModels;
 
 public class AvailableRoomModel {
-    String roomType,roomNo,roomRent,_id,owner_id,ownerName,phoneNo;
+    String roomType,roomNo,roomRent,_id,owner_id,ownerName,phoneNo,buildingId,
+            buildingName,floors;
 
-    public AvailableRoomModel(String roomType, String roomNo, String roomRent, String _id, String owner_id, String ownerName, String phoneNo) {
+    public AvailableRoomModel(String roomType, String roomNo, String roomRent,
+                              String _id, String owner_id, String ownerName,
+                              String phoneNo, String buildingId, String buildingName,
+                              String floors) {
         this.roomType = roomType;
         this.roomNo = roomNo;
         this.roomRent = roomRent;
@@ -11,14 +15,9 @@ public class AvailableRoomModel {
         this.owner_id = owner_id;
         this.ownerName = ownerName;
         this.phoneNo = phoneNo;
-    }
-
-    public String getOwner_id() {
-        return owner_id;
-    }
-
-    public String getPhoneNo() {
-        return phoneNo;
+        this.buildingId = buildingId;
+        this.buildingName = buildingName;
+        this.floors = floors;
     }
 
     public String getRoomType() {
@@ -37,7 +36,27 @@ public class AvailableRoomModel {
         return _id;
     }
 
+    public String getOwner_id() {
+        return owner_id;
+    }
+
     public String getOwnerName() {
         return ownerName;
+    }
+
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    public String getBuildingId() {
+        return buildingId;
+    }
+
+    public String getBuildingName() {
+        return buildingName;
+    }
+
+    public String getFloors() {
+        return floors;
     }
 }

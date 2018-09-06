@@ -220,7 +220,7 @@ public class StudentActivity extends AppCompatActivity implements DatePickerDial
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student); Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
+        setContentView(R.layout.owner_activity_add_tenant); Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         checkin=(Button)findViewById(R.id.checkInButton);

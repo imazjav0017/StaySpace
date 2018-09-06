@@ -158,7 +158,7 @@ public class roomDetailActivity extends AppCompatActivity {
                         else if(s.equals("First clear Dues!"))
                         {
                             AlertDialog.Builder builder=new AlertDialog.Builder(roomDetailActivity.this);
-                            View view= LayoutInflater.from(roomDetailActivity.this).inflate(R.layout.collect_dialog,null,false);
+                            View view= LayoutInflater.from(roomDetailActivity.this).inflate(R.layout.owner_dialog_collect,null,false);
                             final EditText rentCollectedInput=(EditText)view.findViewById(R.id.rentcollectedinput);
                             final EditText payee=(EditText)view.findViewById(R.id.payee);
                             rentCollectedInput.setText(dueAmnt);
@@ -432,7 +432,7 @@ public class roomDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_room_detail);
+        setContentView(R.layout.owner_activity_room_detail);
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

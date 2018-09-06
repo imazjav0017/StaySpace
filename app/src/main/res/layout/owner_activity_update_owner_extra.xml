@@ -26,6 +26,13 @@
             android:layout_height="wrap_content"
             android:hint="Address"
             android:id="@+id/updateOwnerAddressInput"/>
+        <EditText
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="No.Of Floors"
+            android:inputType="number"
+            android:id="@+id/updateOwnerFloorsInput"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

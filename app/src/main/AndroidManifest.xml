@@ -38,11 +38,6 @@
             android:resizeableActivity="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Owner.roomActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:resizeableActivity="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".Owner.roomDetailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:resizeableActivity="false"
@@ -102,7 +97,16 @@
 
         <activity android:name=".Tenants.UpdateProfileActivity" />
         <activity android:name=".Owner.UpdateOwnerProfileActivity" />
-        <activity android:name=".Owner.UpdateOwnerExtraActivity"></activity>
+        <activity android:name=".Owner.UpdateOwnerExtraActivity" />
+
+        <service
+            android:name=".Services.getOwnerDetailsService"
+            android:exported="false" />
+        <service
+            android:name=".Tenants.Services.GetTenantHomeService"
+            android:exported="false" />
+
+        <activity android:name=".Owner.SelectBuildingActivity"></activity>
     </application>
 
 </manifest>

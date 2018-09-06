@@ -6,6 +6,12 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.rent.rentmanagement.renttest.LoginActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -68,6 +74,17 @@ public class AddBuildingTask extends AsyncTask<String,Void,String> {
         super.onPostExecute(s);
        if(s!=null)
        {
+           Log.i("addBuildingResp",s);
+           JSONObject mainObject= null;
+           try {
+               mainObject = new JSONObject(s);
+               JSONArray buildings=mainObject.getJSONArray("build");
+               LoginActivity.sharedPreferences.edit()
+                       .putString("buildings",buildings.toString()).apply();
+           } catch (JSONException e) {
+               e.printStackTrace();
+           }
+
            addBuildingResp.processFinish(true);
            Toast.makeText(context, "Building Added!", Toast.LENGTH_SHORT).show();
        }

@@ -37,7 +37,7 @@ public class AvailableRoomsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v=inflater.inflate(R.layout.available_rooms_fragment,container,false);
+        v=inflater.inflate(R.layout.tenant_available_rooms_fragment,container,false);
         availableRoomsList=(RecyclerView)v.findViewById(R.id.availableRoomsList);
         availableRooms=new ArrayList<>();
         adapter=new AvailableRoomsAdapter(availableRooms);

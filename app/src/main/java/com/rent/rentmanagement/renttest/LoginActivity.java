@@ -15,6 +15,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.rent.rentmanagement.renttest.Owner.MainActivity;
+import com.rent.rentmanagement.renttest.Services.getOwnerDetailsService;
+import com.rent.rentmanagement.renttest.Tenants.Services.GetTenantHomeService;
 import com.rent.rentmanagement.renttest.Tenants.TenantActivity;
 
 import org.json.JSONArray;
@@ -70,31 +72,42 @@ public class LoginActivity extends AppCompatActivity {
             if(isOwner==true)
             {
                 JSONObject ownerObject=tokenJson.getJSONObject("owner");
-                JSONArray buildings=tokenJson.getJSONArray("buildName");
-                sharedPreferences.edit().putString("buildingName",buildings.toString()).apply();
                 String _id=ownerObject.getString("_id");
                 sharedPreferences.edit().putString("ownerId",_id).apply();
                 sharedPreferences.edit().putBoolean("isOwner",true).apply();
                 sharedPreferences.edit().putString("ownerDetails",ownerObject.toString()).apply();
-                LoginActivity.sharedPreferences.edit().putInt("occupiedRoomsCount", tokenJson.getInt("occupiedRoomsCount")).apply();
-                LoginActivity.sharedPreferences.edit().putInt("emptyRoomsCount", tokenJson.getInt("emptyRoomsCount")).apply();
-                LoginActivity.sharedPreferences.edit().putInt("notCollected", tokenJson.getInt("notCollected")).apply();
-                LoginActivity.sharedPreferences.edit().putInt("totalRooms", Integer.parseInt(tokenJson.getString("totalRooms"))).apply();
-                LoginActivity.sharedPreferences.edit().putInt("totalTenants", tokenJson.getInt("totalStudents")).apply();
-                LoginActivity.sharedPreferences.edit().putString("totalIncome", tokenJson.getString("totalIncome")).apply();
-                LoginActivity.sharedPreferences.edit().putString("todayIncome", tokenJson.getString("todayIncome")).apply();
-                LoginActivity.sharedPreferences.edit().putString("collected", tokenJson.getString("collected")).apply();
+                try
+                {
+                    JSONArray buildings=tokenJson.getJSONArray("building");
+                    sharedPreferences.edit().putString("buildings",buildings.toString()).apply();
+                }catch(JSONException e)
+                {
+                    e.printStackTrace();
+                }finally {
+                    startService(new Intent(getApplicationContext(),getOwnerDetailsService.class));
+                }
 
 
             }
-            else
-            {
-                JSONObject tenantObject=tokenJson.getJSONObject("tenant");
-                String _id=tenantObject.getString("_id");
-                sharedPreferences.edit().putString("tenantId",_id).apply();
-                Log.i("ten1",sharedPreferences.getString("tenantId",null));
-                sharedPreferences.edit().putBoolean("isOwner",false).apply();
-                sharedPreferences.edit().putString("tenantDetails",tenantObject.toString()).apply();
+            else {
+                try {
+                    String _id = tokenJson.getString("tenant");
+                    sharedPreferences.edit().putString("tenantId", _id).apply();
+                    sharedPreferences.edit().putBoolean("isOwner", false).apply();
+                    JSONObject buildingInfo = tokenJson.getJSONObject("building");
+                    JSONObject ownerInfo = tokenJson.getJSONObject("owner");
+                    sharedPreferences.edit().putString("tenantBuildingInfo", buildingInfo.toString()).apply();
+                    sharedPreferences.edit().putString("tenantOwnerInfo", ownerInfo.toString()).apply();
+                    String RoomId;
+                    RoomId = tokenJson.getString("room");
+                    sharedPreferences.edit().putString("tenantRoomId", RoomId).apply();
+                }
+                catch(JSONException e)
+                {
+
+                }finally {
+                    startService(new Intent(getApplicationContext(),GetTenantHomeService.class));
+                }
             }
 
             //sharedPreferences.edit().putString("ownerDetails",jsonObject.toString()).apply();
@@ -107,7 +120,6 @@ public class LoginActivity extends AppCompatActivity {
     {
         if(sharedPreferences.getBoolean("isOwner",true)==true) {
             Log.i("isOwner","y");
-
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(i);
             finish();
@@ -138,23 +150,21 @@ public class LoginActivity extends AppCompatActivity {
                 connection.connect();
                 DataOutputStream outputStream=new DataOutputStream(connection.getOutputStream());
                 outputStream.writeBytes(params[1]);
-                Log.i("data",params[1]);
+                Log.i("LOGIN JSON DATA",params[1]);
                  resp=connection.getResponseCode();
                 if(resp!=200) {
                     enableButton();
                     String response=getResponse(connection);
-
-                    Log.i("resp",String.valueOf(resp));
+                    Log.i("LOGIN RESPONSE CODE",String.valueOf(resp));
                     return String.valueOf(resp);
                 }
                 else
                 {
                     sharedPreferences.edit().putBoolean("isLoggedIn",true).apply();
-
                    String response=getResponse(connection);
-                    Log.i("resp",String.valueOf(resp));
+                    Log.i("LOGIN RESPONSE CODE",String.valueOf(resp));
                     setToken(response);
-                    Log.i("ressss",response);
+                    Log.i("LOGIN RESPONSE DATA",response);
                     outputStream.flush();
                     outputStream.close();
                     gotoHome();

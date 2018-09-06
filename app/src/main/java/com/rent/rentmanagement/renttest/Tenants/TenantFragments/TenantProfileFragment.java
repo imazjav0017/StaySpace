@@ -14,15 +14,26 @@ import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Tenants.UpdateProfileActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class TenantProfileFragment extends android.support.v4.app.Fragment {
-    TextView name,email,phNo;
+    static TextView name,email,phNo;
     Button updateProfile;
     View v;
     Context context;
     public TenantProfileFragment() {
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            setData();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public TenantProfileFragment(Context context) {
@@ -32,15 +43,10 @@ public class TenantProfileFragment extends android.support.v4.app.Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-         v=inflater.inflate(R.layout.tenant_fragment,container,false);
+         v=inflater.inflate(R.layout.tenant_profile_fragment,container,false);
         name=(TextView)v.findViewById(R.id.tenantNameTextView);
         email=(TextView)v.findViewById(R.id.tenantEmailTextView);
         phNo=(TextView)v.findViewById(R.id.tenantNumberTextView);
-        try {
-            setData();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         updateProfile=(Button)v.findViewById(R.id.tenantUpdateProfileBtn);
         updateProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,15 +57,17 @@ public class TenantProfileFragment extends android.support.v4.app.Fragment {
         });
         return v;
     }
-    public void setData() throws JSONException {
+    public static void setData() throws JSONException {
         String tName,tEmail,tPhoneNO;
-        String data= LoginActivity.sharedPreferences.getString("tenantDetails",null);
-        if(data!=null)
+        String data= LoginActivity.sharedPreferences.getString("tenantDetail",null);
+        if(data!=null && name!=null)
         {
             JSONObject object=new JSONObject(data);
-            tName=object.getString("name");
             tEmail=object.getString("email");
             tPhoneNO=object.getString("mobileNo");
+            JSONArray nameArray=object.getJSONArray("name");
+            JSONObject nameObject=nameArray.getJSONObject(0);
+            tName=nameObject.getString("firstName")+" "+nameObject.getString("lastName");
             name.setText(tName);
             email.setText(tEmail);
             phNo.setText(tPhoneNO);

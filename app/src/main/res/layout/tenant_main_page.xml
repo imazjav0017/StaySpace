@@ -1,11 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Room Details"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="30dp"
+    android:textSize="24sp"
     android:gravity="center"
-    android:layout_centerInParent="true"
-    android:textSize="50sp"/>
+    android:text="Next Rent To Be Paid in 10 Days"
+    android:textColor="#df0804"/>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:id="@+id/tenantCircleImageView"
+        android:src="@drawable/owner" />
+    <ScrollView
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tenantCircleImageView"
+        android:layout_marginTop="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:orientation="horizontal">
+            <android.support.v7.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="2dp"
+                android:layout_weight="1"
+                android:padding="3dp"
+                app:cardElevation="2dp">
+                <LinearLayout
+                    android:padding="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Room No/Flat No"
+                        android:textStyle="bold"
+                        android:textColor="#000"
+                        android:textSize="18sp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="1A"
+                        android:gravity="center"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="2dp"
+                android:padding="3dp"
+                android:layout_weight="1"
+                app:cardElevation="2dp">
+                <LinearLayout
+                    android:padding="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Building Name"
+                        android:textStyle="bold"
+                        android:textColor="#000"
+                        android:textSize="18sp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Garden City"
+                        android:gravity="center"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+
+    </ScrollView>
+
 </RelativeLayout>

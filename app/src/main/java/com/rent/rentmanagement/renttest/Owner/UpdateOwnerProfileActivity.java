@@ -21,7 +21,7 @@ import com.rent.rentmanagement.renttest.R;
      @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_owner_profile);
+        setContentView(R.layout.owner_activity_update_owner_profile);
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("Owner Name");

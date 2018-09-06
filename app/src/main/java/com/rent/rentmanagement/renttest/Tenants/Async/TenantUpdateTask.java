@@ -67,7 +67,7 @@ Context context;
         super.onPostExecute(s);
         if (s != null) {
             Toast.makeText(context, "updated!", Toast.LENGTH_SHORT).show();
-            LoginActivity.sharedPreferences.edit().putString("tenantDetails",s).apply();
+            LoginActivity.sharedPreferences.edit().putString("tenantDetail",s).apply();
             Log.i("updatedData", s);
         }
         else

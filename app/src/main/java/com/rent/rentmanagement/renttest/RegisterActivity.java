@@ -15,7 +15,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.DataOutputStream;
@@ -28,11 +27,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class RegisterActivity extends AppCompatActivity {
-    EditText username,email,password,mobileNo;
+    EditText firstName,lastName,email,password,mobileNo;
     Button register;
     ProgressBar progressBar;
-    RadioGroup rg;
+    RadioGroup rg,gendergroup;
     boolean isOwner=false;
+    String gender=null;
 
 
     @Override
@@ -61,11 +61,10 @@ public class RegisterActivity extends AppCompatActivity {
                 connection.setRequestMethod("POST");
                 connection.setDoOutput(true);
                 connection.connect();
-
                 DataOutputStream outputStream=new DataOutputStream(connection.getOutputStream());
                 outputStream.writeBytes(params[1]);
                 int resp=connection.getResponseCode();
-                Log.i("resp",String.valueOf(resp));
+                Log.i("REGISTER RESP",String.valueOf(resp));
                 if(resp==200) {
                     onBackPressed();
                     return String.valueOf(resp);
@@ -102,24 +101,31 @@ public class RegisterActivity extends AppCompatActivity {
     }
     public void Register(View v)  {
         DateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
-        register.setClickable(false);
-        try {
-            progressBar.setVisibility(View.VISIBLE);
-            JSONObject userDetails = new JSONObject();
-         userDetails.put("name", username.getText().toString());
-            userDetails.put("email", email.getText().toString());
-            userDetails.put("password", password.getText().toString());
-            userDetails.put("mobileNo",mobileNo.getText().toString());
-            userDetails.put("date",dateFormat.format(new Date()).toString());
-            userDetails.put("isOwner",isOwner);
-            RegisterTask task=new RegisterTask();
-            Log.i("data:",userDetails.toString());
-            task.execute("https://sleepy-atoll-65823.herokuapp.com/users/signup",userDetails.toString());
-        }catch(Exception e)
+        if(gender==null)
         {
-            progressBar.setVisibility(View.INVISIBLE);
-            Log.i("err",e.getMessage());
-            register.setClickable(true);
+            Toast.makeText(this, "Select Your Gender", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            register.setClickable(false);
+            try {
+                progressBar.setVisibility(View.VISIBLE);
+                JSONObject userDetails = new JSONObject();
+                userDetails.put("firstName", firstName.getText().toString());
+                userDetails.put("lastName", lastName.getText().toString());
+                userDetails.put("gender",gender);
+                userDetails.put("email", email.getText().toString());
+                userDetails.put("password", password.getText().toString());
+                userDetails.put("mobileNo", mobileNo.getText().toString());
+                userDetails.put("date", dateFormat.format(new Date()).toString());
+                userDetails.put("isOwner", isOwner);
+                RegisterTask task = new RegisterTask();
+                Log.i("REGISTER JSON DATA:", userDetails.toString());
+                task.execute("https://sleepy-atoll-65823.herokuapp.com/users/signup", userDetails.toString());
+            } catch (Exception e) {
+                progressBar.setVisibility(View.INVISIBLE);
+                Log.i("REGISTER ERROR", e.getMessage());
+                register.setClickable(true);
+            }
         }
     }
 
@@ -138,13 +144,15 @@ public class RegisterActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setTitle("Register");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        username=(EditText)findViewById(R.id.newUsernameInput);
+        firstName=(EditText)findViewById(R.id.firstNameInput);
+        lastName=(EditText)findViewById(R.id.lastNameInput);
         progressBar=(ProgressBar)findViewById(R.id.registerProgress);
         email=(EditText)findViewById(R.id.emailInput);
         password=(EditText)findViewById(R.id.newPasswordInput);
         register=(Button)findViewById(R.id.submitRegister);
         mobileNo=(EditText)findViewById(R.id.mobileNo);
         rg=(RadioGroup)findViewById(R.id.registerRadioGroup);
+        gendergroup=(RadioGroup)findViewById(R.id.registerGenderRadioGroup);
         RadioButton defaultButton=(RadioButton)findViewById(R.id.tenantRadioRegister);
         defaultButton.setChecked(true);
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -157,6 +165,19 @@ public class RegisterActivity extends AppCompatActivity {
                else if(i==R.id.ownerRadioRegister) {
                    isOwner=true;
                     Log.i("radioClick","O");
+                }
+            }
+        });
+        gendergroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if(i==R.id.maleRadioBtn)
+                {
+                    gender="m";
+                }
+                else
+                {
+                    gender="f";
                 }
             }
         });

@@ -40,7 +40,7 @@ public class RentDueFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v=inflater.inflate(R.layout.rent_due_tab,container,false);
+        v=inflater.inflate(R.layout.owner_rent_due_tab,container,false);
         occupiedRoomsListView=(RecyclerView)v.findViewById(R.id.occupiedRoomsList);
         empty=(TextView)v.findViewById(R.id.noRentDueText);
         LinearLayoutManager lm1=new LinearLayoutManager(context);

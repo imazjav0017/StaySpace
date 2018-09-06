@@ -2,30 +2,22 @@ package com.rent.rentmanagement.renttest.Owner;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rent.rentmanagement.renttest.Fragments.RoomsFragment;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -80,11 +72,11 @@ public class BuildActivity extends AppCompatActivity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(getApplicationContext(), "Processing!", Toast.LENGTH_SHORT).show();
-                            Log.i("sending","sending");
-                            Log.i("amo",rentAmount);
-                            SendToken task = new SendToken();
-                            task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/addRooms");
+                            try {
+                                setPostData();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
@@ -96,38 +88,47 @@ public class BuildActivity extends AppCompatActivity {
 
         }
     }
+
+    void setPostData() throws JSONException {
+        Toast.makeText(getApplicationContext(), "Processing!", Toast.LENGTH_SHORT).show();
+        Log.i("addRoomsProcessAuto","sending");
+        JSONObject roomsData=new JSONObject();
+        DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        roomsData.put("roomType",roomType);
+        roomsData.put("roomRent",Integer.parseInt(rentAmount));
+        roomsData.put("noOfRooms",Integer.parseInt(rooms));
+        roomsData.put("date",dateFormat.format(new Date()).toString());
+        if(roomCapacity!=0)
+            roomsData.put("roomCapacity",roomCapacity);
+        if(accessToken!=null)
+            roomsData.put("auth",accessToken);
+        roomsData.put("ownerId",LoginActivity.sharedPreferences.getString(
+                "ownerId",null));
+        String buildingId=getIntent().getStringExtra("buildingId");
+        if(buildingId!=null)
+            roomsData.put("buildingId",buildingId);
+        SendToken task = new SendToken();
+        task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/addRooms",roomsData.toString());
+    }
     public class SendToken extends AsyncTask<String,Void,String> {
 
 
         @Override
         protected String doInBackground(String... params) {
-            DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
-                JSONObject roomsData=new JSONObject();
+
                 URL url = new URL(params[0]);
-                roomsData.put("roomType",roomType);
-                roomsData.put("roomRent",Integer.parseInt(rentAmount));
-                roomsData.put("noOfRooms",Integer.parseInt(rooms));
-                roomsData.put("date",dateFormat.format(new Date()).toString());
-                if(roomCapacity!=0)
-                    roomsData.put("roomCapacity",roomCapacity);
-                Log.i( "response",dateFormat.format(new Date()).toString());
-                if(accessToken!=null)
-                    roomsData.put("auth",accessToken);
-                roomsData.put("ownerId",LoginActivity.sharedPreferences.getString(
-                        "ownerId",null));
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.addRequestProperty("Accept","application/json");
                 connection.addRequestProperty("Content-Type", "application/json");
-
                 connection.setDoOutput(true);
                 connection.connect();
                 DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-                outputStream.writeBytes(roomsData.toString());
-                Log.i("data", roomsData.toString());
+                outputStream.writeBytes(params[1]);
+                Log.i("json data autoRooms",params[1]);
                 int tokenRecieved = connection.getResponseCode();
-                Log.i("tokenResp", String.valueOf(tokenRecieved));
+                Log.i("auto rooms add resp", String.valueOf(tokenRecieved));
                 return String.valueOf(tokenRecieved);
 
 
@@ -135,8 +136,6 @@ public class BuildActivity extends AppCompatActivity {
 
                 e.printStackTrace();
             } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
                 e.printStackTrace();
             }
             return null;
@@ -146,9 +145,6 @@ public class BuildActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             response(s);
-
-
-
         }
     }
     public void response(String s) {
@@ -170,8 +166,8 @@ public class BuildActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_build);
-         addRoomsbutton= (Button) findViewById(R.id.addroomsButton);
+        setContentView(R.layout.owner_activity_add_automatic_rooms);
+        addRoomsbutton= (Button) findViewById(R.id.addroomsButton);
         roomNo=(EditText) findViewById(R.id.roomdetailInput);
         rentInput=(EditText)findViewById(R.id.rentInput);
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
@@ -187,7 +183,7 @@ public class BuildActivity extends AppCompatActivity {
                 if(checkedId==R.id.single)
                 {
                    roomType=items[1];
-                    roomCapacity=1;
+                   roomCapacity=1;
                 }
                 else if(checkedId==R.id.doubleBtn)
                 {

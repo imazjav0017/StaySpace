@@ -63,7 +63,7 @@ public class TenantActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tenant);
+        setContentView(R.layout.tenant_main_activity);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
@@ -87,7 +87,7 @@ public class TenantActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_menu,menu);
+        getMenuInflater().inflate(R.menu.options_menu,menu);
         return true;
     }
 

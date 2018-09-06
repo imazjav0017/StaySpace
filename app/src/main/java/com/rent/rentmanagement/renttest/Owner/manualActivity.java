@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,11 +69,11 @@ public class manualActivity extends AppCompatActivity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(getApplicationContext(), "Processing!", Toast.LENGTH_SHORT).show();
-                            Log.i("sending","sending");
-                            Log.i("amo",rentAmount);
-                            manualActivity.SendToken task = new manualActivity.SendToken();
-                            task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/addRooms");
+                            try {
+                                setPostData();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
@@ -84,47 +85,52 @@ public class manualActivity extends AppCompatActivity {
 
         }
     }
+    void setPostData() throws JSONException {
+        Toast.makeText(getApplicationContext(), "Processing!", Toast.LENGTH_SHORT).show();
+        Log.i("addRoomsProcess","sending");
+        JSONObject roomsData=new JSONObject();
+        DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        roomsData.put("roomType",roomType);
+        roomsData.put("roomRent",Integer.parseInt(rentAmount));
+        roomsData.put("roomNo",rooms);
+        roomsData.put("date",dateFormat.format(new Date()).toString());
+        if(roomCapacity!=0)
+            roomsData.put("roomCapacity",roomCapacity);
+        if(accessToken!=null)
+            roomsData.put("auth",accessToken);
+        roomsData.put("ownerId",LoginActivity.sharedPreferences.getString(
+                "ownerId",null));
+        String buildingId=getIntent().getStringExtra("buildingId");
+        if(buildingId!=null)
+        roomsData.put("buildingId",buildingId);
+        manualActivity.SendToken task = new manualActivity.SendToken();
+        task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/addRooms",roomsData.toString());
+    }
     public class SendToken extends AsyncTask<String,Void,String> {
 
 
         @Override
         protected String doInBackground(String... params) {
-            DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            try {
 
-                JSONObject roomsData=new JSONObject();
+            try {
                 URL url = new URL(params[0]);
-                roomsData.put("roomType",roomType);
-                roomsData.put("roomRent",Integer.parseInt(rentAmount));
-                roomsData.put("roomNo",rooms);
-                roomsData.put("date",dateFormat.format(new Date()).toString());
-                if(roomCapacity!=0)
-                roomsData.put("roomCapacity",roomCapacity);
-                if(accessToken!=null)
-                    roomsData.put("auth",accessToken);
-                roomsData.put("ownerId",LoginActivity.sharedPreferences.getString(
-                        "ownerId",null));
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.addRequestProperty("Accept","application/json");
                 connection.addRequestProperty("Content-Type", "application/json");
-
                 connection.setDoOutput(true);
                 connection.connect();
                 DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-                outputStream.writeBytes(roomsData.toString());
-                Log.i("data", roomsData.toString());
+                outputStream.writeBytes(params[1]);
+                Log.i("manual rooms addData",params[1]);
                 int tokenRecieved = connection.getResponseCode();
-                Log.i("tokenResp", String.valueOf(tokenRecieved));
+                Log.i("manual rooms addResp", String.valueOf(tokenRecieved));
                 return String.valueOf(tokenRecieved);
-
 
             } catch (MalformedURLException e) {
 
                 e.printStackTrace();
             } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
                 e.printStackTrace();
             }
             return null;
@@ -134,9 +140,6 @@ public class manualActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             response(s);
-
-
-
         }
     }
     public void response(String s) {
@@ -157,7 +160,7 @@ public class manualActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manual);
+        setContentView(R.layout.owner_activity_add_rooms_manual);
         addRoomsbutton= (Button) findViewById(R.id.addroomsButton);
         roomNo=(EditText) findViewById(R.id.roomdetailInput);
         rentInput=(EditText)findViewById(R.id.rentInput);

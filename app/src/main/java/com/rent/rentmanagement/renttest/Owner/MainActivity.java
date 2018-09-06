@@ -26,12 +26,14 @@ import com.rent.rentmanagement.renttest.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
    public static BottomNavigationView bottomNavigationView;
     public static FloatingActionButton fab;
     public static String roomInfo;
     boolean showSv=false;
+    String Buildings;
     public static boolean completedTasks=true;
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()== R.id.logoutMenuOption)
@@ -57,14 +59,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_menu,menu);
+        getMenuInflater().inflate(R.menu.options_menu,menu);
         return true;
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.owner_activity_main);
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         bottomNavigationView=(BottomNavigationView)findViewById(R.id.bottomNavigationView);
@@ -74,23 +75,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                try {
-                    JSONArray buildings=new JSONArray(LoginActivity.sharedPreferences.getString("buildingName",null));
-                    if(buildings.length()==0)
-                    {
-                      Intent i=new Intent(getApplicationContext(),UpdateOwnerExtraActivity.class);
-                      startActivity(i);
-                    }
-                    else
-                    {
-                        Intent i=new Intent(getApplicationContext(),automanualActivity.class);
-                        startActivity(i);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+                tryToAddRooms();
             }
         });
         fab.setVisibility(View.INVISIBLE);
@@ -187,10 +172,46 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onResume() {
         super.onResume();
+         Buildings=LoginActivity.sharedPreferences.getString("buildings",null);
+        if(Buildings!=null)
+        {
+            try {
+                JSONArray buildingArray = new JSONArray(Buildings);
+                if (buildingArray.length() > 0) {
+                    JSONObject buildingObject = buildingArray.getJSONObject(0);
+                    String buildName = buildingObject.getString("name");
+                    setTitle(buildName);
+                } else
+                    setTitle("TenKeyz");
+            }catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
         Log.i("onResume",ACTIVITY_SERVICE);
         startService(new Intent(getApplicationContext(), GetRoomRequestsService.class));
     }
-
+    public void tryToAddRooms()
+         {
+             Buildings=LoginActivity.sharedPreferences.getString("buildings",null);
+             if(Buildings!=null)
+             {
+                 try {
+                     JSONArray buildingArray = new JSONArray(Buildings);
+                     if (buildingArray.length() > 0) {
+                        Intent i=new Intent(getApplicationContext(),SelectBuildingActivity.class);
+                        startActivity(i);
+                     } else
+                     {
+                         Intent i=new Intent(getApplicationContext(),UpdateOwnerExtraActivity.class);
+                         startActivity(i);
+                     }
+                 }catch (JSONException e)
+                 {
+                     e.printStackTrace();
+                 }
+             }
+         }
 
 
 }

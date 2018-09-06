@@ -44,7 +44,7 @@ public class OwnerProfileFragment extends Fragment {
     public void onResume() {
         super.onResume();
         try {
-            JSONArray buildings=new JSONArray(LoginActivity.sharedPreferences.getString("buildingName",null));
+            JSONArray buildings=new JSONArray(LoginActivity.sharedPreferences.getString("buildings",null));
             if(buildings.length()==0)
                     updateProfile.setVisibility(View.VISIBLE);
                 else
@@ -99,30 +99,15 @@ public class OwnerProfileFragment extends Fragment {
     void setDetails()
     {
         String s= LoginActivity.sharedPreferences.getString("ownerDetails",null);
-        if(s!=null)
-        {
-            try {
-
-                JSONObject jsonObject=new JSONObject(s);
-                String oName=jsonObject.getString("name");
-                String oEmail=jsonObject.getString("email");
-                String oNo=jsonObject.getString("mobileNo");
-                if(oName!=null)
-                {
-                    name.setText(oName);
-                    getActivity().setTitle(oName);
-                }
-                if(oEmail!=null)
-                {
-                    email.setText(oEmail);
-                }
-                if(oNo!=null)
-                {
-                    phNo.setText(oNo);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        try {
+            JSONObject object=new JSONObject(s);
+            JSONObject ownerNameObject=object.getJSONObject("name");
+            String ownerName=ownerNameObject.getString("firstName")+" "+ownerNameObject.getString("lastName");
+            name.setText(ownerName);
+            email.setText(object.getString("email"));
+            phNo.setText(object.getString("mobileNo"));
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -72,7 +72,7 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
 
     @Override
     public ViewHolder2 onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v=LayoutInflater.from(parent.getContext()).inflate(R.layout.layoutway,parent,false);
+        View v=LayoutInflater.from(parent.getContext()).inflate(R.layout.owner_occupied_rooms_item,parent,false);
         return new ViewHolder2(v);
     }
 
@@ -115,7 +115,7 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
                // roomActivity.reasonPage.setVisibility(View.VISIBLE);
                 //roomActivity.isVisible=true;
                 AlertDialog.Builder builder=new AlertDialog.Builder(context);
-                View view=LayoutInflater.from(context).inflate(R.layout.reason_dialog,null,false);
+                View view=LayoutInflater.from(context).inflate(R.layout.owner_reason_dialog,null,false);
                 final EditText input=(EditText)view.findViewById(R.id.reasonInputText);
                 final Button btn=(Button)view.findViewById(R.id.reasonButtonDialog);
                 builder.setView(view);
@@ -145,7 +145,7 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
             public void onClick(View v) {
 
                 AlertDialog.Builder builder=new AlertDialog.Builder(context);
-                View view=LayoutInflater.from(context).inflate(R.layout.collect_dialog,null,false);
+                View view=LayoutInflater.from(context).inflate(R.layout.owner_dialog_collect,null,false);
                 final EditText rentCollectedInput=(EditText)view.findViewById(R.id.rentcollectedinput);
                 final EditText payee=(EditText)view.findViewById(R.id.payee);
                 rentCollectedInput.setText(model.getDueAmount());

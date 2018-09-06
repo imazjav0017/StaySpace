@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import com.rent.rentmanagement.renttest.R;
 
-import java.net.URI;
-
 public class ownerTenantRequestDetails extends AppCompatActivity {
 TextView roomnoTextView,name,phNo;
 Button accept,reject,call,message;
@@ -20,7 +18,7 @@ String tenantName,roomNo,_id,mobileNo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_owner_tenant_request_details);
+        setContentView(R.layout.owner_activity_tenant_request_details);
         roomnoTextView=(TextView)findViewById(R.id.requestingRoomNoInfo);
         name=(TextView)findViewById(R.id.requestingTenantNameInfo);
         phNo=(TextView)findViewById(R.id.requestingTenantPhoneInfo);

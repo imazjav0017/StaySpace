@@ -103,13 +103,22 @@ public class GetAvailableRoomsService extends IntentService {
                 for(int i=0;i<room.length();i++)
                 {
                     JSONObject object=room.getJSONObject(i);
-                    JSONObject userDetails=object.getJSONObject("owner");
-                    String ownerId=userDetails.getString("_id");
-                    String ownerName=userDetails.getString("name");
-                    String mobileNo=userDetails.getString("mobileNo");
-                    availableRooms.add(new AvailableRoomModel(object.getString("roomType"),
-                            object.getString("roomNo"),String.valueOf(object.getInt("roomRent")),
-                            object.getString("_id"),ownerId,ownerName,mobileNo));
+                    String roomId=object.getString("_id");
+                    String roomType=object.getString("roomType");
+                    String roomRent=object.getString("roomRent");
+                    String roomNo=object.getString("roomNo");
+                    JSONObject buildingObject=object.getJSONObject("building");
+                    String buildingId=buildingObject.getString("_id");
+                    String buildingName=buildingObject.getString("name");
+                    String floors=String.valueOf(buildingObject.getInt("floor"));
+                    JSONObject ownerObject=object.getJSONObject("owner");
+                    String ownerId=ownerObject.getString("_id");
+                    String ownerPhoneNo=ownerObject.getString("mobileNo");
+                    JSONObject ownerNameObject=ownerObject.getJSONObject("name");
+                    String Ownername=ownerNameObject.getString("firstName")
+                            +" "+ownerNameObject.getString("lastName");
+                    availableRooms.add(new AvailableRoomModel(roomType,roomNo,roomRent,roomId,ownerId,Ownername,
+                            ownerPhoneNo,buildingId,buildingName,floors ));
                 }
                 AvailableRoomsFragment.updateNow();
             }
