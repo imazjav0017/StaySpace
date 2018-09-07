@@ -39,21 +39,31 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()== R.id.logoutMenuOption)
         {
-            new AlertDialog.Builder(this)
-                    .setTitle("Logout!").setMessage("Are You Sure You Wish To Logout?")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+
+
+        }
+        switch(item.getItemId())
+        {
+            case R.id.logoutMenuOption :
+                new AlertDialog.Builder(this)
+                        .setTitle("Logout!").setMessage("Are You Sure You Wish To Logout?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
                                 Log.i("status","logout");
                                 LoginActivity.sharedPreferences.edit().clear().apply();
                                 Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                                 startActivity(i);
 
-                        }
-                    }).setNegativeButton("No",null).show();
-            return true;
-
+                            }
+                        }).setNegativeButton("No",null).show();
+                return true;
+            case R.id.switchBuildingOption :
+                Log.i("switching","building");
+                Intent i=new Intent(getApplicationContext(),SwitchBuildingActivity.class);
+                startActivity(i);
+                return true;
         }
 
         return false;
@@ -176,10 +186,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
          Buildings=LoginActivity.sharedPreferences.getString("buildings",null);
         if(Buildings!=null)
         {
+            int  buildingIndex= LoginActivity.sharedPreferences.getInt("buildingIndex",0);
             try {
                 JSONArray buildingArray = new JSONArray(Buildings);
                 if (buildingArray.length() > 0) {
-                    JSONObject buildingObject = buildingArray.getJSONObject(0);
+                    JSONObject buildingObject = buildingArray.getJSONObject(buildingIndex);
                     String buildName = buildingObject.getString("name");
                     setTitle(buildName);
                 } else
@@ -192,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Log.i("onResume",ACTIVITY_SERVICE);
         startService(new Intent(getApplicationContext(), GetRoomRequestsService.class));
         startService(new Intent(getApplicationContext(), GetRoomsService.class));
+        RoomsFragment.showProgress(true);
     }
     public void tryToAddRooms()
          {

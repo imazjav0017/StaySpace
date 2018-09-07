@@ -47,26 +47,13 @@ public class GetRoomsService extends IntentService {
     public GetRoomsService() {
         super("GetRoomsService");
     }
-
-    /**
-     * Starts this service to perform action Foo with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-
-
-    /**
-     * Starts this service to perform action Baz with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-
+     int buildingIndex;
 
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             try {
+                buildingIndex= LoginActivity.sharedPreferences.getInt("buildingIndex",0);
                 startTask();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -82,7 +69,7 @@ public class GetRoomsService extends IntentService {
             try {
                 JSONArray buildingArray = new JSONArray(Buildings);
                 if (buildingArray.length() > 0) {
-                    JSONObject buildingObject = buildingArray.getJSONObject(0);
+                    JSONObject buildingObject = buildingArray.getJSONObject(buildingIndex);
                      buildId = buildingObject.getString("_id");
                 }
             } catch (JSONException e) {
@@ -139,12 +126,18 @@ public class GetRoomsService extends IntentService {
             }
         }
         RoomsFragment.updateView();
+        RoomsFragment.showProgress(false);
 
 
 
     }
     public class GetRoomsTask extends AsyncTask<String,Integer,String>
     {
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            RoomsFragment.progressBar.setProgress(values[0]);
+        }
         @Override
         protected String doInBackground(String... params) {
             try {

@@ -1,9 +1,11 @@
 package com.rent.rentmanagement.renttest.Adapters;
 
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +13,18 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.rent.rentmanagement.renttest.DataModels.BuildingListModel;
+import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.Owner.automanualActivity;
 import com.rent.rentmanagement.renttest.R;
+import com.rent.rentmanagement.renttest.Services.GetRoomsService;
 
 import java.util.List;
 
-public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapter.ViewHolder>
+public class BuildingListSwitchingAdapter extends RecyclerView.Adapter<BuildingListSwitchingAdapter.ViewHolder>
 {
-    List<BuildingListModel>buildingListModels;
+    List<BuildingListModel> buildingListModels;
 
-    public BuildingListAdapter(List<BuildingListModel> buildingListModels) {
+    public BuildingListSwitchingAdapter(List<BuildingListModel> buildingListModels) {
         this.buildingListModels = buildingListModels;
     }
 
@@ -31,16 +35,18 @@ public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapte
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final BuildingListModel model=buildingListModels.get(position);
         holder.buildingName.setText(model.getBuildingName());
         holder.buildingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(holder.context,automanualActivity.class);
-                i.putExtra("buildingId",model.get_id());
-                holder.context.startActivity(i);
-
+                Log.i("switching",model.getBuildingName());
+                Intent i=new Intent(holder.context,GetRoomsService.class);
+                LoginActivity.sharedPreferences.edit().putInt("buildingIndex",
+                        position).apply();
+                holder.context.startService(i);
+                ((Activity)holder.context).onBackPressed();
             }
         });
     }
@@ -63,3 +69,4 @@ public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapte
         }
     }
 }
+

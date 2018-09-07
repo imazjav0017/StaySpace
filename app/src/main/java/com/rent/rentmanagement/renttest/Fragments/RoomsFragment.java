@@ -83,11 +83,6 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
         progressBar=(ProgressBar)v.findViewById(R.id.progressBar);
         progressBar.setProgress(0);
         progressBar.setMax(100);
-        try {
-            setStaticData(LoginActivity.sharedPreferences.getString("getRoomsResp",null));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         return v;
     }
 
@@ -154,10 +149,26 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
     public void onResume() {
         super.onResume();
         MainActivity.fab.setVisibility(View.VISIBLE);
+        try {
+            setStaticData(LoginActivity.sharedPreferences.getString("getRoomsResp",null));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         updateView();
         if(currentTab!=-1)
             if(viewPager!=null)
             viewPager.setCurrentItem(currentTab,true);
+    }
+    public static void showProgress(boolean flag)
+    {
+        if(progressBar!=null) {
+            if (flag)
+                progressBar.setVisibility(View.VISIBLE);
+            else {
+                RoomsFragment.progressBar.setProgress(100);
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+        }
     }
     public static void updateView()
     {
@@ -179,6 +190,9 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
 
     public void setStaticData(String s) throws JSONException {
         if (s != null) {
+            erooms.clear();
+            oRooms.clear();
+            tRooms.clear();
             JSONArray mainArray = new JSONArray(s);
             for (int i = 0; i < mainArray.length(); i++) {
                 JSONObject mainObject = mainArray.getJSONObject(i);

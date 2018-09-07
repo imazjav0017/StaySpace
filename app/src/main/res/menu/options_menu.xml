@@ -11,4 +11,8 @@
         android:id="@+id/logoutMenuOption"
         android:title="Logout">
     </item>
+    <item
+        android:id="@+id/switchBuildingOption"
+        android:title="Switch Building">
+    </item>
 </menu>
