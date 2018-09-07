@@ -455,7 +455,7 @@ public class roomDetailActivity extends AppCompatActivity {
         rn.setText(roomNo);
         rt.setText(roomType);
         rr.setText("\u20B9"+roomRent);
-        studentsRV=(RecyclerView)findViewById(R.id.studentsRecyclerView);
+       /* studentsRV=(RecyclerView)findViewById(R.id.studentsRecyclerView);
         studentsList=new ArrayList<>();
         adapter=new StudentAdapter(studentsList,getApplicationContext());
         LinearLayoutManager lm=new LinearLayoutManager(getApplicationContext());
@@ -474,7 +474,7 @@ public class roomDetailActivity extends AppCompatActivity {
             setStudentsData(LoginActivity.sharedPreferences.getString("allTenantsinfo",null));
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
     }
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void expandStudents(View v)

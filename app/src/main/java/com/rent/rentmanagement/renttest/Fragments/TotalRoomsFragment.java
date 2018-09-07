@@ -31,6 +31,7 @@ public class TotalRoomsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        empty();
     }
 
     @Nullable
@@ -38,24 +39,11 @@ public class TotalRoomsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View  v=inflater.inflate(R.layout.owner_activity_all_rooms,container,false);
         totalRoomsList=(RecyclerView)v.findViewById(R.id.totalRoomsList);
-       empty=(TextView)v.findViewById(R.id.noRoomsText);
+        empty=(TextView)v.findViewById(R.id.noRoomsText);
         LinearLayoutManager lm=new LinearLayoutManager(context);
         totalRoomsList.setLayoutManager(lm);
         totalRoomsList.setHasFixedSize(true);
         totalRoomsList.setAdapter(RoomsFragment.adapter3);
-       /* if(RoomsFragment.tRooms.isEmpty())
-        {
-            if(empty!=null) {
-                totalRoomsList.setVisibility(View.INVISIBLE);
-                empty.setVisibility(View.VISIBLE);
-            }
-        }
-        else {
-            if(empty!=null) {
-                totalRoomsList.setVisibility(View.VISIBLE);
-                empty.setVisibility(View.INVISIBLE);
-            }
-        }*/
         return v;
     }
     public static void empty() {

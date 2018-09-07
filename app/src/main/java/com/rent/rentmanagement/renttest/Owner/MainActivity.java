@@ -23,6 +23,7 @@ import com.rent.rentmanagement.renttest.Fragments.TenantsFragment;
 import com.rent.rentmanagement.renttest.Services.GetRoomRequestsService;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
+import com.rent.rentmanagement.renttest.Services.GetRoomsService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -190,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
         Log.i("onResume",ACTIVITY_SERVICE);
         startService(new Intent(getApplicationContext(), GetRoomRequestsService.class));
+        startService(new Intent(getApplicationContext(), GetRoomsService.class));
     }
     public void tryToAddRooms()
          {

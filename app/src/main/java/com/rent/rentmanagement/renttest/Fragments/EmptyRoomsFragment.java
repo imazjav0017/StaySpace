@@ -35,7 +35,7 @@ public class EmptyRoomsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        empty();
     }
 
     @Nullable

@@ -106,7 +106,11 @@
             android:name=".Tenants.Services.GetTenantHomeService"
             android:exported="false" />
 
-        <activity android:name=".Owner.SelectBuildingActivity"></activity>
+        <activity android:name=".Owner.SelectBuildingActivity" />
+
+        <service
+            android:name=".Services.GetRoomsService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

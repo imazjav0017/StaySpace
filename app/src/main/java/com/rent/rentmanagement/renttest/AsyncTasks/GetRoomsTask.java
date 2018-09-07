@@ -81,17 +81,9 @@ public class GetRoomsTask extends AsyncTask<String,Integer,String>
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         MainActivity.completedTasks=true;
-        RoomsFragment.progressBar.setProgress(100);
-        RoomsFragment.progressBar.setVisibility(View.INVISIBLE);
         if (s != null) {
-
-            Log.i("getRooms", s);
-            MainActivity.roomInfo=s;
-            try {
-                RoomsFragment.setData(s,context);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            RoomsFragment.progressBar.setProgress(100);
+            RoomsFragment.progressBar.setVisibility(View.INVISIBLE);
         }
         else
         {

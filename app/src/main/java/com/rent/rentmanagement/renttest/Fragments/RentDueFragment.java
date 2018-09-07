@@ -34,7 +34,7 @@ public class RentDueFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        empty();
     }
 
     @Nullable
@@ -47,20 +47,6 @@ public class RentDueFragment extends Fragment {
         occupiedRoomsListView.setLayoutManager(lm1);
         occupiedRoomsListView.setHasFixedSize(true);
         occupiedRoomsListView.setAdapter(RoomsFragment.adapter2);
-
-        /*if(RoomsFragment.oRooms.isEmpty())
-        {
-            if(empty!=null) {
-                occupiedRoomsListView.setVisibility(View.INVISIBLE);
-                empty.setVisibility(View.VISIBLE);
-            }
-        }
-        else {
-            if(empty!=null) {
-                occupiedRoomsListView.setVisibility(View.VISIBLE);
-                empty.setVisibility(View.INVISIBLE);
-            }
-        }*/
         return v;
     }
     public static void empty()
