@@ -7,6 +7,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.rent.rentmanagement.renttest.LoginActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -31,15 +36,27 @@ public class ResponseToRoomRequestService extends IntentService {
 
 
 
-
-
+    String data,tenantname;
+    boolean response;
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-
+            data=intent.getStringExtra("data");
+            tenantname=intent.getStringExtra("tenantName");
+            response=intent.getBooleanExtra("response",false);
+            try {
+                startTask();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
-    public class SendRoomRequestResponseTask extends AsyncTask<String,Integer,String> {
+    void startTask() throws JSONException {
+        JSONObject jsonData=new JSONObject(data);
+        SendRoomRequestResponseTask task=new SendRoomRequestResponseTask(tenantname,response);
+        task.execute("https://sleepy-atoll-65823.herokuapp.com/users/responseToRoomRequest",jsonData.toString());
+    }
+     class SendRoomRequestResponseTask extends AsyncTask<String,Integer,String> {
         String name;
         boolean response;
 

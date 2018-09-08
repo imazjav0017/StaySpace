@@ -1,12 +1,13 @@
 package com.rent.rentmanagement.renttest.DataModels;
 
 public class TenantRequestModel {
-    String tenantname,tenantId,roomNo,_id,phoneNo,email;
+    String tenantname,tenantId,roomNo,roomId,_id,phoneNo,email;
 
-    public TenantRequestModel(String tenantname, String tenantId, String roomNo, String _id, String phoneNo, String email) {
+    public TenantRequestModel(String tenantname, String tenantId, String roomNo, String roomId, String _id, String phoneNo, String email) {
         this.tenantname = tenantname;
         this.tenantId = tenantId;
         this.roomNo = roomNo;
+        this.roomId = roomId;
         this._id = _id;
         this.phoneNo = phoneNo;
         this.email = email;
@@ -34,6 +35,10 @@ public class TenantRequestModel {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getRoomId() {
+        return roomId;
     }
 
     @Override

@@ -19,6 +19,7 @@ import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.Owner.ownerTenantRequestDetails;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Services.GetRoomRequestsService;
+import com.rent.rentmanagement.renttest.Services.ResponseToRoomRequestService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,9 +61,12 @@ List<TenantRequestModel>tenantRequestModels;
         });
         final JSONObject requestResponse=new JSONObject();
         try {
+            String ownerId=LoginActivity.sharedPreferences.getString("ownerId",null);
             requestResponse.put("auth", LoginActivity.sharedPreferences.getString("token",null));
+            requestResponse.put("ownerId",ownerId);
             requestResponse.put("requestId",model.get_id());
             requestResponse.put("tenantId",model.getTenantId());
+            requestResponse.put("roomId",model.getRoomId());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -73,15 +77,20 @@ List<TenantRequestModel>tenantRequestModels;
                 Log.i("Accept","request");
                 try {
                     requestResponse.put("response",true);
-                    SendRoomRequestResponseTask task=new SendRoomRequestResponseTask(holder.context,model.getTenantname(),true);
-                    task.execute("https://sleepy-atoll-65823.herokuapp.com/users/responseToRoomRequest",requestResponse.toString());
+                    Intent i=new Intent(holder.context,ResponseToRoomRequestService.class);
+                    i.putExtra("data",requestResponse.toString());
+                    i.putExtra("response",true);
+                    i.putExtra("tenantName",model.getTenantname());
+                    holder.context.startService(i);
+                    /*SendRoomRequestResponseTask task=new SendRoomRequestResponseTask(holder.context,model.getTenantname(),true);
+                    task.execute("https://sleepy-atoll-65823.herokuapp.com/users/responseToRoomRequest",requestResponse.toString());*/
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }finally {
+                }/*finally {
                     tenantRequestModels.remove(position);
                     GetRoomRequestsService.removeElement(position);
                     notifyDataSetChanged();
-                }
+                }*/
 
             }
         });
@@ -92,15 +101,20 @@ List<TenantRequestModel>tenantRequestModels;
                 Log.i("rejected","request");
                 try {
                     requestResponse.put("response",false);
-                    SendRoomRequestResponseTask task=new SendRoomRequestResponseTask(holder.context,model.getTenantname(),false);
-                    task.execute("https://sleepy-atoll-65823.herokuapp.com/users/responseToRoomRequest",requestResponse.toString());
+                    Intent i=new Intent(holder.context,ResponseToRoomRequestService.class);
+                    i.putExtra("data",requestResponse.toString());
+                    i.putExtra("response",false);
+                    i.putExtra("tenantName",model.getTenantname());
+                    holder.context.startService(i);
+                    //SendRoomRequestResponseTask task=new SendRoomRequestResponseTask(holder.context,model.getTenantname(),false);
+                    //task.execute("https://sleepy-atoll-65823.herokuapp.com/users/responseToRoomRequest",requestResponse.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }finally {
+                }/*finally {
                     tenantRequestModels.remove(position);
                     GetRoomRequestsService.removeElement(position);
                     notifyDataSetChanged();
-                }
+                }*/
             }
         });
 

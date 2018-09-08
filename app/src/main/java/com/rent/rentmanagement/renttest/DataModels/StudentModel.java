@@ -10,6 +10,7 @@ public class StudentModel {
     String roomNo;
     String _id;
     String aadharNo;
+    String roomId;
 
     public StudentModel(String name, String phNo, String roomNo, String _id, String roomId,String aadharNo) {
         this.name = name;
@@ -36,7 +37,7 @@ public class StudentModel {
         this.aadharNo=aadharNo;
     }
 
-    String roomId;
+
     public String getName() {
         return name;
     }

@@ -375,48 +375,42 @@ public class roomDetailActivity extends AppCompatActivity {
             }
         }
     }
-    public void setStudentsData(String s) throws JSONException {
-        studentsList.clear();
-       Log.i("setStudentsData",s);
+    void setStudentsData(String s) throws JSONException {
         if(s!=null) {
-            JSONObject jsonObject=new JSONObject(s);
-            //tenants checked in through requests
-            JSONArray tenantArray=jsonObject.getJSONArray("tenant");
-
-            JSONArray array=jsonObject.getJSONArray("student");
-            JSONArray roomNo=jsonObject.getJSONArray("roomNo");
             studentsList.clear();
-            //adding the "students"
-            for(int k=0;k<array.length();k++)
-            {
-                String rNo=roomNo.getString(k);
-                JSONArray array1=array.getJSONArray(k);
-                for (int i = 0; i < array1.length(); i++) {
-                    JSONObject detail = array1.getJSONObject(i);
-                    studentsList.add(new StudentModel(detail.getString("name"),detail.getString("mobileNo"),rNo
-                            ,detail.getString("_id"),detail.getString("adharNo")));
-                }
-            }
-            for(int i=0;i<tenantArray.length();i++)
-            {
-                String rNo=roomNo.getString(i);
-                JSONArray array2=tenantArray.getJSONArray(i);
-                for (int i1 = 0; i1 < array2.length(); i1++) {
-                    JSONObject detail = array2.getJSONObject(i1);
-                    studentsList.add(new StudentModel(detail.getString("name"),detail.getString("mobileNo"),rNo
-                            ,detail.getString("_id"),detail.getString("adharNo")));
-                }
-
-            }
-         if(studentsList.size()==0)
-                    {
-
-                            checkOut.setText("Checkin");
-
+            JSONArray mainArray = new JSONArray(s);
+            for (int i = 0; i < mainArray.length(); i++) {
+                JSONObject mainObject = mainArray.getJSONObject(i);
+                String roomId = mainObject.getString("_id");
+                if (roomId.equals(_id)) {
+                    JSONArray studentsArray = mainObject.getJSONArray("students");
+                    for (int index = 0; index < studentsArray.length(); index++) {
+                        JSONObject student = studentsArray.getJSONObject(index);
+                        String name = student.getString("name");
+                        String studentId = student.getString("_id");
+                        String phoneNo = student.getString("mobileNo");
+                        String adharNo = student.getString("adharNo");
+                        studentsList.add(new StudentModel(name, phoneNo, roomNo, studentId, roomId, adharNo));
                     }
-                    adapter.notifyDataSetChanged();
-        }
+                }
+            }
+            if (studentsList.size() == 0) {
 
+                checkOut.setText("Checkin");
+
+            }
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            setStudentsData(LoginActivity.sharedPreferences.getString("getRoomsResp",null));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -455,14 +449,14 @@ public class roomDetailActivity extends AppCompatActivity {
         rn.setText(roomNo);
         rt.setText(roomType);
         rr.setText("\u20B9"+roomRent);
-       /* studentsRV=(RecyclerView)findViewById(R.id.studentsRecyclerView);
+        studentsRV=(RecyclerView)findViewById(R.id.studentsRecyclerView);
         studentsList=new ArrayList<>();
         adapter=new StudentAdapter(studentsList,getApplicationContext());
         LinearLayoutManager lm=new LinearLayoutManager(getApplicationContext());
         studentsRV.setLayoutManager(lm);
         studentsRV.setHasFixedSize(true);
         studentsRV.setAdapter(adapter);
-        paymentList=new ArrayList<>();
+       /* paymentList=new ArrayList<>();
         paymentsHistoryList=(RecyclerView)findViewById(R.id.paymentsHistoryList);
         pAdapter=new PaymentHistoryAdapter(paymentList);
         LinearLayoutManager lm2=new LinearLayoutManager(getApplicationContext());
