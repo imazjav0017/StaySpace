@@ -112,7 +112,11 @@
             android:name=".Services.GetRoomsService"
             android:exported="false" />
 
-        <activity android:name=".Owner.SwitchBuildingActivity"></activity>
+        <activity android:name=".Owner.SwitchBuildingActivity" />
+
+        <service
+            android:name=".Services.ResponseToRoomRequestService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

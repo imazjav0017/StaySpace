@@ -67,11 +67,12 @@ public class GetRoomRequestsService extends IntentService {
      * @see IntentService
      */
 
-
+    int buildingIndex;
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             try {
+                buildingIndex= LoginActivity.sharedPreferences.getInt("buildingIndex",0);
                 setJsonData();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -84,15 +85,28 @@ public class GetRoomRequestsService extends IntentService {
          */
     }
     void setJsonData() throws JSONException {
+        String buildId=null;
         JSONObject object=new JSONObject();
         String auth=LoginActivity.sharedPreferences.getString("token",null);
         String ownerId=LoginActivity.sharedPreferences.getString("ownerId",null);
         object.put("auth",auth);
         object.put("ownerId",ownerId);
-        GetRoomRequestsTask task=new GetRoomRequestsTask();
-        task.execute("https://sleepy-atoll-65823.herokuapp.com/users/getRoomRequest",object.toString());
+        String Buildings = LoginActivity.sharedPreferences.getString("buildings", null);
+        if (Buildings != null) {
+            try {
+                JSONArray buildingArray = new JSONArray(Buildings);
+                if (buildingArray.length() > 0) {
+                    JSONObject buildingObject = buildingArray.getJSONObject(buildingIndex);
+                    buildId = buildingObject.getString("_id");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            object.put("buildingId",buildId);
+            GetRoomRequestsTask task = new GetRoomRequestsTask();
+            task.execute("https://sleepy-atoll-65823.herokuapp.com/users/getRoomRequest", object.toString());
 
-
+        }
     }
     public static ArrayList<TenantRequestModel> tenantRequestModels;
     //store RoomRequests in a static arrayList
