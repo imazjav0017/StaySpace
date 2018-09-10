@@ -131,7 +131,8 @@ public class getOwnerDetailsService extends IntentService {
                if (resp == 200) {
                    String response = getResponse(connection);
                    return response;
-               } else {
+               }
+               else {
                    return null;
                }
 

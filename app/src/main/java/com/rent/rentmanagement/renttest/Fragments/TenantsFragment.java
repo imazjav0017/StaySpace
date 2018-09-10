@@ -30,6 +30,7 @@ import com.rent.rentmanagement.renttest.Adapters.TotalTenantsAdapter;
 import com.rent.rentmanagement.renttest.DataModels.StudentModel;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
+import com.rent.rentmanagement.renttest.Services.GetAllTenantsService;
 import com.rent.rentmanagement.renttest.Tenants.TenantActivity;
 
 import org.json.JSONArray;
@@ -68,186 +69,22 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
 
     RecyclerView totalTenants;
     public static List<StudentModel> studentModelList;
-  public static TotalTenantsAdapter adapter;
-    String response;
-    public void setTokenJson()
-    {
-        try {
-            if(LoginActivity.sharedPreferences.getString("token",null)!=null) {
-                JSONObject token = new JSONObject();
-                token.put("ownerId",LoginActivity.sharedPreferences.getString(
-                        "ownerId",null));
-                token.put("auth",LoginActivity.sharedPreferences.getString("token", null));
-                GetTentantsTask task = new GetTentantsTask();
-                task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/getAllStudents", token.toString());
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-    public String  getResponse(HttpURLConnection connection)
-    {
-        try {
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(
-                            connection.getInputStream()));
-            StringBuffer sb = new StringBuffer("");
-            String line = "";
-
-            while ((line = in.readLine()) != null) {
-
-                sb.append(line);
-                break;
-            }
-
-            in.close();
-            return sb.toString();
-        }catch(Exception e)
-        {
-            return e.getMessage();
-        }
-    }
-    public class GetTentantsTask extends AsyncTask<String,Void,String>
-    {
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                URL url = new URL(params[0]);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.addRequestProperty("Accept", "application/json");
-                connection.addRequestProperty("Content-Type", "application/json");
-                connection.setRequestMethod("POST");
-                connection.setDoOutput(true);
-                connection.connect();
-                DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-                outputStream.writeBytes(params[1]);
-                Log.i("data", params[1]);
-                int resp = connection.getResponseCode();
-                Log.i("getAllSTudentsResp",String.valueOf(resp));
-                if(resp==200)
-                {
-                    response=getResponse(connection);
-                    return response;
-                }
-                else
-                {
-                    return null;
-                }
-
-            }catch(MalformedURLException e)
-            {
-                e.printStackTrace();
-            } catch (ProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            if (s != null) {
-
-                try {
-                    setData(s);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            else
-            {
-                Toast.makeText(context, "Please Check Your Internet Connection and try later!", Toast.LENGTH_SHORT).show();
-                super.onPostExecute(s);
-            }
-        }
-    }
-    void setStaticData(String s) throws JSONException
-    {
-        if(s!=null) {
-            JSONObject jsonObject = new JSONObject(s);
-            JSONArray array = jsonObject.getJSONArray("student");
-            JSONArray tenantArray=jsonObject.getJSONArray("tenant");
-            JSONArray roomNo = jsonObject.getJSONArray("roomNo");
-            studentModelList.clear();
-            for (int k = 0; k < array.length(); k++) {
-                String rNo = roomNo.getString(k);
-                JSONArray array1 = array.getJSONArray(k);
-                for (int i = 0; i < array1.length(); i++) {
-                    JSONObject detail = array1.getJSONObject(i);
-                    studentModelList.add(new StudentModel(detail.getString("name"), detail.getString("mobileNo"), rNo
-                            , detail.getString("_id"),detail.getString("adharNo")));
-                }
-            }
-            for(int i=0;i<tenantArray.length();i++)
-            {
-                String rNo=roomNo.getString(i);
-                JSONArray array2=tenantArray.getJSONArray(i);
-                for (int i1 = 0; i1 < array2.length(); i1++) {
-                    JSONObject detail = array2.getJSONObject(i1);
-                    studentModelList.add(new StudentModel(detail.getString("name"),detail.getString("mobileNo"),rNo
-                            ,detail.getString("_id"),detail.getString("adharNo")));
-                }
-
-            }
-            adapter.notifyDataSetChanged();
-        }
-
-    }
-    public void setData(String s) throws JSONException {
-        Log.i("getAllStudents", s);
-        LoginActivity.sharedPreferences.edit().putString("allTenantsinfo",s).apply();
-        JSONObject jsonObject=new JSONObject(s);
-        //tenants checked in through requests
-        JSONArray tenantArray=jsonObject.getJSONArray("tenant");
-
-        JSONArray array=jsonObject.getJSONArray("student");
-        JSONArray roomNo=jsonObject.getJSONArray("roomNo");
-        studentModelList.clear();
-        //adding the "students"
-        for(int k=0;k<array.length();k++)
-        {
-            String rNo=roomNo.getString(k);
-            JSONArray array1=array.getJSONArray(k);
-            for (int i = 0; i < array1.length(); i++) {
-                JSONObject detail = array1.getJSONObject(i);
-                studentModelList.add(new StudentModel(detail.getString("name"),detail.getString("mobileNo"),rNo
-                        ,detail.getString("_id"),detail.getString("adharNo")));
-            }
-        }
-        for(int i=0;i<tenantArray.length();i++)
-        {
-            String rNo=roomNo.getString(i);
-            JSONArray array2=tenantArray.getJSONArray(i);
-            for (int i1 = 0; i1 < array2.length(); i1++) {
-                JSONObject detail = array2.getJSONObject(i1);
-                studentModelList.add(new StudentModel(detail.getString("name"),detail.getString("mobileNo"),rNo
-                        ,detail.getString("_id"),detail.getString("adharNo")));
-            }
-
-        }
-        adapter.notifyDataSetChanged();
-        if(studentModelList.size()==0)
-        {
-            empty.setVisibility(View.VISIBLE);
-        }
-        else {
-            empty.setVisibility(View.INVISIBLE);
-        }
-
-
-    }
+    public static TotalTenantsAdapter adapter;
 
     @Override
-    public void onStart() {
-        super.onStart();
-        try {
-            setStaticData(LoginActivity.sharedPreferences.getString("allTenantsinfo",null));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        setTokenJson();
+    public void onResume() {
+        super.onResume();
+        updateView();
+    }
 
+    public static void updateView()
+    {
+        if(adapter!=null && GetAllTenantsService.studentsList!=null)
+        {
+            studentModelList.clear();
+            studentModelList.addAll(GetAllTenantsService.studentsList);
+            adapter.notifyDataSetChanged();
+        }
     }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

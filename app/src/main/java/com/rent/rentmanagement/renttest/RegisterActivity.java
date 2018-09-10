@@ -91,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
                 {
                     Toast.makeText(getApplicationContext(), "Registered...", Toast.LENGTH_SHORT).show();
                 }
-                else
+                else if(s.equals("422"))
                     Toast.makeText(getApplicationContext(), "Invalid! Maybe Some Detail is Already In Use", Toast.LENGTH_SHORT).show();
 
             }
@@ -174,6 +174,8 @@ public class RegisterActivity extends AppCompatActivity {
                 if(i==R.id.maleRadioBtn)
                 {
                     gender="m";
+
+
                 }
                 else
                 {

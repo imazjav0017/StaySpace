@@ -21,6 +21,7 @@ import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Services.GetRoomRequestsService;
 import com.rent.rentmanagement.renttest.Services.ResponseToRoomRequestService;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -61,12 +62,15 @@ List<TenantRequestModel>tenantRequestModels;
         });
         final JSONObject requestResponse=new JSONObject();
         try {
+            int buildingIndex= LoginActivity.sharedPreferences.getInt("buildingIndex",0);
+            String buildId=getBuildingId(buildingIndex);
             String ownerId=LoginActivity.sharedPreferences.getString("ownerId",null);
             requestResponse.put("auth", LoginActivity.sharedPreferences.getString("token",null));
             requestResponse.put("ownerId",ownerId);
             requestResponse.put("requestId",model.get_id());
             requestResponse.put("tenantId",model.getTenantId());
             requestResponse.put("roomId",model.getRoomId());
+            requestResponse.put("buildingId",buildId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -127,6 +131,22 @@ List<TenantRequestModel>tenantRequestModels;
                 holder.context.startActivity(i);
             }
         });
+    }
+    String getBuildingId(int index) {
+        String buildId=null;
+        String Buildings = LoginActivity.sharedPreferences.getString("buildings", null);
+        if (Buildings != null) {
+            try {
+                JSONArray buildingArray = new JSONArray(Buildings);
+                if (buildingArray.length() > 0) {
+                    JSONObject buildingObject = buildingArray.getJSONObject(index);
+                     buildId = buildingObject.getString("_id");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return buildId;
     }
 
     @Override

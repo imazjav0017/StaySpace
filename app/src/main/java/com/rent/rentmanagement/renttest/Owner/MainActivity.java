@@ -20,10 +20,12 @@ import com.rent.rentmanagement.renttest.Fragments.OwnerProfileFragment;
 import com.rent.rentmanagement.renttest.Fragments.ProfileFragment;
 import com.rent.rentmanagement.renttest.Fragments.RoomsFragment;
 import com.rent.rentmanagement.renttest.Fragments.TenantsFragment;
+import com.rent.rentmanagement.renttest.Services.GetAllTenantsService;
 import com.rent.rentmanagement.renttest.Services.GetRoomRequestsService;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Services.GetRoomsService;
+import com.rent.rentmanagement.renttest.Tenants.Async.GetAvailableRoomsTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -203,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Log.i("onResume",ACTIVITY_SERVICE);
         startService(new Intent(getApplicationContext(), GetRoomRequestsService.class));
         startService(new Intent(getApplicationContext(), GetRoomsService.class));
+        startService(new Intent(getApplicationContext(), GetAllTenantsService.class));
         RoomsFragment.showProgress(true);
     }
     public void tryToAddRooms()
