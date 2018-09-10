@@ -1,5 +1,6 @@
 package com.rent.rentmanagement.renttest;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.DataOutputStream;
@@ -33,8 +35,6 @@ public class RegisterActivity extends AppCompatActivity {
     RadioGroup rg,gendergroup;
     boolean isOwner=false;
     String gender=null;
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home)
@@ -108,7 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
         else {
             register.setClickable(false);
             try {
-                progressBar.setVisibility(View.VISIBLE);
+                 progressBar.setVisibility(View.VISIBLE);
                 JSONObject userDetails = new JSONObject();
                 userDetails.put("firstName", firstName.getText().toString());
                 userDetails.put("lastName", lastName.getText().toString());

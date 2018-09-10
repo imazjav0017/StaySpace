@@ -77,6 +77,42 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
         updateView();
     }
 
+    void setStaticData(String s) throws JSONException {
+        if(s!=null) {
+            studentModelList.clear();
+            JSONObject mainObject = new JSONObject(s);
+            JSONArray tenantsArray = mainObject.getJSONArray("tenants");
+            JSONArray studentsArray = mainObject.getJSONArray("student");
+            for (int i = 0; i < studentsArray.length(); i++) {
+                JSONObject roomDetail = studentsArray.getJSONObject(i);
+                String roomId = roomDetail.getString("_id");
+                String roomNo = roomDetail.getString("roomNo");
+                JSONArray studentsDetailArray = roomDetail.getJSONArray("students");
+                for (int j = 0; j < studentsDetailArray.length(); j++) {
+                    JSONObject studentDetails = studentsDetailArray.getJSONObject(j);
+                    String studentId = studentDetails.getString("_id");
+                    String name = studentDetails.getString("name");
+                    String mobileNo = studentDetails.getString("mobileNo");
+                    String adharNo = studentDetails.getString("adharNo");
+                    studentModelList.add(new StudentModel(name, mobileNo, roomNo, studentId, roomId, adharNo));
+                }
+            }
+            for (int i = 0; i < tenantsArray.length(); i++) {
+                JSONObject tenantObject = tenantsArray.getJSONObject(i);
+                String tenantId = tenantObject.getString("_id");
+                String mobileNo = tenantObject.getString("mobileNo");
+                JSONObject nameObject = tenantObject.getJSONObject("name");
+                String name = nameObject.getString("firstName") + " " + nameObject.getString("lastName");
+                JSONObject roomObject = tenantObject.getJSONObject("room");
+                String roomId = roomObject.getString("_id");
+                String roomNo = roomObject.getString("roomNo");
+                String adharNo = tenantObject.getString("adharNo");
+                studentModelList.add(new StudentModel(name, mobileNo, roomNo, tenantId, roomId, adharNo));
+            }
+            adapter.notifyDataSetChanged();
+        }
+    }
+
     public static void updateView()
     {
         if(adapter!=null && GetAllTenantsService.studentsList!=null)
@@ -209,6 +245,11 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
         totalTenants.setLayoutManager(lm);
         totalTenants.setHasFixedSize(true);
         totalTenants.setAdapter(adapter);
+        try {
+            setStaticData(LoginActivity.sharedPreferences.getString("allTenants",null));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return v;
     }
 }

@@ -87,13 +87,13 @@ public class TenantActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.options_menu,menu);
+        getMenuInflater().inflate(R.menu.options_menu_tenants,menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()== R.id.logoutMenuOption)
+        if(item.getItemId()== R.id.logoutTenantOption)
         {
             new AlertDialog.Builder(this)
                     .setTitle("Logout!").setMessage("Are You Sure You Wish To Logout?")

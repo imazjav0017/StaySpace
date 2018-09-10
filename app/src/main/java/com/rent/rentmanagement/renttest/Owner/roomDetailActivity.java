@@ -376,23 +376,42 @@ public class roomDetailActivity extends AppCompatActivity {
         }
     }
     void setStudentsData(String s) throws JSONException {
-        if(s!=null) {
+
+        if (s != null) {
             studentsList.clear();
-            JSONArray mainArray = new JSONArray(s);
-            for (int i = 0; i < mainArray.length(); i++) {
-                JSONObject mainObject = mainArray.getJSONObject(i);
-                String roomId = mainObject.getString("_id");
-                if (roomId.equals(_id)) {
-                    JSONArray studentsArray = mainObject.getJSONArray("students");
-                    for (int index = 0; index < studentsArray.length(); index++) {
-                        JSONObject student = studentsArray.getJSONObject(index);
-                        String name = student.getString("name");
-                        String studentId = student.getString("_id");
-                        String phoneNo = student.getString("mobileNo");
-                        String adharNo = student.getString("adharNo");
-                        studentsList.add(new StudentModel(name, phoneNo, roomNo, studentId, roomId, adharNo));
+            JSONObject mainObject = new JSONObject(s);
+            JSONArray tenantsArray = mainObject.getJSONArray("tenants");
+            JSONArray studentsArray = mainObject.getJSONArray("student");
+            for (int i = 0; i < studentsArray.length(); i++) {
+                JSONObject roomDetail = studentsArray.getJSONObject(i);
+                String roomId = roomDetail.getString("_id");
+                if(roomId.equals(_id)) {
+                    String roomNo = roomDetail.getString("roomNo");
+                    JSONArray studentsDetailArray = roomDetail.getJSONArray("students");
+                    for (int j = 0; j < studentsDetailArray.length(); j++) {
+                        JSONObject studentDetails = studentsDetailArray.getJSONObject(j);
+                        String studentId = studentDetails.getString("_id");
+                        String name = studentDetails.getString("name");
+                        String mobileNo = studentDetails.getString("mobileNo");
+                        String adharNo = studentDetails.getString("adharNo");
+                        studentsList.add(new StudentModel(name, mobileNo, roomNo, studentId, roomId, adharNo));
                     }
                 }
+                else
+                    continue;
+            }
+            for (int i = 0; i < tenantsArray.length(); i++) {
+                JSONObject tenantObject = tenantsArray.getJSONObject(i);
+                String tenantId = tenantObject.getString("_id");
+                String mobileNo = tenantObject.getString("mobileNo");
+                JSONObject nameObject = tenantObject.getJSONObject("name");
+                String name = nameObject.getString("firstName") + " " + nameObject.getString("lastName");
+                JSONObject roomObject = tenantObject.getJSONObject("room");
+                String roomId = roomObject.getString("_id");
+                String roomNo = roomObject.getString("roomNo");
+                String adharNo = tenantObject.getString("adharNo");
+                if(roomId.equals(_id))
+                studentsList.add(new StudentModel(name, mobileNo, roomNo, tenantId, roomId, adharNo));
             }
             if (studentsList.size() == 0) {
 
@@ -407,7 +426,7 @@ public class roomDetailActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-            setStudentsData(LoginActivity.sharedPreferences.getString("getRoomsResp",null));
+            setStudentsData(LoginActivity.sharedPreferences.getString("allTenants",null));
         } catch (JSONException e) {
             e.printStackTrace();
         }
