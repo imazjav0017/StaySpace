@@ -94,7 +94,7 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
                     String name = studentDetails.getString("name");
                     String mobileNo = studentDetails.getString("mobileNo");
                     String adharNo = studentDetails.getString("adharNo");
-                    studentModelList.add(new StudentModel(name, mobileNo, roomNo, studentId, roomId, adharNo));
+                    studentModelList.add(new StudentModel(name, mobileNo, roomNo, studentId, adharNo, roomId,false));
                 }
             }
             for (int i = 0; i < tenantsArray.length(); i++) {
@@ -107,7 +107,7 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
                 String roomId = roomObject.getString("_id");
                 String roomNo = roomObject.getString("roomNo");
                 String adharNo = tenantObject.getString("adharNo");
-                studentModelList.add(new StudentModel(name, mobileNo, roomNo, tenantId, roomId, adharNo));
+                studentModelList.add(new StudentModel(name, mobileNo, roomNo, tenantId, adharNo, roomId,true));
             }
             adapter.notifyDataSetChanged();
         }

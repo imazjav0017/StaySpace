@@ -56,6 +56,8 @@ public class TotalTenantsAdapter extends RecyclerView.Adapter<TotalTenantsAdapte
                 i.putExtra("name",model.getName());
                 i.putExtra("id",model.get_id());
                 i.putExtra("roomNo",model.getRoomNo());
+                i.putExtra("roomId",model.getRoomId());
+                i.putExtra("isTenant",model.isTenant());
                 i.putExtra("aadharNo",model.getAadharNo());
                 i.putExtra("phNo",model.getPhNo());
                 i.putExtra("total",true);

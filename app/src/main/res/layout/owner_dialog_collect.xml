@@ -58,7 +58,7 @@
                 android:id="@+id/payee"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="studnet1/student 2"
+                android:text="hello"
                 android:gravity="center"
                 android:textSize="15sp"
                 />

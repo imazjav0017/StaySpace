@@ -23,7 +23,7 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/buildingNamesSwitchingRv"
             android:scaleType="fitXY"
-            android:src="@drawable/plus"
+            android:background="@drawable/plus"
             android:onClick="addBuilding"/>
         <TextView
             android:layout_width="wrap_content"

@@ -93,7 +93,7 @@ public class GetAllTenantsService extends IntentService {
                 String name = studentDetails.getString("name");
                 String mobileNo = studentDetails.getString("mobileNo");
                 String adharNo = studentDetails.getString("adharNo");
-                studentsList.add(new StudentModel(name, mobileNo, roomNo, studentId, roomId, adharNo));
+                studentsList.add(new StudentModel(name, mobileNo, roomNo, studentId, adharNo,roomId,false));
             }
         }
         for (int i = 0; i < tenantsArray.length(); i++)
@@ -107,7 +107,7 @@ public class GetAllTenantsService extends IntentService {
             String roomId=roomObject.getString("_id");
             String roomNo=roomObject.getString("roomNo");
             String adharNo=tenantObject.getString("adharNo");
-            studentsList.add(new StudentModel(name, mobileNo, roomNo, tenantId, roomId, adharNo));
+            studentsList.add(new StudentModel(name, mobileNo, roomNo, tenantId,adharNo,roomId,true));
 
         }
         TenantsFragment.updateView();

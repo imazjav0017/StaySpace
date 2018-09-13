@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.rent.rentmanagement.renttest.Adapters.TotalTenantsAdapter;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 
@@ -26,8 +27,8 @@ import java.net.ProtocolException;
 import java.net.URL;
 
 public class studentProfile extends AppCompatActivity {
-String _id,name,phNo,roomNo,adhaarNo;
-    boolean from;
+String _id,name,phNo,roomNo,adhaarNo,roomId;
+    boolean from,isTenant;
     EditText sRoomNo,sPhNo,sAadharNo,sName;
     Button edit,delete;
     String response;
@@ -150,9 +151,101 @@ String _id,name,phNo,roomNo,adhaarNo;
         adhaarNo=sAadharNo.getText().toString();
         setTokenJson("e");
     }
-    public void deleteStudent(View v)
+    public void deleteStudent(View v)  {
+        try {
+            deleteStudent();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    void deleteStudent() throws JSONException {
+        String auth = LoginActivity.sharedPreferences.getString("token", null);
+        JSONObject data=new JSONObject();
+        data.put("auth",auth);
+        data.put("roomId",roomId);
+        if(isTenant)
+            data.put("tenantId",_id);
+        else
+            data.put("studentId",_id);
+        DeleteStudentTask task=new DeleteStudentTask();
+        task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/deleteStudents",data.toString());
+    }
+    class DeleteStudentTask extends AsyncTask<String,Void,String>
     {
-        setTokenJson("d");
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                URL url = new URL(params[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.addRequestProperty("Accept", "application/json");
+                connection.addRequestProperty("Content-Type", "application/json");
+                connection.setRequestMethod("POST");
+                connection.setDoOutput(true);
+                connection.connect();
+                DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+                outputStream.writeBytes(params[1]);
+                Log.i("DELETESTUDENTDATA", params[1]);
+                int resp = connection.getResponseCode();
+                Log.i("DELETESTUDENTRESP",String.valueOf(resp));
+                if(resp==200)
+                {
+                    String response=getResponse(connection);
+                    return response;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }catch(MalformedURLException e)
+            {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (s != null) {
+                Log.i("DELETESTUDENTRESP", s);
+                Toast.makeText(studentProfile.this, "Tenant Checked out!", Toast.LENGTH_SHORT).show();
+                onBackPressed();
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(), "Please Check Your Internet Connection and try later!", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        public String  getResponse(HttpURLConnection connection)
+        {
+            try {
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(
+                                connection.getInputStream()));
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+
+                    sb.append(line);
+                    break;
+                }
+
+                in.close();
+                return sb.toString();
+            }catch(Exception e)
+            {
+                return e.getMessage();
+            }
+        }
+
+
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,8 +256,10 @@ String _id,name,phNo,roomNo,adhaarNo;
         _id=i.getStringExtra("id");
         phNo=i.getStringExtra("phNo");
         roomNo=i.getStringExtra("roomNo");
+        roomId=i.getStringExtra("roomId");
         from=i.getBooleanExtra("total",false);
         adhaarNo=i.getStringExtra("aadharNo");
+        isTenant=i.getBooleanExtra("isTenant",false);
         Log.i("aadharNo",adhaarNo);
         sName=(EditText) findViewById(R.id.studentNameField);
         sRoomNo=(EditText)findViewById(R.id.studentRoomNoField);

@@ -1,10 +1,12 @@
 package com.rent.rentmanagement.renttest.Adapters;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,11 +27,19 @@ import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.DataModels.RoomModel;
 import com.rent.rentmanagement.renttest.Owner.StudentActivity;
 import com.rent.rentmanagement.renttest.Owner.roomDetailActivity;
+import com.rent.rentmanagement.renttest.Services.GetRoomsService;
+import com.rent.rentmanagement.renttest.Services.PaymentService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,7 +63,7 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
 
     @Override
     public TotalRoomsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.owner_total_rooms_item,parent,false);
+        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.test,parent,false);
         return new TotalRoomsHolder(v);
     }
 
@@ -63,19 +73,36 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
 
         if(model.isEmpty==false)
         {
-            holder.roomNo.setText("Room No. "+model.getRoomNo());
-            holder.amount.setText("Due Amount: \u20B9"+model.getDueAmount());
-            holder.date.setText(model.getCheckInDate());
-            holder.roomType.setText(", "+model.getRoomType()+" ,");
+            int noOfTenants=model.getTotalRoomCapacity()-model.getRoomCapacity();
+            holder.roomNo.setText(model.getRoomNo());
+            holder.amount.setText("\u20B9"+model.getDueAmount());
+            holder.noOfTenants.setText("x"+String.valueOf(noOfTenants));
+            String roomType=model.getRoomType();
+            switch(roomType)
+            {
+                case "Single":
+                    roomType="x1";
+                    break;
+                case "Double":
+                    roomType="x2";
+                    break;
+                case "Triple":
+                    roomType="x3";
+                    break;
+                default:
+                    roomType=model.getRoomType();
+            }
+            holder.roomType.setText(roomType);
             if(model.isRentDue==false)
             {
-                holder.checkIn.setText("CheckOut");
+                holder.amountName.setText("Due Amount:");
+                holder.checkIn.setText("Vacate");
                 holder.status.setText("Paid");
                 holder.statusBar.setBackgroundColor(Color.parseColor("#0ed747"));
             }
             else
             {
-
+                holder.amountName.setText("Due Amount");
                 holder.checkIn.setText("Collect");
                 holder.status.setText("Rent Due");
                 if(model.getDueAmount().equals(model.getRoomRent()))
@@ -86,13 +113,29 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
         }
         else
         {
-            holder.date.setText(model.getCheckInDate());
-            holder.roomNo.setText("Room No. "+model.getRoomNo());
-            holder.roomType.setText(", "+model.getRoomType());
+            holder.noOfTenants.setText("x0");
+            holder.roomNo.setText(model.getRoomNo());
+            String roomType=model.getRoomType();
+            switch(roomType)
+            {
+                case "Single":
+                    roomType="x1";
+                    break;
+                case "Double":
+                    roomType="x2";
+                    break;
+                case "Triple":
+                    roomType="x3";
+                    break;
+                default:
+                    roomType=model.getRoomType();
+            }
+            holder.roomType.setText(roomType);
             holder.amount.setText(" \u20B9"+model.getRoomRent());
             holder.checkIn.setText("CheckIn");
+            holder.amountName.setText("Room Rent:");
             holder.status.setText("Vacant");
-           holder.statusBar.setBackgroundColor(Color.parseColor("#000000"));
+           holder.statusBar.setBackgroundColor(Color.parseColor("#FF3EC3EF"));
         }
         holder.ll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,15 +165,14 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
                     case "Collect":
                         AlertDialog.Builder builder=new AlertDialog.Builder(context);
                         View view=LayoutInflater.from(context).inflate(R.layout.owner_dialog_collect,null,false);
+                        final Button collectedButton=(Button)view.findViewById(R.id.collectedbutton);
                         final EditText rentCollectedInput=(EditText)view.findViewById(R.id.rentcollectedinput);
                         final EditText payee=(EditText)view.findViewById(R.id.payee);
                         rentCollectedInput.setText(model.getDueAmount());
                         rentCollectedInput.setSelection(rentCollectedInput.getText().toString().length());
-                        final Button collectedButton=(Button)view.findViewById(R.id.collectedbutton);
                         DateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
                         Date dateObj=new Date();
-                        String date=dateFormat.format(dateObj).toString();
-                        setStaticData(LoginActivity.sharedPreferences.getString("roomsDetails",null),payee,model.get_id());
+                        final String date=dateFormat.format(dateObj).toString();
                         TextView dateCollected=(TextView)view.findViewById(R.id.datecollectedinput);
                         dateCollected.setText(date);
                         builder.setView(view);
@@ -139,22 +181,41 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
                         collectedButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                makeJson(model.get_id(),payee,rentCollectedInput,"c",null);
-                                collectedButton.setClickable(false);
-                                PaymentTask task=new PaymentTask(holder.context,dialog,collectedButton);
-                                task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/paymentDetail",rentdetails.toString());
-
-
+                                String payeeeName=payee.getText().toString();
+                                String am=rentCollectedInput.getText().toString();
+                                if (payeeeName.equals("")) {
+                                    Toast.makeText(holder.context, "Payee name Cannot be empty!", Toast.LENGTH_SHORT).show();
+                                }
+                                else if(am.equals("")) {
+                                    Toast.makeText(holder.context, "Amount cannot be 0!", Toast.LENGTH_SHORT).show();
+                                }
+                                else
+                                {
+                                    collectedButton.setClickable(false);
+                                    Intent i = new Intent(holder.context, PaymentService.class);
+                                    i.putExtra("roomId", model.get_id());
+                                    i.putExtra("date", date);
+                                    i.putExtra("payee", payeeeName);
+                                    i.putExtra("amount", am);
+                                    i.putExtra("from", "occ");
+                                    i.putExtra("isPayment", true);//indicates that collect pressed from occ
+                                    holder.context.startService(i);
+                                    dialog.dismiss();
+                                }
                             }
                         });
                         break;
-                    case "CheckOut":
+                    case "Vacate":
                         new AlertDialog.Builder(context)
-                                .setTitle("Delete!").setMessage("Are You Sure You Wish To Checkout from Room No "+model.getRoomNo()+"?")
+                                .setTitle("Vacate!").setMessage("Are You Sure You Wish To Checkout from Room No "+model.getRoomNo()+"?")
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        setTokenJson("ch",model.get_id());
+                                        try {
+                                            startCheckout(model.get_id(),holder.context);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
                                 })
                                 .setNegativeButton("No",null).show();
@@ -164,6 +225,68 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
                 }
             }
         });
+    }
+    void startCheckout(String roomId,Context context) throws JSONException {
+        JSONObject data=new JSONObject();
+        String auth = LoginActivity.sharedPreferences.getString("token", null);
+        data.put("auth",auth);
+        data.put("roomId",roomId);
+        CheckoutTask task = new CheckoutTask(context);
+        task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/vacateRooms", data.toString());
+
+    }
+    class CheckoutTask extends AsyncTask<String,Void,String> {
+        Context context;
+
+        public CheckoutTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                URL url = new URL(params[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.addRequestProperty("Accept", "application/json");
+                connection.addRequestProperty("Content-Type", "application/json");
+                connection.setRequestMethod("POST");
+                connection.setDoOutput(true);
+                connection.connect();
+                DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+                outputStream.writeBytes(params[1]);
+                Log.i("VACATEDATA", params[1]);
+                int resp = connection.getResponseCode();
+                Log.i("VACATERESP", String.valueOf(resp));
+                if (resp == 422) {
+                    return "First clear Dues!";
+                } else if (resp == 200) {
+                    return "checked out from Room";
+                } else {
+                    return null;
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (s != null) {
+                Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                if (s.equals("checked out from Room")) {
+                    context.startService(new Intent(context, GetRoomsService.class));
+                }
+                else {
+                    Toast.makeText(context, "Please Check Your Internet Connection and try later!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
   public void setEmptyView(TextView tv)
   {
@@ -264,31 +387,12 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
                     roomDetailActivity.DeleteRoomsTask task = new roomDetailActivity.DeleteRoomsTask();
                     task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/deleteRooms", token.toString());
                 }*/
-                if(mode.equals("ch"))
-                {
-                    CheckoutTask task = new CheckoutTask();
-                    String s=task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/vacateRooms", token.toString()).get();
-                    if (s != null) {
-                        Toast.makeText(context,s,Toast.LENGTH_SHORT).show();
-                        if(s.equals("checked out from Room"))
-                        {
-                           goBack(context);
-                        }
-                    }
-                    else
-                    {
-                        Toast.makeText(context, "Please Check Your Internet Connection and try later!", Toast.LENGTH_SHORT).show();
-                    }
-                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
         }
     }
+
 
     /**
      * Created by imazjav0017 on 18-03-2018.
@@ -299,9 +403,10 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
         LinearLayout statusBar;
         TextView roomNo;
         TextView roomType;
+        TextView amountName;
         TextView amount;
-        TextView date;
         TextView status;
+        TextView noOfTenants;
         Context context;
         Button checkIn;
         public TotalRoomsHolder(View itemView) {
@@ -309,11 +414,12 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
             ll=(LinearLayout)itemView.findViewById(R.id.TotalLl);
             statusBar=(LinearLayout)itemView.findViewById(R.id.totalStatusBar);
             context=itemView.getContext();
-            date=(TextView)itemView.findViewById(R.id.totalCheckInDate);
             roomNo=(TextView)itemView.findViewById(R.id.totalRoomNo);
             status=(TextView)itemView.findViewById(R.id.TotalStatus);
             roomType=(TextView)itemView.findViewById(R.id.totalRoomType);
             amount=(TextView)itemView.findViewById(R.id.TotalRentToBeCollected);
+            amountName=(TextView)itemView.findViewById(R.id.amountNametextView);
+            noOfTenants=(TextView)itemView.findViewById(R.id.noOfTenantsTextView);
             checkIn=(Button)itemView.findViewById(R.id.totalCheckinButton);
         }
     }

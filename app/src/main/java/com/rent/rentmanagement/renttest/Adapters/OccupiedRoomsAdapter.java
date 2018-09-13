@@ -21,6 +21,7 @@ import com.rent.rentmanagement.renttest.AsyncTasks.PaymentTask;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.DataModels.RoomModel;
 import com.rent.rentmanagement.renttest.Owner.roomDetailActivity;
+import com.rent.rentmanagement.renttest.Services.PaymentService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,7 +83,7 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
         holder.roomNo.setText("Room No. "+model.getRoomNo());
         holder.amount.setText("Due Amount: \u20B9"+model.getDueAmount());
         holder.date.setText(model.getCheckInDate());
-        holder.dueDays.setText(model.getDays()+" left!");
+        holder.dueDays.setText(model.getDays());
         holder.roomType.setText(", "+model.getRoomType()+",");
 
         holder.roomType.setText(", "+model.getRoomType()+",");
@@ -126,14 +127,22 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
                     public void onClick(View v) {
                         btn.setClickable(false);
                         String reason=input.getText().toString();
+                        DateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
+                        Date dateObj=new Date();
+                        final String date=dateFormat.format(dateObj).toString();
                         if(reason.isEmpty()) {
                             enable(btn);
                             Toast.makeText(context, "Please Give A Reason..", Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            makeJson(model.get_id(), null, null, "r", reason);
-                            PaymentTask task = new PaymentTask(holder.context,dialog,btn);
-                            task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/paymentDetail", rentdetails.toString());
+                            Intent i=new Intent(holder.context, PaymentService.class);
+                            i.putExtra("roomId",model.get_id());
+                            i.putExtra("date",date);
+                            i.putExtra("reason",reason);
+                            i.putExtra("from","occ");
+                            i.putExtra("isPayment",false);//indicates that collect pressed from occ
+                            holder.context.startService(i);
+                            dialog.dismiss();
                         }
                     }
                 });
@@ -146,15 +155,14 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
 
                 AlertDialog.Builder builder=new AlertDialog.Builder(context);
                 View view=LayoutInflater.from(context).inflate(R.layout.owner_dialog_collect,null,false);
+                final Button collectedButton=(Button)view.findViewById(R.id.collectedbutton);
                 final EditText rentCollectedInput=(EditText)view.findViewById(R.id.rentcollectedinput);
                 final EditText payee=(EditText)view.findViewById(R.id.payee);
                 rentCollectedInput.setText(model.getDueAmount());
                 rentCollectedInput.setSelection(rentCollectedInput.getText().toString().length());
-                final Button collectedButton=(Button)view.findViewById(R.id.collectedbutton);
                 DateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
                 Date dateObj=new Date();
-               String date=dateFormat.format(dateObj).toString();
-                setStaticData(LoginActivity.sharedPreferences.getString("roomsDetails",null),payee,model.get_id());
+               final String date=dateFormat.format(dateObj).toString();
                 TextView dateCollected=(TextView)view.findViewById(R.id.datecollectedinput);
                 dateCollected.setText(date);
                 builder.setView(view);
@@ -163,12 +171,27 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
                                collectedButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        collectedButton.setClickable(false);
-                        makeJson(model.get_id(),payee,rentCollectedInput,"c",null);
-                        PaymentTask task=new PaymentTask(holder.context,dialog,collectedButton);
-                           task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/paymentDetail",rentdetails.toString());
-
-
+                         String payeeeName=payee.getText().toString();
+                         String am=rentCollectedInput.getText().toString();
+                        if (payeeeName.equals("")) {
+                            Toast.makeText(holder.context, "Payee name Cannot be empty!", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(am.equals("")) {
+                            Toast.makeText(holder.context, "Amount cannot be 0!", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                         {
+                            collectedButton.setClickable(false);
+                            Intent i = new Intent(holder.context, PaymentService.class);
+                            i.putExtra("roomId", model.get_id());
+                            i.putExtra("date", date);
+                            i.putExtra("payee", payeeeName);
+                            i.putExtra("amount", am);
+                            i.putExtra("from", "occ");
+                            i.putExtra("isPayment", true);//indicates that collect pressed from occ
+                            holder.context.startService(i);
+                            dialog.dismiss();
+                        }
                     }
                 });
 
@@ -188,73 +211,6 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
         roomList=new ArrayList<>();
         roomList.addAll(filteredList);
         notifyDataSetChanged();
-    }
-    public void setStaticData(String s,EditText payee,String _id) {
-        if(s!=null) {
-            if (s.equals("0")) {
-                Toast.makeText(context, "Fetching!", Toast.LENGTH_SHORT).show();
-
-            } else {
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(s);
-                    JSONArray array = jsonObject.getJSONArray("room");
-
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject detail = array.getJSONObject(i);
-                        if(detail.getBoolean("isEmpty")==false && detail.getString("_id").equals(_id))
-                        {
-                            JSONArray students=detail.getJSONArray("students");
-                            if(students.length()>0)
-                            {
-                                JSONObject studentDetails=students.getJSONObject(0);
-                                payee.setText(studentDetails.getString("name"));
-                            }
-                        }
-
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-    public void makeJson(String _id,EditText payee,EditText rentCollectedInput,String mode,String reason)
-    {
-        DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
-
-        rentdetails=new JSONObject();
-        try {
-
-            if(LoginActivity.sharedPreferences.getString("token",null)==null)
-            {
-                throw new Exception("invalid token");
-            }
-            else {
-                rentdetails.put("roomId",_id);
-                rentdetails.put("auth", LoginActivity.sharedPreferences.getString("token", null));
-                if(mode.equals("c")) {
-                    rentdetails.put("payee", payee.getText().toString());
-                    rentdetails.put("amount", Integer.parseInt(rentCollectedInput.getText().toString()));
-                   rentdetails.put("date",dateFormat.format(new Date()).toString());
-                }else if(mode.equals("r"))
-                {
-                    Log.i("reason",reason);
-                    rentdetails.put("reason",reason);
-                }
-
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-    public static void goBack(Context context)
-    {
-        new RoomsFragment(context).onResume();
-
     }
     public static void enable(Button btn)
     {

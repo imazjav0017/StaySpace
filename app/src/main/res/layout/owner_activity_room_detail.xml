@@ -66,20 +66,6 @@
                     android:textColor="#000"
                     android:textSize="15sp" />
 
-                <Button
-
-                    android:id="@+id/delete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
-                    android:onClick="deleteRoom"
-                    android:text="Delete"
-                    android:textAllCaps="false"
-
-                    />
-
 
             </RelativeLayout>
 
@@ -111,22 +97,6 @@
 
                     android:textColor="#000"
                     android:textSize="15sp" />
-
-
-                <Button
-                    android:id="@+id/edit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_gravity="end"
-                    android:layout_marginRight="10dp"
-
-                    android:onClick="editRoom"
-                    android:text="Edit"
-                    android:textAllCaps="false"
-
-                    />
-
 
             </RelativeLayout>
 
@@ -170,13 +140,13 @@
                     android:id="@+id/empt_checkin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
                     android:layout_gravity="end"
-                    android:layout_marginRight="10dp"
                     android:onClick="checkOut"
-                    android:text="Checkout"
+                    android:text="Vacate"
                     android:textAllCaps="false" />
-
+                t
             </RelativeLayout>
         </LinearLayout>
 

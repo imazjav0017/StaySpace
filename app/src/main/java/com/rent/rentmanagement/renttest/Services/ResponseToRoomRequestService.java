@@ -112,6 +112,8 @@ public class ResponseToRoomRequestService extends IntentService {
                 {
                     Toast.makeText(getApplicationContext(), "Rejected "+name+" !", Toast.LENGTH_SHORT).show();
                 }
+                startService(new Intent(getApplicationContext(),GetRoomRequestsService.class));
+                startService(new Intent(getApplicationContext(),GetAllTenantsService.class));
             }
             else
             {

@@ -6,11 +6,13 @@ package com.rent.rentmanagement.renttest.DataModels;
 
 public class RoomModel {
     String roomType,roomNo,roomRent,_id,checkInDate,dueAmount,days;
+    int roomCapacity,totalRoomCapacity;
     public boolean isEmpty;
     public boolean isRentDue;
 
 
-    public RoomModel(String roomType, String roomNo, String roomRent, String _id,String checkInDate,boolean isEmpty,String days) {
+    public RoomModel(String roomType, String roomNo, String roomRent, String _id,String checkInDate,boolean isEmpty,String days,
+                     int roomCapacity,int totalRoomCapacity) {
         this.roomType = roomType;
         this.roomNo = roomNo;
         this.roomRent = roomRent;
@@ -18,9 +20,12 @@ public class RoomModel {
         this.isEmpty=isEmpty;
         this.checkInDate=checkInDate;
         this.days=days;
+        this.roomCapacity=roomCapacity;
+        this.totalRoomCapacity=totalRoomCapacity;
     }
 
-    public RoomModel(String roomType, String roomNo, String roomRent, String dueAmount, String _id, String checkInDate,boolean isEmpty,boolean isRentDue,String days) {
+    public RoomModel(String roomType, String roomNo, String roomRent, String dueAmount, String _id, String checkInDate,boolean isEmpty,boolean isRentDue,String days,
+                     int roomCapacity,int totalRoomCapacity) {
         this.roomType = roomType;
         this.roomNo = roomNo;
         this.roomRent = roomRent;
@@ -30,6 +35,8 @@ public class RoomModel {
         this.isEmpty=isEmpty;
         this.isRentDue=isRentDue;
         this.days=days;
+        this.roomCapacity=roomCapacity;
+        this.totalRoomCapacity=totalRoomCapacity;
     }
 
     public String getDays() {
@@ -66,5 +73,13 @@ public class RoomModel {
 
     public boolean isRentDue() {
         return isRentDue;
+    }
+
+    public int getRoomCapacity() {
+        return roomCapacity;
+    }
+
+    public int getTotalRoomCapacity() {
+        return totalRoomCapacity;
     }
 }

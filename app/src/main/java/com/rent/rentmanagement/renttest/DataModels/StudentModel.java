@@ -11,14 +11,16 @@ public class StudentModel {
     String _id;
     String aadharNo;
     String roomId;
+    boolean isTenant;
 
-    public StudentModel(String name, String phNo, String roomNo, String _id, String roomId,String aadharNo) {
+    public StudentModel(String name, String phNo, String roomNo, String _id, String aadharNo, String roomId, boolean isTenant) {
         this.name = name;
         this.phNo = phNo;
         this.roomNo = roomNo;
         this._id = _id;
         this.aadharNo = aadharNo;
         this.roomId = roomId;
+        this.isTenant = isTenant;
     }
 
     public String getAadharNo() {
@@ -29,14 +31,9 @@ public class StudentModel {
         this.aadharNo = aadharNo;
     }
 
-    public StudentModel(String name, String phNo, String roomNo, String _id,String aadharNo) {
-        this.name = name;
-        this.phNo = phNo;
-        this.roomNo = roomNo;
-        this._id = _id;
-        this.aadharNo=aadharNo;
+    public boolean isTenant() {
+        return isTenant;
     }
-
 
     public String getName() {
         return name;

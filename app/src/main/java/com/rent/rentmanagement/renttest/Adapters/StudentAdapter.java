@@ -61,6 +61,8 @@ StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentViewHolder> {
                 i.putExtra("name",model.getName());
                 i.putExtra("id",model.get_id());
                 i.putExtra("roomNo",model.getRoomNo());
+                i.putExtra("roomId",model.getRoomId());
+                i.putExtra("isTenant",model.isTenant());
                 i.putExtra("aadharNo",model.getAadharNo());
                 Log.i("ade",String.valueOf(model.getAadharNo()));
                 i.putExtra("phNo",model.getPhNo());

@@ -119,6 +119,9 @@
             android:exported="false" />
         <service
             android:name=".Services.GetAllTenantsService"
+            android:exported="false" />
+        <service
+            android:name=".Services.PaymentService"
             android:exported="false"></service>
     </application>
 

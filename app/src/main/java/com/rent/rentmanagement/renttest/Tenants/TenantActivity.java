@@ -12,13 +12,21 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Tenants.Services.GetAvailableRoomsService;
 import com.rent.rentmanagement.renttest.Tenants.TenantFragments.AvailableRoomsFragment;
 import com.rent.rentmanagement.renttest.Tenants.TenantFragments.MainPageFragment;
 import com.rent.rentmanagement.renttest.Tenants.TenantFragments.TenantProfileFragment;
+
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
 
 public class TenantActivity extends AppCompatActivity {
 
@@ -59,6 +67,14 @@ public class TenantActivity extends AppCompatActivity {
             return true;
         }
     };
+    private Socket mSocket;
+    {
+        try {
+            mSocket = IO.socket("https://sleepy-atoll-65823.herokuapp.com/");
+        } catch (URISyntaxException e) {
+            Log.i("err",e.getMessage());
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +86,7 @@ public class TenantActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setTitle("Tenant Side");
         loadFragment(new MainPageFragment());
+        mSocket.connect();
     }
 
     @Override
@@ -102,7 +119,7 @@ public class TenantActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             Log.i("status","logout");
                             LoginActivity.sharedPreferences.edit().clear().apply();
-                            //socket.disconnect();
+                            mSocket.disconnect();
                             Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(i);
 

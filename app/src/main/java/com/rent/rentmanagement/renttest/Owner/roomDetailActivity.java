@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -60,73 +61,7 @@ public class roomDetailActivity extends AppCompatActivity {
     ExpandableRelativeLayout expandableRelativeLayout,expandablePayments;
     String roomNo,roomType,roomRent,_id,response,dueAmnt;
     boolean fromTotal;
-    JSONObject rentdetails;
-    void enable(Button btn)
-    {
-        btn.setClickable(true);
-    }
-    public void makeJson(String _id,EditText payee,EditText rentCollectedInput,String mode,String reason)
-    {
-        DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
 
-        rentdetails=new JSONObject();
-        try {
-
-            if(LoginActivity.sharedPreferences.getString("token",null)==null)
-            {
-                throw new Exception("invalid token");
-            }
-            else {
-                rentdetails.put("roomId",_id);
-                rentdetails.put("auth", LoginActivity.sharedPreferences.getString("token", null));
-                if(mode.equals("c")) {
-                    rentdetails.put("payee", payee.getText().toString());
-                    rentdetails.put("amount", Integer.parseInt(rentCollectedInput.getText().toString()));
-                    rentdetails.put("date",dateFormat.format(new Date()).toString());
-                }else if(mode.equals("r"))
-                {
-                    Log.i("reason",reason);
-                    rentdetails.put("reason",reason);
-                }
-
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-    public void setStaticData(String s,EditText payee,String _id) {
-        if(s!=null) {
-            if (s.equals("0")) {
-                Toast.makeText(getApplicationContext(), "Fetching!", Toast.LENGTH_SHORT).show();
-
-            } else {
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(s);
-                    JSONArray array = jsonObject.getJSONArray("room");
-
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject detail = array.getJSONObject(i);
-                        if(detail.getBoolean("isEmpty")==false && detail.getString("_id").equals(_id))
-                        {
-                            JSONArray students=detail.getJSONArray("students");
-                            if(students.length()>0)
-                            {
-                                JSONObject studentDetails=students.getJSONObject(0);
-                                payee.setText(studentDetails.getString("name"));
-                            }
-                        }
-
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
@@ -145,58 +80,9 @@ public class roomDetailActivity extends AppCompatActivity {
                     DeleteRoomsTask task = new DeleteRoomsTask();
                     task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/deleteRooms", token.toString());
                 }
-                else if(mode.equals("ch"))
-                {
-                    CheckoutTask task = new CheckoutTask();
-                    String s=task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/vacateRooms", token.toString()).get();
-                    if (s != null) {
-                        Toast.makeText(roomDetailActivity.this,s,Toast.LENGTH_SHORT).show();
-                        if(s.equals("checked out from Room"))
-                        {
-                            onBackPressed();
-                        }
-                        else if(s.equals("First clear Dues!"))
-                        {
-                            AlertDialog.Builder builder=new AlertDialog.Builder(roomDetailActivity.this);
-                            View view= LayoutInflater.from(roomDetailActivity.this).inflate(R.layout.owner_dialog_collect,null,false);
-                            final EditText rentCollectedInput=(EditText)view.findViewById(R.id.rentcollectedinput);
-                            final EditText payee=(EditText)view.findViewById(R.id.payee);
-                            rentCollectedInput.setText(dueAmnt);
-                            rentCollectedInput.setSelection(rentCollectedInput.getText().toString().length());
-                            final Button collectedButton=(Button)view.findViewById(R.id.collectedbutton);
-                            DateFormat df=new SimpleDateFormat("dd/MM/yyyy");
-                            Date dateObj=new Date();
-                            String date=df.format(dateObj).toString();
-                            setStaticData(LoginActivity.sharedPreferences.getString("roomsDetails",null),payee,_id);
-                            TextView dateCollected=(TextView)view.findViewById(R.id.datecollectedinput);
-                            dateCollected.setText(date);
-                            builder.setView(view);
-                            final AlertDialog dialog=builder.create();
-                            dialog.show();
-                            collectedButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    collectedButton.setClickable(false);
-                                    makeJson(_id,payee,rentCollectedInput,"c",null);
-                                    PaymentTask ptask=new PaymentTask(roomDetailActivity.this,dialog,collectedButton);
-                                    ptask.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/paymentDetail",rentdetails.toString());
 
-                                }
-                            });
-
-                        }
-                    }
-                    else
-                    {
-                        Toast.makeText(roomDetailActivity.this, "Please Check Your Internet Connection and try later!", Toast.LENGTH_SHORT).show();
-                    }
-                }
             }
         } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
             e.printStackTrace();
         }
     }
@@ -274,7 +160,7 @@ public class roomDetailActivity extends AppCompatActivity {
             }
         }
     }
-    public void deleteRoom(View v)
+    public void deleteRoom()
     {
         new AlertDialog.Builder(this)
                 .setTitle("Delete!").setMessage("Are You Sure You Wish To Delete Room No "+roomNo)
@@ -288,13 +174,17 @@ public class roomDetailActivity extends AppCompatActivity {
     }
     public void checkOut(View v)
     {
-        if(checkOut.getText().toString().equals("Checkout")) {
+        if(checkOut.getText().toString().equals("Vacate")) {
             new AlertDialog.Builder(this)
-                    .setTitle("Checkout!").setMessage("Are You Sure You Wish To Checkout from Room No " + roomNo + "?")
+                    .setTitle("Vacate!").setMessage("Are You Sure You Wish To Vacate All Tenants From Room No " + roomNo + "?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            setTokenJson("ch");
+                            try {
+                                startCheckout();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     })
                     .setNegativeButton("No", null).show();
@@ -309,7 +199,65 @@ public class roomDetailActivity extends AppCompatActivity {
         }
 
     }
-    public void editRoom(View v)
+    void startCheckout() throws JSONException {
+        JSONObject data=new JSONObject();
+        String auth = LoginActivity.sharedPreferences.getString("token", null);
+        data.put("auth",auth);
+        data.put("roomId",_id);
+        CheckoutTask task = new CheckoutTask();
+        task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/vacateRooms", data.toString());
+
+    }
+    class CheckoutTask extends AsyncTask<String,Void,String> {
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                URL url = new URL(params[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.addRequestProperty("Accept", "application/json");
+                connection.addRequestProperty("Content-Type", "application/json");
+                connection.setRequestMethod("POST");
+                connection.setDoOutput(true);
+                connection.connect();
+                DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+                outputStream.writeBytes(params[1]);
+                Log.i("VACATEDATA", params[1]);
+                int resp = connection.getResponseCode();
+                Log.i("VACATERESP", String.valueOf(resp));
+                if (resp == 422) {
+                    return "First clear Dues!";
+                } else if (resp == 200) {
+                    return "checked out from Room";
+                } else {
+                    return null;
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (s != null) {
+                Toast.makeText(roomDetailActivity.this, s, Toast.LENGTH_SHORT).show();
+                if (s.equals("checked out from Room")) {
+                    onBackPressed();
+                }
+                else if (s.equals("First clear Dues!")) {
+                    Toast.makeText(roomDetailActivity.this, s, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(roomDetailActivity.this, "Please Check Your Internet Connection and try later!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+    public void editRoom()
     {
         Intent i=new Intent(getApplicationContext(),edit_rooms.class);
         i.putExtra("roomNo",roomNo);
@@ -329,51 +277,41 @@ public class roomDetailActivity extends AppCompatActivity {
         startActivity(i);
         finish();
     }
-    public void setPaymentHistory(String s) {
+    public void setPaymentHistory(String s) throws JSONException {
         paymentList.clear();
-        if(s!=null) {
-            if (s.equals("0")) {
-                Toast.makeText(this, "Fetching!", Toast.LENGTH_SHORT).show();
-
-            } else {
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(s);
-                    JSONArray array = jsonObject.getJSONArray("room");
-
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject detail = array.getJSONObject(i);
-                        if(detail.getString("_id").equals(_id))
+        if(s!=null)
+        {
+            JSONArray mainArray=new JSONArray(s);
+            for(int i=0;i<mainArray.length();i++) {
+                JSONObject mainObject=mainArray.getJSONObject(i);
+                if(_id.equals(mainObject.getString("_id"))) {
+                    JSONArray paymentArray = mainObject.getJSONArray("paymentDetail");
+                    for(int j=0;j<paymentArray.length();j++) {
+                        JSONObject paymentObject=paymentArray.getJSONObject(j);
+                        boolean payStatus=paymentObject.getBoolean("payStatus");
+                        String date=paymentObject.getString("date");
+                        if(payStatus) {
+                            String payee = paymentObject.getString("payee");
+                            String amount = String.valueOf(paymentObject.getInt("amount"));
+                            paymentList.add(new PaymentHistoryModel(payee,amount,date,payStatus));
+                        }
+                        else
                         {
-                            JSONObject paymentobj=detail.getJSONObject("paymentDetail");
-                            Log.i("payments",paymentobj.toString());
-                            JSONArray payments=paymentobj.getJSONArray("payment");
-                            if(payments.length()>0)
-                            {
+                            String reason=paymentObject.getString("reason");
+                            paymentList.add(new PaymentHistoryModel(reason,date,payStatus));
 
-                                for(int k=0;k<payments.length();k++) {
-                                    JSONObject paymentDetails = payments.getJSONObject(k);
-                                    if(paymentDetails.getBoolean("payStatus")==true)
-                                    paymentList.add(new PaymentHistoryModel(paymentDetails.getString("payee"),
-                                            paymentDetails.getString("amount"),paymentDetails.getString("date")
-                                            ,paymentDetails.getBoolean("payStatus")));
-                                    else
-                                        paymentList.add(new PaymentHistoryModel(paymentDetails.getString("reason"),paymentDetails.getString("date")
-                                                ,paymentDetails.getBoolean("payStatus")));
-
-
-                                }
-                                pAdapter.notifyDataSetChanged();
-
-                            }
                         }
 
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+
+
                 }
             }
         }
+        else
+            Log.i("s","is null");
+        pAdapter.notifyDataSetChanged();
+
     }
     void setStudentsData(String s) throws JSONException {
 
@@ -394,7 +332,7 @@ public class roomDetailActivity extends AppCompatActivity {
                         String name = studentDetails.getString("name");
                         String mobileNo = studentDetails.getString("mobileNo");
                         String adharNo = studentDetails.getString("adharNo");
-                        studentsList.add(new StudentModel(name, mobileNo, roomNo, studentId, roomId, adharNo));
+                        studentsList.add(new StudentModel(name, mobileNo, roomNo, studentId, adharNo, roomId,false));
                     }
                 }
                 else
@@ -411,7 +349,7 @@ public class roomDetailActivity extends AppCompatActivity {
                 String roomNo = roomObject.getString("roomNo");
                 String adharNo = tenantObject.getString("adharNo");
                 if(roomId.equals(_id))
-                studentsList.add(new StudentModel(name, mobileNo, roomNo, tenantId, roomId, adharNo));
+                studentsList.add(new StudentModel(name, mobileNo, roomNo, tenantId, adharNo, roomId,true));
             }
             if (studentsList.size() == 0) {
 
@@ -430,15 +368,34 @@ public class roomDetailActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        try {
+            setPaymentHistory(LoginActivity.sharedPreferences.getString("getRoomsResp",null));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.room_detail_options,menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==android.R.id.home)
+        switch(item.getItemId())
         {
-            onBackPressed();
-            return true;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.deleteRoomOption:
+                deleteRoom();
+                return true;
+            case R.id.editRoomOption:
+                editRoom();
+                return true;
         }
+
         return false;
     }
 
@@ -475,19 +432,14 @@ public class roomDetailActivity extends AppCompatActivity {
         studentsRV.setLayoutManager(lm);
         studentsRV.setHasFixedSize(true);
         studentsRV.setAdapter(adapter);
-       /* paymentList=new ArrayList<>();
+        paymentList=new ArrayList<>();
         paymentsHistoryList=(RecyclerView)findViewById(R.id.paymentsHistoryList);
         pAdapter=new PaymentHistoryAdapter(paymentList);
         LinearLayoutManager lm2=new LinearLayoutManager(getApplicationContext());
         paymentsHistoryList.setLayoutManager(lm2);
         paymentsHistoryList.setHasFixedSize(true);
         paymentsHistoryList.setAdapter(pAdapter);
-        setPaymentHistory(LoginActivity.sharedPreferences.getString("roomsDetails",null));
-        try {
-            setStudentsData(LoginActivity.sharedPreferences.getString("allTenantsinfo",null));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
+
     }
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void expandStudents(View v)

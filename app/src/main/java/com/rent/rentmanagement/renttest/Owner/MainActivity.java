@@ -168,6 +168,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     bottomNavigationView.setSelectedItemId(R.id.profileViewItem);
                 }
             }
+            else
+                bottomNavigationView.setSelectedItemId(R.id.profileViewItem);
+
 
         }
         else

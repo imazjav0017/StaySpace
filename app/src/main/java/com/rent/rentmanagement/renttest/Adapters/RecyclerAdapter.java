@@ -46,7 +46,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.roomNo.setText("Room No. "+model.getRoomNo());
         holder.roomType.setText(", "+model.getRoomType()+",");
         holder.roomRent.setText(" \u20B9"+model.getRoomRent());
-        holder.emptyDays.setText("Empty From "+model.getDays());
+        holder.emptyDays.setText(model.getDays());
         holder.date.setText(model.getCheckInDate());
         holder.ll.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -198,21 +198,24 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
                 String roomRent = mainObject.getString("roomRent");
                 String roomNo = mainObject.getString("roomNo");
                 boolean isEmpty = mainObject.getBoolean("isEmpty");
+                int roomCapacity=mainObject.getInt("roomCapacity");
+                int totalRoomsCapacity=mainObject.getInt("totalRoomCapacity");
                 if (isEmpty == true) {
                     //empty rooms
                     String emptyDays = mainObject.getString("emptyDays");
-                    erooms.add(new RoomModel(roomType, roomNo, roomRent, roomId, "10 days", isEmpty, emptyDays));
-                    tRooms.add(new RoomModel(roomType, roomNo, roomRent, roomId, "10 days", isEmpty, emptyDays));
+                    String checkOutDate=mainObject.getString("checkOutDate");
+                    erooms.add(new RoomModel(roomType, roomNo, roomRent, roomId, checkOutDate, isEmpty, emptyDays,roomCapacity,totalRoomsCapacity));
+                    tRooms.add(new RoomModel(roomType, roomNo, roomRent, roomId, checkOutDate, isEmpty, emptyDays,roomCapacity,totalRoomsCapacity));
                 } else {
                     boolean isRentDue = mainObject.getBoolean("isRentDue");
                     String dueAmount = String.valueOf(mainObject.getInt("dueAmount"));
                     String dueDays = mainObject.getString("dueDays");
                     String dueDate = mainObject.getString("dueDate");
                     tRooms.add(new RoomModel(roomType, roomNo, roomRent, dueAmount, roomId,
-                            dueDate, isEmpty, isRentDue, dueDays));
-                    if (isRentDue = true) {
+                            dueDate, isEmpty, isRentDue, dueDays,roomCapacity,totalRoomsCapacity));
+                    if (isRentDue == true) {
                         oRooms.add(new RoomModel(roomType, roomNo, roomRent, dueAmount, roomId,
-                                dueDate, isEmpty, isRentDue, dueDays));
+                                dueDate, isEmpty, isRentDue, dueDays,roomCapacity,totalRoomsCapacity));
                     }
                 }
             }
