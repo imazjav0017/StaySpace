@@ -1,5 +1,10 @@
 package com.rent.rentmanagement.renttest.Tenants.DataModels;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class AvailableRoomModel {
     String roomType,roomNo,roomRent,_id,owner_id,ownerName,phoneNo,buildingId,
             buildingName,floors;
@@ -58,5 +63,29 @@ public class AvailableRoomModel {
 
     public String getFloors() {
         return floors;
+    }
+
+    @Override
+    public String toString() {
+        try {
+            JSONObject object = new JSONObject();
+            object.put("roomNo", roomNo);
+            object.put("roomType", roomType);
+            object.put("roomRent", roomRent);
+            object.put("roomId", _id);
+            object.put("ownerId", owner_id);
+            object.put("ownerName", ownerName);
+            object.put("phNo", phoneNo);
+            object.put("buildingId", buildingId);
+            object.put("buildingName", buildingName);
+            return object.toString();
+        }catch (JSONException e)
+        {
+            Log.i("err",e.getMessage());
+            return null;
+        }
+
+
+
     }
 }

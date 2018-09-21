@@ -1,18 +1,21 @@
 package com.rent.rentmanagement.renttest.Tenants.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rent.rentmanagement.renttest.Tenants.DataModels.AvailableRoomModel;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Tenants.Async.RoomRequestTask;
+import com.rent.rentmanagement.renttest.Tenants.SendRequestActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,31 +38,32 @@ public class AvailableRoomsAdapter extends RecyclerView.Adapter<AvailableRoomsAd
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final AvailableRoomModel model=roomModelList.get(position);
-        holder.roomNo.setText(model.getBuildingName()+" ,"+
-                model.getFloors()+" floors ,roomNo. "+model.getRoomNo());
-        holder.roomType.setText(", "+model.getRoomType());
-        holder.rent.setText(" \u20B9"+model.getRoomRent());
-        holder.ownerName.setText("Mr./Mrs."+model.getOwnerName());
+        holder.roomNo.setText("Room No:\n"+model.getRoomNo());
+        holder.buildingName.setText(model.getBuildingName());
+        holder.rent.setText("Rent: \u20B9"+model.getRoomRent());
+        holder.ownerName.setText("Owner: Mr./Mrs."+model.getOwnerName());
+        holder.availableRoomsBg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("sending ","request");
+                Intent i=new Intent(holder.context, SendRequestActivity.class);
+                i.putExtra("roomId",model.get_id());
+                i.putExtra("ownerId",model.getOwner_id());
+                i.putExtra("buildingId",model.getBuildingId());
+                i.putExtra("data",model.toString());
+                holder.context.startActivity(i);
+            }
+        });
         holder.request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("sending ","request");
-                //making JSON with auth, tenantName,roomId
-                JSONObject requestObject=new JSONObject();
-                try {
-                    String auth=LoginActivity.sharedPreferences.getString("token",null);
-                    String _id=LoginActivity.sharedPreferences.getString("tenantId",null);
-                    if(auth!=null)
-                    requestObject.put("auth",auth);
-                    requestObject.put("roomId",model.get_id());
-                    requestObject.put("ownerId",model.getOwner_id());
-                    requestObject.put("buildingId",model.getBuildingId());
-                    requestObject.put("tenantId",_id);
-                    RoomRequestTask task=new RoomRequestTask(holder.context);
-                    task.execute("https://sleepy-atoll-65823.herokuapp.com/students/sendRoomRequest",requestObject.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                Intent i=new Intent(holder.context, SendRequestActivity.class);
+                i.putExtra("roomId",model.get_id());
+                i.putExtra("ownerId",model.getOwner_id());
+                i.putExtra("buildingId",model.getBuildingId());
+                i.putExtra("data",model.toString());
+                holder.context.startActivity(i);
             }
         });
     }
@@ -71,15 +75,17 @@ public class AvailableRoomsAdapter extends RecyclerView.Adapter<AvailableRoomsAd
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        TextView roomNo,roomType,rent,ownerName;
+        RelativeLayout availableRoomsBg;
+        TextView roomNo,buildingName,rent,ownerName;
         Button request;
         Context context;
 
         public ViewHolder(View itemView) {
             super(itemView);
             context=itemView.getContext();
+            availableRoomsBg=(RelativeLayout)itemView.findViewById(R.id.availableRoomsBg);
             roomNo=(TextView)itemView.findViewById(R.id.availableRoomNo);
-            roomType=(TextView)itemView.findViewById(R.id.availableRoomType);
+            buildingName=(TextView)itemView.findViewById(R.id.availableBuildingName);
             rent=(TextView)itemView.findViewById(R.id.availableRoomRent);
             ownerName=(TextView)itemView.findViewById(R.id.ownerNameAvailableRooms);
             request=(Button)itemView.findViewById(R.id.availableRoomRequestBtn);

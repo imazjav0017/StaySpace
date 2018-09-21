@@ -46,6 +46,7 @@ List<TenantRequestModel>tenantRequestModels;
         final TenantRequestModel model=tenantRequestModels.get(position);
         holder.name.setText(model.getTenantname());
         holder.roomNo.setText("Room no "+model.getRoomNo());
+        holder.checkinDate.setText("Check In Date: "+model.getCheckinDate());
 
         //clicking the tenant shuld open info
         holder.bg.setOnClickListener(new View.OnClickListener() {
@@ -56,10 +57,16 @@ List<TenantRequestModel>tenantRequestModels;
                 i.putExtra("roomNo",model.getRoomNo());
                 i.putExtra("tenantId",model.getTenantId());
                 i.putExtra("mobileNo",model.getPhoneNo());
+                i.putExtra("checkInDate",model.getCheckinDate());
+                i.putExtra("requestId",model.get_id());
+                i.putExtra("roomId",model.getRoomId());
                 holder.context.startActivity(i);
 
             }
         });
+
+
+        //building json to send in response
         final JSONObject requestResponse=new JSONObject();
         try {
             int buildingIndex= LoginActivity.sharedPreferences.getInt("buildingIndex",0);
@@ -71,6 +78,7 @@ List<TenantRequestModel>tenantRequestModels;
             requestResponse.put("tenantId",model.getTenantId());
             requestResponse.put("roomId",model.getRoomId());
             requestResponse.put("buildingId",buildId);
+            requestResponse.put("checkInDate",model.getCheckinDate());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -157,7 +165,7 @@ List<TenantRequestModel>tenantRequestModels;
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         Context context;
-        TextView name,roomNo;
+        TextView name,roomNo,checkinDate;
         Button accept,reject,call,message;
         RelativeLayout bg;
         public ViewHolder(View itemView) {
@@ -166,6 +174,7 @@ List<TenantRequestModel>tenantRequestModels;
             bg=(RelativeLayout)itemView.findViewById(R.id.tenantRequestListBg);
             name=(TextView)itemView.findViewById(R.id.studentRequestName);
             roomNo=(TextView)itemView.findViewById(R.id.requestingRoomNo);
+            checkinDate=(TextView)itemView.findViewById(R.id.requestingRoomDate);
             accept=(Button)itemView.findViewById(R.id.acceptRequestBtn);
             reject=(Button)itemView.findViewById(R.id.rejectRequestButton);
             call=(Button)itemView.findViewById(R.id.callRequestingButton);

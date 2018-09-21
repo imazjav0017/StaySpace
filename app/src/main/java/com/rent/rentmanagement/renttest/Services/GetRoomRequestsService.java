@@ -113,7 +113,7 @@ public class GetRoomRequestsService extends IntentService {
     public static void setRequestsData(String s) throws JSONException {
         tenantRequestModels=new ArrayList<>();
         JSONObject object=new JSONObject(s);
-        String _id,name,roomNo,studentId,phoneNo,emailId,roomId;
+        String _id,name,roomNo,studentId,phoneNo,emailId,roomId,checkinDate;
         JSONArray roomRequest=object.getJSONArray("roomRequest");
         tenantRequestModels.clear();
         for(int i=0;i<roomRequest.length();i++)
@@ -129,7 +129,8 @@ public class GetRoomRequestsService extends IntentService {
             JSONObject roomDetails=mainObject.getJSONObject("roomDetail");
             roomNo=roomDetails.getString("roomNo");
             roomId=roomDetails.getString("_id");
-            tenantRequestModels.add(new TenantRequestModel(name,studentId,roomNo,roomId,_id,phoneNo,emailId));
+            checkinDate=mainObject.getString("requestCheckInDate");
+            tenantRequestModels.add(new TenantRequestModel(name,studentId,roomNo,roomId,_id,phoneNo,emailId,checkinDate));
         }
         TenantRequestListFragment.upateView();
 

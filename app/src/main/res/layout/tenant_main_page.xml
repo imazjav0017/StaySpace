@@ -1,93 +1,231 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-<TextView
-    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_centerHorizontal="true"
-    android:layout_marginTop="30dp"
-    android:textSize="24sp"
-    android:gravity="center"
-    android:text="Next Rent To Be Paid in 10 Days"
-    android:textColor="#df0804"/>
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:id="@+id/tenantCircleImageView"
-        android:src="@drawable/owner" />
-    <ScrollView
-        android:padding="5dp"
+    android:id="@+id/tenantMainPageSrl"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tenantCircleImageView"
-        android:layout_marginTop="10dp">
-        <LinearLayout
-            android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:weightSum="2"
-            android:orientation="horizontal">
-            <android.support.v7.widget.CardView
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:text="Due On :N/A"
+            android:id="@+id/dueDaysTenantTextView"
+            android:textColor="#df0804"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tenantCircleImageView"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="2dp"
-                android:layout_weight="1"
-                android:padding="3dp"
-                app:cardElevation="2dp">
-                <LinearLayout
-                    android:padding="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Room No/Flat No"
-                        android:textStyle="bold"
-                        android:textColor="#000"
-                        android:textSize="18sp"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="1A"
-                        android:gravity="center"
-                        android:textSize="14sp"/>
-                </LinearLayout>
+                android:text="Rent Status :"
+                android:textSize="18sp" />
 
-            </android.support.v7.widget.CardView>
-            <android.support.v7.widget.CardView
-                android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="2dp"
-                android:padding="3dp"
-                android:layout_weight="1"
-                app:cardElevation="2dp">
-                <LinearLayout
-                    android:padding="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Building Name"
-                        android:textStyle="bold"
-                        android:textColor="#000"
-                        android:textSize="18sp"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Garden City"
-                        android:gravity="center"
-                        android:textSize="14sp"/>
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
+                android:gravity="center"
+                android:text="paid"
+                android:id="@+id/rentStatusTenantTextView"
+                android:textColor="#3aa335"
+                android:textSize="18sp" />
         </LinearLayout>
 
-    </ScrollView>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tenantCircleImageView"
+            android:layout_marginTop="130dp"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical"
+            android:padding="5dp">
 
-</RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Due Amount"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="2000"
+                android:id="@+id/dueAmountTenantTextView"
+                android:textColor="#f4081c"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:id="@+id/tenantCircleImageView"
+            android:src="@drawable/owner" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/tenantCircleImageView">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:padding="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:orientation="horizontal">
+                    <android.support.v7.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="2dp"
+                        android:layout_weight="1"
+                        android:padding="3dp"
+                        app:cardElevation="2dp">
+                        <LinearLayout
+                            android:padding="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Room No/Flat No"
+                                android:textStyle="bold"
+                                android:textColor="#000"
+                                android:textSize="18sp"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="1A"
+                                android:id="@+id/roomNoTenantTextView"
+                                android:gravity="center"
+                                android:textSize="14sp"/>
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                    <android.support.v7.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="2dp"
+                        android:padding="3dp"
+                        android:layout_weight="1"
+                        app:cardElevation="2dp">
+                        <LinearLayout
+                            android:padding="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Building Name"
+                                android:textStyle="bold"
+                                android:textColor="#000"
+                                android:textSize="18sp"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Garden City"
+                                android:gravity="center"
+                                android:id="@+id/buildingNameTenantTextView"
+                                android:textSize="14sp"/>
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+                </LinearLayout>
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="2dp"
+                    app:cardCornerRadius="2dp"
+                    android:layout_marginTop="30dp"
+                    android:padding="5dp">
+                    <LinearLayout
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:padding="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Owner Name"
+                                android:textStyle="bold"
+                                android:textColor="#000"
+                                android:textSize="18sp"/>
+                            <TextView
+                                android:id="@+id/ownerNameTenantTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Mr.Nitish Kumar"
+                                android:textSize="14sp"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:padding="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Contact No:"
+                                android:textStyle="bold"
+                                android:textColor="#000"
+                                android:textSize="18sp"/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+                                <TextView
+                                    android:paddingTop="5dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="+919101011111"
+                                    android:id="@+id/ownerPhNoTenantTextView"
+                                    android:textSize="14sp"
+                                    android:layout_weight="1.5"/>
+                                <android.support.v4.widget.Space
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.3"/>
+                                <ImageButton
+                                    android:layout_width="35dp"
+                                    android:layout_height="35dp"
+                                    android:id="@+id/callOwnerBtn"
+                                    android:background="@drawable/ic_action_call"/>
+                                <ImageButton
+                                    android:layout_width="35dp"
+                                    android:layout_height="35dp"
+                                    android:id="@+id/messageOwnerBtn"
+                                    android:background="@drawable/ic_action_name"/>
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </ScrollView>
+
+    </RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

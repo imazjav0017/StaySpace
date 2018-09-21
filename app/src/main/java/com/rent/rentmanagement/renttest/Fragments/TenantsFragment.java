@@ -3,11 +3,13 @@ package com.rent.rentmanagement.renttest.Fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -60,6 +62,7 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
     CheckBox onlyRooms;
     boolean rooms;
     String checkRooms;
+    static SwipeRefreshLayout swipeRefreshLayout;
     public TenantsFragment() {
     }
 
@@ -120,6 +123,7 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
             studentModelList.clear();
             studentModelList.addAll(GetAllTenantsService.studentsList);
             adapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
     @Override
@@ -237,6 +241,7 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.owner_tenant_all,container,false);
         totalTenants=(RecyclerView)v.findViewById(R.id.totalStudentsList);
+        swipeRefreshLayout=(SwipeRefreshLayout)v.findViewById(R.id.allTenantsSrl);
         empty=(TextView)v.findViewById(R.id.noTenantsText);
         onlyRooms=(CheckBox)v.findViewById(R.id.roomsOnlySearchFilter);
         studentModelList=new ArrayList<>();
@@ -250,6 +255,16 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
         return v;
+    }
+    void refresh()
+    {
+        getContext().startService(new Intent(getContext(),GetAllTenantsService.class));
     }
 }

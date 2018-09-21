@@ -25,6 +25,7 @@ import com.rent.rentmanagement.renttest.Services.GetRoomRequestsService;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Services.GetRoomsService;
+import com.rent.rentmanagement.renttest.Services.getOwnerDetailsService;
 import com.rent.rentmanagement.renttest.Tenants.Async.GetAvailableRoomsTask;
 
 import org.json.JSONArray;
@@ -179,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            MainActivity.super.onBackPressed();
+                           moveTaskToBack(true);
                         }
                     }).setNegativeButton("No",null).show();
         }
@@ -206,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             }
         }
         Log.i("onResume",ACTIVITY_SERVICE);
+        startService(new Intent(getApplicationContext(),getOwnerDetailsService.class));
         startService(new Intent(getApplicationContext(), GetRoomRequestsService.class));
         startService(new Intent(getApplicationContext(), GetRoomsService.class));
         startService(new Intent(getApplicationContext(), GetAllTenantsService.class));

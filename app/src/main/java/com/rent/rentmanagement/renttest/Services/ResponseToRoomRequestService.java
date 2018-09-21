@@ -114,6 +114,7 @@ public class ResponseToRoomRequestService extends IntentService {
                 }
                 startService(new Intent(getApplicationContext(),GetRoomRequestsService.class));
                 startService(new Intent(getApplicationContext(),GetAllTenantsService.class));
+                startService(new Intent(getApplicationContext(),GetRoomsService.class));
             }
             else
             {

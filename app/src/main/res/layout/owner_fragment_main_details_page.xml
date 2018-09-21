@@ -5,102 +5,108 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
    >
-    <ScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <RelativeLayout
+        android:layout_height="wrap_content"
+        android:id="@+id/ownerMainDetailsSrl">
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <LinearLayout
-                android:id="@+id/l1"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:background="@drawable/building"
-                android:orientation="horizontal">
-            </LinearLayout>
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:id="@+id/l1"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="@drawable/building"
+                    android:orientation="horizontal">
+                </LinearLayout>
 
 
 
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/img"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="160dp"
-                android:text="Jade magician"
-                android:textSize="18sp"
-                android:id="@+id/ownerNameTextView" />
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="2dp"
-                android:layout_below="@+id/ownerNameTextView"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:id="@+id/cardIncome"
-                android:background="#ffffff">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Income Details"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="#F44336"
+                    android:layout_below="@+id/img"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="160dp"
+                    android:text="Jade magician"
                     android:textSize="18sp"
-                  />
+                    android:id="@+id/ownerNameTextView" />
 
-                <android.support.v7.widget.RecyclerView
-                android:id="@+id/profileDetailsRv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/ownerNameTextView"
-                android:layout_marginTop="32dp">
-
-            </android.support.v7.widget.RecyclerView>
-            </android.support.v7.widget.CardView>
-            <android.support.v7.widget.CardView
-
-
-                android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="4dp"
-                android:layout_marginRight="5dp"
-
-                app:cardElevation="2dp"
-            android:background="#ffffff"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_below="@+id/cardIncome">
-                <TextView
-                    android:layout_width="wrap_content"
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Rooms detail"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="#F44336"
-                    android:textSize="18sp"
-                    />
+                    app:cardCornerRadius="4dp"
+                    app:cardElevation="2dp"
+                    android:layout_below="@+id/ownerNameTextView"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:id="@+id/cardIncome"
+                    android:background="#ffffff">
 
-                <android.support.v7.widget.RecyclerView
-                android:id="@+id/roomsdetailsRv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/profileDetailsRv"
-                android:layout_marginTop="32dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Income Details"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="#F44336"
+                        android:textSize="18sp"
+                        />
 
-            </android.support.v7.widget.RecyclerView>
-            </android.support.v7.widget.CardView>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/profileDetailsRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/ownerNameTextView"
+                        android:layout_marginTop="32dp">
 
-        </RelativeLayout>
-    </ScrollView>
+                    </android.support.v7.widget.RecyclerView>
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="4dp"
+                    android:layout_marginRight="5dp"
+
+                    app:cardElevation="2dp"
+                    android:background="#ffffff"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_below="@+id/cardIncome">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rooms detail"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="#F44336"
+                        android:textSize="18sp"
+                        />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/roomsdetailsRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/profileDetailsRv"
+                        android:layout_marginTop="32dp">
+
+                    </android.support.v7.widget.RecyclerView>
+                </android.support.v7.widget.CardView>
+
+            </RelativeLayout>
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
 
 

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.rent.rentmanagement.renttest.DataModels.BuildingListModel;
 import com.rent.rentmanagement.renttest.Owner.automanualActivity;
+import com.rent.rentmanagement.renttest.Owner.manualActivity;
 import com.rent.rentmanagement.renttest.R;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapte
         holder.buildingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(holder.context,automanualActivity.class);
+                Intent i=new Intent(holder.context,manualActivity.class);
                 i.putExtra("buildingId",model.get_id());
                 holder.context.startActivity(i);
 

@@ -23,16 +23,6 @@
         android:layout_marginTop="45dp"
         android:layout_gravity="center_vertical"
         android:src="@drawable/img" />
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@android:color/transparent"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
-    </LinearLayout>
-
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,8 +33,6 @@
         android:background="@android:color/transparent"
         android:textSize="18sp"
         android:id="@+id/requestingTenantNameInfo" />
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,8 +43,6 @@
         android:paddingEnd="40dp"
         android:orientation="horizontal"
         >
-
-
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,58 +71,45 @@
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
         android:layout_below="@+id/l2">
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             >
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_margin=".1dp"
-
                 android:id="@+id/c1"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
                 android:background="#ffffff">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/l2"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:id="@+id/l3"
-                    android:orientation="horizontal">
-                    <LinearLayout
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
+                        android:text="Requesting Room No"
+                        android:textSize="15sp"
+                        android:textColor="#43b360"/>
 
-                        >
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Requesting Room No"
-                            android:textSize="15sp"
-                            android:textColor="#43b360"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:textSize="18sp"
-                            android:text="B102"
-                            android:id="@+id/requestingRoomNoInfo"
-                            android:background="@android:color/transparent"
-                            android:layout_marginTop="5dp"/>
-
-                    </LinearLayout>
-
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="18sp"
+                        android:text="B102"
+                        android:id="@+id/requestingRoomNoInfo"
+                        android:background="@android:color/transparent"
+                        android:layout_marginTop="5dp"/>
                 </LinearLayout>
-
             </android.support.v7.widget.CardView>
 
 
@@ -145,91 +118,84 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/c1"
-                android:layout_margin=".1dp"
-
                 android:id="@+id/c2"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
                 android:background="#ffffff">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+
+                    >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Phone"
+
+                        android:textSize="15sp"
+                        android:textColor="#43b360"/>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-
-                        >
-
+                        android:weightSum="2"
+                        android:orientation="horizontal">
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Phone"
+                            android:layout_weight="1.5"
+                            android:id="@+id/requestingTenantPhoneInfo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textSize="18sp"
+                            android:text="9792919485"
+                            android:background="@android:color/transparent"
+                            android:layout_marginTop="5dp"/>
 
-                            android:textSize="15sp"
-                            android:textColor="#43b360"/>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:weightSum="2"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:layout_weight="1.5"
-                                android:id="@+id/requestingTenantPhoneInfo"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:textSize="18sp"
-                                android:text="9792919485"
-                                android:background="@android:color/transparent"
-                                android:layout_marginTop="5dp"/>
-
-                            <ImageButton
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                android:layout_gravity="right"
-                                android:background="#ffff"
-                                android:id="@+id/callRequestingTenantInfo"
-                                android:src="@drawable/ic_action_call"
-                                android:onClick="call"/>
-                            <ImageButton
-                                android:background="#fff"
-                                android:layout_marginLeft="15dp"
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                android:id="@+id/messageRequestingTenantInfo"
-                                android:layout_gravity="right"
-                                android:src="@drawable/ic_action_name" />
-                        </LinearLayout>
-
-
+                        <ImageButton
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:layout_gravity="right"
+                            android:background="#ffff"
+                            android:id="@+id/callRequestingTenantInfo"
+                            android:src="@drawable/ic_action_call"
+                            android:onClick="call"/>
+                        <ImageButton
+                            android:background="#fff"
+                            android:layout_marginLeft="15dp"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:id="@+id/messageRequestingTenantInfo"
+                            android:layout_gravity="right"
+                            android:src="@drawable/ic_action_name" />
                     </LinearLayout>
                 </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/c2"
-                android:layout_margin=".1dp"
-
-                android:id="@+id/c3"
-                android:background="#ffffff">
-
             </android.support.v7.widget.CardView>
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/c3"
-                android:layout_margin=".1dp"
-                android:id="@+id/c4"
-                android:background="#ffffff">
-
+                app:cardBackgroundColor="#ffff"
+                android:background="#ffff"
+                android:padding="15dp"
+                android:layout_below="@+id/c2"
+                android:layout_marginTop="20dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Checkin :"
+                        android:textSize="18sp"/>
+                    <TextView
+                        android:layout_marginLeft="40dp"
+                        android:id="@+id/checkinDatePicker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_action_calendar"
+                        android:text="30/03/2018" />
+                </LinearLayout>
             </android.support.v7.widget.CardView>
         </RelativeLayout>
     </ScrollView>

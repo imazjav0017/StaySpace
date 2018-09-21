@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.rent.rentmanagement.renttest.DataCallBack;
 import com.rent.rentmanagement.renttest.Tenants.UpdateProfileActivity;
 
 import java.io.BufferedReader;
@@ -19,9 +20,11 @@ import java.net.URL;
 
 public class RoomRequestTask extends AsyncTask<String,Integer,String> {
     Context context;
+    DataCallBack dataCallBack;
 
-    public RoomRequestTask(Context context) {
+    public RoomRequestTask(Context context, DataCallBack dataCallBack) {
         this.context = context;
+        this.dataCallBack = dataCallBack;
     }
 
     @Override
@@ -44,10 +47,12 @@ public class RoomRequestTask extends AsyncTask<String,Integer,String> {
                 String response=getResponse(connection);
                 return response;
             }
-            else if(resp==422)
+            else if(resp==422 || resp==401)
             {
                 return "adhaar";
             }
+            else if(resp== 406)
+                return "Request Already Sent";
             else
             {
                 return null;
@@ -75,8 +80,14 @@ public class RoomRequestTask extends AsyncTask<String,Integer,String> {
                 i.putExtra("sendingRequest",true);
                 (context).startActivity(i);
             }
+            else if(s.equals("Request Already Sent"))
+            {
+                Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                dataCallBack.datacallBack(s,true);
+            }
             else {
                 Toast.makeText(context, "Request Sent!", Toast.LENGTH_SHORT).show();
+                dataCallBack.datacallBack(s,true);
                 Log.i("RoomRequestTask", s);
             }
         }

@@ -45,8 +45,7 @@
             android:layout_height="wrap_content"
             android:padding="2dp"
             android:text="Room No:"
-            android:textStyle="bold"
-            android:textSize="18sp"
+            android:textSize="15sp"
             />
 
         <TextView
@@ -54,8 +53,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="18sp"
             android:text="1"
-            android:textSize="15sp" />
+            />
     </LinearLayout>
     <android.support.v4.widget.Space
         android:layout_width="wrap_content"
@@ -74,9 +75,7 @@
             android:padding="2dp"
             android:id="@+id/amountNametextView"
             android:text="Due Amount"
-            android:textStyle="bold"
-
-            android:textSize="18sp"
+            android:textSize="15sp"
             />
 
         <TextView
@@ -86,7 +85,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="500"
-            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textSize="18sp"
 
             />
 

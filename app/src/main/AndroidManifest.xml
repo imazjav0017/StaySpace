@@ -122,7 +122,9 @@
             android:exported="false" />
         <service
             android:name=".Services.PaymentService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity android:name=".Tenants.SendRequestActivity"></activity>
     </application>
 
 </manifest>

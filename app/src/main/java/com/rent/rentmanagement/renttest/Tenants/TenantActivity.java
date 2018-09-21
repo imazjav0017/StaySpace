@@ -20,6 +20,7 @@ import com.github.nkzawa.socketio.client.Socket;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Tenants.Services.GetAvailableRoomsService;
+import com.rent.rentmanagement.renttest.Tenants.Services.GetTenantHomeService;
 import com.rent.rentmanagement.renttest.Tenants.TenantFragments.AvailableRoomsFragment;
 import com.rent.rentmanagement.renttest.Tenants.TenantFragments.MainPageFragment;
 import com.rent.rentmanagement.renttest.Tenants.TenantFragments.TenantProfileFragment;
@@ -92,6 +93,7 @@ public class TenantActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        startService(new Intent(getApplicationContext(), GetTenantHomeService.class));
         startService(new Intent(getApplicationContext(),GetAvailableRoomsService.class));
     }
 
@@ -138,7 +140,7 @@ public class TenantActivity extends AppCompatActivity {
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        TenantActivity.super.onBackPressed();
+                       moveTaskToBack(true);
                     }
                 }).setNegativeButton("No",null).show();
     }

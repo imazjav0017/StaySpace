@@ -17,29 +17,7 @@
         android:layout_margin="10dp"
         android:orientation="vertical"
         android:layout_height="match_parent">
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Name"
-            android:lines="1"
-            android:inputType="textPersonName"
-            android:id="@+id/updateOwnerNameInput"/>
-        <EditText
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Password"
-            android:lines="1"
-            android:inputType="textPersonName"
-            android:id="@+id/updateOwnerPasswordInput"/>
-        <EditText
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:lines="1"
-            android:inputType="textPersonName"
-            android:hint=" Re Enter Password"
-            android:id="@+id/updateOwnerReenterPasswordInput"/>
+
     <EditText
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"

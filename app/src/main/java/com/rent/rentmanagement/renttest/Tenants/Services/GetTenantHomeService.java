@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.rent.rentmanagement.renttest.LoginActivity;
+import com.rent.rentmanagement.renttest.Tenants.TenantFragments.MainPageFragment;
 import com.rent.rentmanagement.renttest.Tenants.TenantFragments.TenantProfileFragment;
 
 import org.json.JSONArray;
@@ -30,19 +31,10 @@ import java.net.URL;
  * helper methods.
  */
 public class GetTenantHomeService extends IntentService {
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
-    private static final String ACTION_FOO = "com.rent.rentmanagement.renttest.Tenants.Services.action.FOO";
-    private static final String ACTION_BAZ = "com.rent.rentmanagement.renttest.Tenants.Services.action.BAZ";
-
-    // TODO: Rename parameters
-    private static final String EXTRA_PARAM1 = "com.rent.rentmanagement.renttest.Tenants.Services.extra.PARAM1";
-    private static final String EXTRA_PARAM2 = "com.rent.rentmanagement.renttest.Tenants.Services.extra.PARAM2";
 
     public GetTenantHomeService() {
         super("GetTenantHomeService");
     }
-
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -59,7 +51,7 @@ public class GetTenantHomeService extends IntentService {
             task.execute("https://sleepy-atoll-65823.herokuapp.com/students/tenantHome",data.toString());
         }
     }
-     void save(String s) {
+     void save(String s) throws JSONException {
          JSONObject mainObject = null;
          JSONObject tenantDetail =null;
          try {
@@ -78,18 +70,29 @@ public class GetTenantHomeService extends IntentService {
              }
          }
          try {
+
             JSONObject roomDetails = mainObject.getJSONObject("roomDetail");
             JSONObject paymentDetail = mainObject.getJSONObject("payment");
-            JSONArray sentRoomRequestList = mainObject.getJSONArray("sentRoomRequest");
             JSONObject roomateObject = mainObject.getJSONObject("roommate");
+            JSONObject buildingInfo = mainObject.getJSONObject("building");
+            JSONObject ownerInfo = mainObject.getJSONObject("owner");
+            LoginActivity.sharedPreferences.edit().putString("tenantBuildingInfo", buildingInfo.toString()).apply();
+            LoginActivity.sharedPreferences.edit().putString("tenantOwnerInfo", ownerInfo.toString()).apply();
             LoginActivity.sharedPreferences.edit().putString("tenantRoomDetails", roomDetails.toString()).apply();
             LoginActivity.sharedPreferences.edit().putString("tenantPaymentDetail", paymentDetail.toString()).apply();
-            LoginActivity.sharedPreferences.edit().putString("sentRoomRequestList", sentRoomRequestList.toString()).apply();
             LoginActivity.sharedPreferences.edit().putString("roomateObject", roomateObject.toString()).apply();
 
         } catch (JSONException e) {
             e.printStackTrace();
+             LoginActivity.sharedPreferences.edit().putString("tenantBuildingInfo", null).apply();
+             LoginActivity.sharedPreferences.edit().putString("tenantOwnerInfo", null).apply();
+             LoginActivity.sharedPreferences.edit().putString("tenantRoomDetails",null).apply();
+             LoginActivity.sharedPreferences.edit().putString("tenantPaymentDetail", null).apply();
+             LoginActivity.sharedPreferences.edit().putString("roomateObject",null).apply();
         }
+        finally {
+             MainPageFragment.updateView();
+         }
 
      }
 
@@ -132,7 +135,11 @@ public class GetTenantHomeService extends IntentService {
             super.onPostExecute(s);
             if (s != null) {
                 Log.i("GetTenantHomeResp",s);
-                save(s);
+                try {
+                    save(s);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             } else {
 
             }

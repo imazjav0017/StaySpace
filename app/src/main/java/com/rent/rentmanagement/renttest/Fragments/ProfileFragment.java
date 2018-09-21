@@ -1,9 +1,11 @@
 package com.rent.rentmanagement.renttest.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,6 +19,7 @@ import com.rent.rentmanagement.renttest.Adapters.ProfileDetailsAdapter;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.DataModels.ProfileDetailsModel;
 import com.rent.rentmanagement.renttest.R;
+import com.rent.rentmanagement.renttest.Services.getOwnerDetailsService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +36,7 @@ public class ProfileFragment extends Fragment {
     Context context;
     LinearLayout totalRooms;
     LinearLayout totalStudents;
+    static SwipeRefreshLayout swipeRefreshLayout;
     static TextView name;
    // TextView noOfRooms;
    // TextView noOfTenants;
@@ -56,6 +60,7 @@ public class ProfileFragment extends Fragment {
         name=(TextView)v.findViewById(R.id.ownerNameTextView);
         detailsRv=(RecyclerView)v.findViewById(R.id.profileDetailsRv);
         roomsRv=(RecyclerView)v.findViewById(R.id.roomsdetailsRv) ;
+        swipeRefreshLayout=(SwipeRefreshLayout)v.findViewById(R.id.ownerMainDetailsSrl);
         pList=new ArrayList<>();
         rList=new ArrayList<>();
         adapter=new ProfileDetailsAdapter(pList);
@@ -68,9 +73,19 @@ public class ProfileFragment extends Fragment {
         roomsRv.setLayoutManager(lm2);
         roomsRv.setHasFixedSize(true);
         roomsRv.setAdapter(adapter2);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
 
 
         return v;
+    }
+    void refresh()
+    {
+        getContext().startService(new Intent(getContext(),getOwnerDetailsService.class));
     }
 
     @Override
@@ -121,6 +136,7 @@ public class ProfileFragment extends Fragment {
             }
             adapter.notifyDataSetChanged();
             adapter2.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 }

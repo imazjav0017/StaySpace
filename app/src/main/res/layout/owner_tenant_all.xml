@@ -3,7 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+<android.support.v4.widget.SwipeRefreshLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/allTenantsSrl">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/totalStudentsList"
         android:layout_width="match_parent"
@@ -31,4 +34,6 @@ Get Started By Adding Rooms and Checking In"
         android:visibility="invisible"
         android:padding="5dp"
         android:text="Include Only Students In This Room?" />
+</android.support.v4.widget.SwipeRefreshLayout>
+
 </RelativeLayout>

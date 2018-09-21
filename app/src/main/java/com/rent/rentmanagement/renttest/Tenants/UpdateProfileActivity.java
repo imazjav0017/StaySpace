@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.rent.rentmanagement.renttest.DataCallBack;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Tenants.Async.TenantUpdateTask;
@@ -50,12 +52,24 @@ public class UpdateProfileActivity extends AppCompatActivity {
     public void submit(View v) throws JSONException {
         Log.i("Submit","clicked");
         String adhaarNo=adhaarNoInput.getText().toString();
-        JSONObject data=new JSONObject();
-        data.put("auth",LoginActivity.sharedPreferences.getString("token",null));
-        data.put("tenantId",LoginActivity.sharedPreferences.getString("tenantId",null));
-        data.put("adharNo",adhaarNo);
-        TenantUpdateTask task=new TenantUpdateTask(getApplicationContext());
-        task.execute("https://sleepy-atoll-65823.herokuapp.com/students/editTenantProfile",data.toString());
-
+        if(adhaarNo.equals(""))
+        {
+            Toast.makeText(this, "Field Cant Be Empty!", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            JSONObject data = new JSONObject();
+            data.put("auth", LoginActivity.sharedPreferences.getString("token", null));
+            data.put("tenantId", LoginActivity.sharedPreferences.getString("tenantId", null));
+            data.put("adharNo", adhaarNo);
+            TenantUpdateTask task = new TenantUpdateTask(getApplicationContext(), new DataCallBack() {
+                @Override
+                public void datacallBack(String result, boolean response) {
+                    if (response) {
+                        onBackPressed();
+                    }
+                }
+            });
+            task.execute("https://sleepy-atoll-65823.herokuapp.com/students/editTenantProfile", data.toString());
+        }
     }
 }

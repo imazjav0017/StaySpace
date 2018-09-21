@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-
+    android:id="@+id/availableRoomsBg"
     android:layout_height="wrap_content">
 
 
@@ -27,41 +27,55 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-
                 >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:weightSum="2">
                     <TextView
-
+                        android:padding="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Room No. 1,"
-                        android:id="@+id/availableRoomNo"
-                        android:textColor="#424242"
+                        android:text="Building Name"
+                        android:id="@+id/availableBuildingName"
                         android:layout_marginTop="5dp"
-                        android:layout_marginLeft="20dp"
+                        android:textStyle="bold"
                         android:textSize="22sp"
-
-
+                        android:layout_weight="0.5"
                         />
-                    <TextView
-
+                    <android.support.v4.widget.Space
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" Single, 1st floor,"
-                        android:textColor="#424242"
-                        android:id="@+id/availableRoomType"
-
+                        android:layout_weight="1.5"/>
+                    <TextView
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Room No :"
+                        android:textStyle="bold"
+                        android:id="@+id/availableRoomNo"
+                        android:layout_weight="0.5"
                         android:layout_marginTop="5dp"
-                        android:textSize="20dp"
+                        android:textSize="18sp"
 
 
                         />
                 </LinearLayout>
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Owner Name"
+                    android:textStyle="italic"
+                    android:padding="5dp"
+                    android:textSize="18sp"
+                    android:id="@+id/ownerNameAvailableRooms"
+                    android:gravity="center"
+                    />
                 <ImageView
                     android:layout_marginTop="20dp"
                     android:layout_width="350dp"
@@ -72,7 +86,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="3"
+                    android:weightSum="1"
                     android:background="#ffffff"
                     >
                     <TextView
@@ -87,37 +101,6 @@
                         android:layout_weight="1"
 
                         />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        android:layout_marginTop="5dp"
-                        android:gravity="center"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="horizontal"
-                        >
-
-                        <TextView
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Owner Name"
-                            android:textColor="#424242"
-                            android:textSize="16sp"
-                            android:id="@+id/ownerNameAvailableRooms"
-                            android:gravity="center"
-                            android:layout_marginLeft="2dp"
-                            android:layout_gravity="center"
-
-                            />
-
-                    </LinearLayout>
-
-
-
-
                     <Button
 
                         android:layout_width="wrap_content"

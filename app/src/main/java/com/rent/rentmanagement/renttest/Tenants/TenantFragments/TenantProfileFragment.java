@@ -65,8 +65,7 @@ public class TenantProfileFragment extends android.support.v4.app.Fragment {
             JSONObject object=new JSONObject(data);
             tEmail=object.getString("email");
             tPhoneNO=object.getString("mobileNo");
-            JSONArray nameArray=object.getJSONArray("name");
-            JSONObject nameObject=nameArray.getJSONObject(0);
+            JSONObject nameObject=object.getJSONObject("name");
             tName=nameObject.getString("firstName")+" "+nameObject.getString("lastName");
             name.setText(tName);
             email.setText(tEmail);

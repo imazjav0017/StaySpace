@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.rent.rentmanagement.renttest.DataCallBack;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.Tenants.Services.GetAvailableRoomsService;
 
@@ -21,9 +22,11 @@ import java.net.URL;
 
 public class TenantUpdateTask extends AsyncTask<String,Integer,String> {
 Context context;
+    DataCallBack dataCallBack;
 
-    public TenantUpdateTask(Context context) {
+    public TenantUpdateTask(Context context, DataCallBack dataCallBack) {
         this.context = context;
+        this.dataCallBack = dataCallBack;
     }
 
     @Override
@@ -68,6 +71,7 @@ Context context;
         if (s != null) {
             Toast.makeText(context, "updated!", Toast.LENGTH_SHORT).show();
             LoginActivity.sharedPreferences.edit().putString("tenantDetail",s).apply();
+            dataCallBack.datacallBack(s,true);
             Log.i("updatedData", s);
         }
         else
