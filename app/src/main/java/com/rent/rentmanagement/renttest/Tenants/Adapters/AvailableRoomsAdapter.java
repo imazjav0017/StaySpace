@@ -20,6 +20,7 @@ import com.rent.rentmanagement.renttest.Tenants.SendRequestActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AvailableRoomsAdapter extends RecyclerView.Adapter<AvailableRoomsAdapter.ViewHolder>{
@@ -38,7 +39,7 @@ public class AvailableRoomsAdapter extends RecyclerView.Adapter<AvailableRoomsAd
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final AvailableRoomModel model=roomModelList.get(position);
-        holder.roomNo.setText("Room No:\n"+model.getRoomNo());
+        holder.roomNo.setText(model.getRoomNo());
         holder.buildingName.setText(model.getBuildingName());
         holder.rent.setText("Rent: \u20B9"+model.getRoomRent());
         holder.ownerName.setText("Owner: Mr./Mrs."+model.getOwnerName());
@@ -66,6 +67,12 @@ public class AvailableRoomsAdapter extends RecyclerView.Adapter<AvailableRoomsAd
                 holder.context.startActivity(i);
             }
         });
+    }
+    public void setFilter(List<AvailableRoomModel>filteredList)
+    {
+        roomModelList=new ArrayList<>();
+        roomModelList.addAll(filteredList);
+        notifyDataSetChanged();
     }
 
     @Override

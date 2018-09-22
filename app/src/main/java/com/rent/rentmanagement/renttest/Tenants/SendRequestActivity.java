@@ -1,6 +1,8 @@
 package com.rent.rentmanagement.renttest.Tenants;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rent.rentmanagement.renttest.DataCallBack;
@@ -25,7 +29,8 @@ public class SendRequestActivity extends AppCompatActivity implements DatePicker
     TextView buildingNameTv,addresstv,OwnerNameTv,OwnerPhNoTv,RoomNoTv,roomTypeTv,roomRentTv,
     vacancyTv,datePickerTv;
     Button sendRequest;
-    String data,buildingName,ownerName,phNo,roomNo,roomType,rent,roomId,ownerId,buildingId;
+    ImageButton call;
+    String data,buildingName,ownerName,phNo,roomNo,roomType,rent,roomId,ownerId,buildingId,address;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home)
@@ -56,6 +61,7 @@ public class SendRequestActivity extends AppCompatActivity implements DatePicker
         vacancyTv=(TextView)findViewById(R.id.availableVacancyTv);
         datePickerTv=(TextView)findViewById(R.id.tenantDatePicker);
         sendRequest=(Button)findViewById(R.id.sendRequestButton);
+        call=(ImageButton)findViewById(R.id.callRequestingOwnerBtn);
         try {
             extractInfo();
         } catch (JSONException e) {
@@ -151,13 +157,23 @@ public class SendRequestActivity extends AppCompatActivity implements DatePicker
             roomNo=s.getString("roomNo");
             roomType=s.getString("roomType");
             rent=s.getString("roomRent");
+            address=s.getString("address");
             setTitle("Room No :\n"+roomNo);
-            buildingNameTv.setText("Building Name :\n"+buildingName);
-            OwnerNameTv.setText("Owner Name :\n"+ownerName);
-            OwnerPhNoTv.setText(phNo);
-            RoomNoTv.setText("Room No:\n"+roomNo);
+            buildingNameTv.setText(buildingName);
+            OwnerNameTv.setText(ownerName);
+            OwnerPhNoTv.setText("Contact: "+phNo);
+            RoomNoTv.setText(roomNo);
             roomTypeTv.setText("Room Type :"+roomType);
             roomRentTv.setText("Rent :\u20b9"+rent);
+            addresstv.setText("Address: "+address);
+        }
+    }
+    public void callOwner(View v)
+    {
+        if(phNo!=null) {
+            Intent i = new Intent(Intent.ACTION_DIAL);
+            i.setData(Uri.parse("tel:" + phNo));
+            startActivity(i);
         }
     }
 

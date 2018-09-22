@@ -1,6 +1,7 @@
 package com.rent.rentmanagement.renttest.Fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -14,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.rent.rentmanagement.renttest.Adapters.OccupiedRoomsAdapter;
@@ -95,6 +97,8 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
         MenuItem item=menu.findItem(R.id.searchMenu);
         item.setVisible(true);
         searchView = (SearchView) MenuItemCompat.getActionView(item);
+        ImageView icon= (ImageView) searchView.findViewById(android.support.v7.appcompat.R.id.search_button);
+        icon.setColorFilter(Color.WHITE);
         searchView.setOnQueryTextListener(this);
         searchView.setMaxWidth(Integer.MAX_VALUE);
     }

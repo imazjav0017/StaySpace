@@ -53,8 +53,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="18sp"
+            android:textColor="#000"
+            android:textSize="22sp"
             android:text="1"
             />
     </LinearLayout>
@@ -85,8 +85,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="500"
-            android:textStyle="bold"
-            android:textSize="18sp"
+            android:textColor="#000"
+            android:textSize="22sp"
 
             />
 
@@ -102,12 +102,12 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="7dp"
                     android:orientation="horizontal"
                     android:padding="5dp">
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:background="@drawable/ic_action_bed"/>
                     <TextView
                         android:layout_width="match_parent"
@@ -116,8 +116,7 @@
                         android:padding="5dp"
                         android:id="@+id/totalRoomType"
                         android:text="x3"
-                        android:textColor="#424242"
-                        android:textSize="15sp" />
+                        android:textSize="18sp"/>
                 </LinearLayout>
                 <android.support.v4.widget.Space
                     android:layout_width="wrap_content"

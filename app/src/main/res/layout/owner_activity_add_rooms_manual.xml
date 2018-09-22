@@ -50,55 +50,24 @@
                 android:textSize="20sp"/>
 
         </RadioGroup>
-        <LinearLayout
+
+        <EditText
+            android:layout_marginTop="20dp"
+            android:id="@+id/roomdetailInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="25dp"
-            android:padding="5dp"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Room No: "
-                android:layout_gravity="center"
-                android:textColor="#424242"
-                android:textStyle="bold"
-                android:textSize="20sp"/>
-            <EditText
-                android:id="@+id/roomdetailInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:gravity="center"
-                />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:padding="5dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Room Rent: \u20B9 "
-                android:layout_gravity="center"
-                android:textStyle="bold"
-                android:textColor="#424242"
-                android:textSize="20sp"/>
+            android:hint="Room No"
+            android:textSize="22sp" />
 
             <EditText
+                android:layout_marginTop="20dp"
+                android:hint="Room Rent:\u20B9"
                 android:id="@+id/rentInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="22sp"
                 android:inputType="number"
-                android:gravity="center"
-
                 />
-        </LinearLayout>
 
             <Button
                 android:onClick="saveRooms"
@@ -111,24 +80,34 @@
                 android:background="#172ea4"
                 android:textColor="#fff"
                 android:text="Add Rooms"
-               android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"/>
 
 
-
-
+        <Button
+            android:onClick="finishAdding"
+            android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/finishAddRoomsBtn"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:background="#172ea4"
+            android:textColor="#fff"
+            android:text="Finish"
+            android:layout_marginTop="20dp"/>
         <TextView
-            android:id="@+id/description"
+            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="18sp"
-            android:layout_marginTop="20dp"
-            android:textColor="#610321"/>
-
-
-
-
-
-
+            android:text="Added Rooms:"
+            android:textColor="#000"
+            android:textSize="18sp"/>
+        <android.support.v7.widget.RecyclerView
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/addedRoomsRv">
+        </android.support.v7.widget.RecyclerView>
     </LinearLayout>
+
 </RelativeLayout>

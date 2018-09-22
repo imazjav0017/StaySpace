@@ -7,12 +7,9 @@ import org.json.JSONObject;
 
 public class AvailableRoomModel {
     String roomType,roomNo,roomRent,_id,owner_id,ownerName,phoneNo,buildingId,
-            buildingName,floors;
+            buildingName,floors,address;
 
-    public AvailableRoomModel(String roomType, String roomNo, String roomRent,
-                              String _id, String owner_id, String ownerName,
-                              String phoneNo, String buildingId, String buildingName,
-                              String floors) {
+    public AvailableRoomModel(String roomType, String roomNo, String roomRent, String _id, String owner_id, String ownerName, String phoneNo, String buildingId, String buildingName, String floors, String address) {
         this.roomType = roomType;
         this.roomNo = roomNo;
         this.roomRent = roomRent;
@@ -23,6 +20,7 @@ public class AvailableRoomModel {
         this.buildingId = buildingId;
         this.buildingName = buildingName;
         this.floors = floors;
+        this.address = address;
     }
 
     public String getRoomType() {
@@ -65,6 +63,10 @@ public class AvailableRoomModel {
         return floors;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
     @Override
     public String toString() {
         try {
@@ -78,6 +80,7 @@ public class AvailableRoomModel {
             object.put("phNo", phoneNo);
             object.put("buildingId", buildingId);
             object.put("buildingName", buildingName);
+            object.put("address",address);
             return object.toString();
         }catch (JSONException e)
         {

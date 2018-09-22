@@ -1,19 +1,27 @@
 package com.rent.rentmanagement.renttest.Owner;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.rent.rentmanagement.renttest.Adapters.AddedRoomsAdapter;
+import com.rent.rentmanagement.renttest.Adapters.TotalRoomsAdapter;
+import com.rent.rentmanagement.renttest.DataModels.AddedRoomModel;
+import com.rent.rentmanagement.renttest.DataModels.RoomModel;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 
@@ -28,17 +36,20 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class manualActivity extends AppCompatActivity {
 
     RadioGroup radioGroup;
     EditText rentInput,roomNo;
     Button addRoomsbutton;
-    String accessToken,rooms=null,rentAmount=null,roomType=null;
+    String accessToken,rooms=null,rentAmount=null,roomType=null,buildingName;
     int roomCapacity=0;
-
-
+    List<AddedRoomModel> addedRooms;
+    RecyclerView addedRoomsList;
+    AddedRoomsAdapter adapter;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home)
@@ -84,6 +95,10 @@ public class manualActivity extends AppCompatActivity {
 
 
         }
+    }
+    public void finishAdding(View v)
+    {
+        onBackPressed();
     }
     void setPostData() throws JSONException {
         Toast.makeText(getApplicationContext(), "Processing!", Toast.LENGTH_SHORT).show();
@@ -146,7 +161,14 @@ public class manualActivity extends AppCompatActivity {
         if (s != null)
             if (s.equals("200")) {
                 Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
-              onBackPressed();
+                //keyboard dissapears code
+                InputMethodManager imm = (InputMethodManager)getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(rentInput.getWindowToken(), 0);
+                //adding in recycler View
+                addedRooms.add(new AddedRoomModel(rooms,roomType,rentAmount,buildingName));
+                adapter.notifyDataSetChanged();
+                enable();
             } else {
                 enable();
                 Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
@@ -164,6 +186,14 @@ public class manualActivity extends AppCompatActivity {
         addRoomsbutton= (Button) findViewById(R.id.addroomsButton);
         roomNo=(EditText) findViewById(R.id.roomdetailInput);
         rentInput=(EditText)findViewById(R.id.rentInput);
+        buildingName=getIntent().getStringExtra("buildingName");
+        addedRooms=new ArrayList<>();
+        addedRoomsList=(RecyclerView)findViewById(R.id.addedRoomsRv);
+        adapter=new AddedRoomsAdapter(addedRooms);
+        addedRoomsList.setHasFixedSize(true);
+        addedRoomsList.setAdapter(adapter);
+        LinearLayoutManager lm=new LinearLayoutManager(getApplicationContext());
+        addedRoomsList.setLayoutManager(lm);
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("Add Rooms");

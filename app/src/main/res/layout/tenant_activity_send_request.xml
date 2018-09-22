@@ -25,33 +25,61 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:orientation="vertical">
-           <TextView
+           <LinearLayout
                android:layout_width="wrap_content"
-               android:padding="5dp"
                android:layout_height="wrap_content"
-               android:text="Building Name :\nN/A"
-               android:id="@+id/availableBuildingNameTextView"
-               android:gravity="center"
-               android:textStyle="bold"
-               android:textSize="20sp"/>
+               android:orientation="vertical"
+              >
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:padding="2dp"
+                   android:text="Building Name:"
+                   android:textSize="15sp"
+                   />
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:padding="5dp"
+                   android:layout_height="wrap_content"
+                   android:text="N/A"
+                   android:id="@+id/availableBuildingNameTextView"
+                   android:gravity="center"
+                   android:textColor="#000"
+                   android:textSize="20sp"/>
+           </LinearLayout>
+
            <TextView
-               android:layout_marginTop="5dp"
                android:padding="5dp"
                android:id="@+id/availableAddressTv"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:textSize="15sp"
+               android:textColor="#112a86"
                android:text="Address: N/A"/>
-           <TextView
+           <LinearLayout
                android:layout_width="wrap_content"
-               android:padding="5dp"
                android:layout_height="wrap_content"
-               android:text="Owner Name :\nN/A"
-               android:id="@+id/availableOwnerTv"
-               android:gravity="center"
-               android:textColor="#000"
-               android:textStyle="italic"
-               android:textSize="18sp"/>
+               android:orientation="vertical">
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:padding="2dp"
+                   android:text="Owner Name:"
+                   android:textSize="15sp"
+                   />
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:padding="5dp"
+                   android:layout_height="wrap_content"
+                   android:text="N/A"
+                   android:id="@+id/availableOwnerTv"
+                   android:gravity="center"
+                   android:textColor="#000"
+                   android:textStyle="italic"
+                   android:textSize="18sp"/>
+           </LinearLayout>
+
            <LinearLayout
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
@@ -68,6 +96,8 @@
                <ImageButton
                    android:layout_width="35dp"
                    android:layout_height="35dp"
+                   android:onClick="callOwner"
+                   android:id="@+id/callRequestingOwnerBtn"
                    android:background="@drawable/ic_action_call"/>
                <ImageButton
                    android:layout_width="35dp"
@@ -92,17 +122,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:padding="5dp"
                 android:layout_height="wrap_content"
-                android:text="Room No :\nN/A"
-                android:gravity="center"
-                android:id="@+id/availableRoomNoTv"
-                android:textStyle="bold"
-                android:textSize="20sp"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:text="Room No:"
+                    android:textSize="15sp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:padding="5dp"
+                    android:layout_height="wrap_content"
+                    android:text="N/A"
+                    android:gravity="center"
+                    android:id="@+id/availableRoomNoTv"
+                    android:textColor="#000"
+                    android:textSize="20sp"/>
+            </LinearLayout>
             <TextView
-                android:layout_marginTop="5dp"
                 android:padding="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

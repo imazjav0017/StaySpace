@@ -17,6 +17,8 @@ import android.view.View;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
+import com.rent.rentmanagement.renttest.Fragments.RoomsFragment;
+import com.rent.rentmanagement.renttest.Fragments.TenantsFragment;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Tenants.Services.GetAvailableRoomsService;
@@ -31,7 +33,7 @@ import java.net.URISyntaxException;
 
 public class TenantActivity extends AppCompatActivity {
 
-
+    BottomNavigationView navigation;
 
     private boolean loadFragment(Fragment fragment) {
         //switching fragment
@@ -45,23 +47,24 @@ public class TenantActivity extends AppCompatActivity {
         }
         return false;
     }
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment fragment=null;
+            Fragment fragment = null;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    fragment=new MainPageFragment();
+                    fragment = new MainPageFragment();
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_dashboard:
-                    fragment=new AvailableRoomsFragment(getApplicationContext());
+                    fragment = new AvailableRoomsFragment(getApplicationContext());
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_notifications:
-                    fragment=new TenantProfileFragment(getApplicationContext());
+                    fragment = new TenantProfileFragment(getApplicationContext());
                     loadFragment(fragment);
                     return true;
             }
@@ -69,11 +72,12 @@ public class TenantActivity extends AppCompatActivity {
         }
     };
     private Socket mSocket;
+
     {
         try {
             mSocket = IO.socket("https://sleepy-atoll-65823.herokuapp.com/");
         } catch (URISyntaxException e) {
-            Log.i("err",e.getMessage());
+            Log.i("err", e.getMessage());
         }
     }
 
@@ -81,9 +85,9 @@ public class TenantActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tenant_main_activity);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("Tenant Side");
         loadFragment(new MainPageFragment());
@@ -94,9 +98,8 @@ public class TenantActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         startService(new Intent(getApplicationContext(), GetTenantHomeService.class));
-        startService(new Intent(getApplicationContext(),GetAvailableRoomsService.class));
+        startService(new Intent(getApplicationContext(), GetAvailableRoomsService.class));
     }
-
 
 
     @Override
@@ -106,27 +109,26 @@ public class TenantActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.options_menu_tenants,menu);
+        getMenuInflater().inflate(R.menu.options_menu_tenants, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()== R.id.logoutTenantOption)
-        {
+        if (item.getItemId() == R.id.logoutTenantOption) {
             new AlertDialog.Builder(this)
                     .setTitle("Logout!").setMessage("Are You Sure You Wish To Logout?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Log.i("status","logout");
+                            Log.i("status", "logout");
                             LoginActivity.sharedPreferences.edit().clear().apply();
                             mSocket.disconnect();
                             Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(i);
 
                         }
-                    }).setNegativeButton("No",null).show();
+                    }).setNegativeButton("No", null).show();
             return true;
 
         }
@@ -136,14 +138,28 @@ public class TenantActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this).setTitle("Exit!").setMessage("Are You Sure You Wish To Exit?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                       moveTaskToBack(true);
-                    }
-                }).setNegativeButton("No",null).show();
-    }
+        if (navigation.getSelectedItemId() != R.id.navigation_home) {
+            if (navigation.getSelectedItemId() == R.id.navigation_dashboard) {
+                if (!(AvailableRoomsFragment.searchView.isIconified())) {
+                    AvailableRoomsFragment.searchView.setIconified(true);
+                } else {
+                    navigation.setSelectedItemId(R.id.navigation_home);
+                }
+            }
+            if (navigation.getSelectedItemId() == R.id.navigation_notifications) {
+                navigation.setSelectedItemId(R.id.navigation_home);
+            }
+        }
+        else {
+                new AlertDialog.Builder(this).setTitle("Exit!").setMessage("Are You Sure You Wish To Exit?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                moveTaskToBack(true);
+                            }
+                        }).setNegativeButton("No", null).show();
+            }
 
+    }
 }
 

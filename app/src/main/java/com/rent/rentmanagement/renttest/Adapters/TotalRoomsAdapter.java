@@ -361,7 +361,6 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
     }
     public void setFilter(List<RoomModel> filteredList)
     {
-
         roomList=new ArrayList<>();
         roomList.addAll(filteredList);
         notifyDataSetChanged();

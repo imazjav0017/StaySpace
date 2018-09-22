@@ -40,6 +40,7 @@ public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapte
             public void onClick(View view) {
                 Intent i=new Intent(holder.context,manualActivity.class);
                 i.putExtra("buildingId",model.get_id());
+                i.putExtra("buildingName",model.getBuildingName());
                 holder.context.startActivity(i);
 
             }

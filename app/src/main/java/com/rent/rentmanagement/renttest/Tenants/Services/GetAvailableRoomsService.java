@@ -110,6 +110,7 @@ public class GetAvailableRoomsService extends IntentService {
                     JSONObject buildingObject=object.getJSONObject("building");
                     String buildingId=buildingObject.getString("_id");
                     String buildingName=buildingObject.getString("name");
+                    String address=buildingObject.getString("address");
                     String floors=String.valueOf(buildingObject.getInt("floor"));
                     JSONObject ownerObject=object.getJSONObject("owner");
                     String ownerId=ownerObject.getString("_id");
@@ -118,7 +119,7 @@ public class GetAvailableRoomsService extends IntentService {
                     String Ownername=ownerNameObject.getString("firstName")
                             +" "+ownerNameObject.getString("lastName");
                     availableRooms.add(new AvailableRoomModel(roomType,roomNo,roomRent,roomId,ownerId,Ownername,
-                            ownerPhoneNo,buildingId,buildingName,floors ));
+                            ownerPhoneNo,buildingId,buildingName,floors,address ));
                 }
                 AvailableRoomsFragment.updateNow();
             }

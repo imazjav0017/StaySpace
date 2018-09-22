@@ -3,6 +3,7 @@ package com.rent.rentmanagement.renttest.Tenants.TenantFragments;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,8 +26,10 @@ import org.json.JSONObject;
 
 public class MainPageFragment extends Fragment {
     View v;
+    static String phNo;
     static SwipeRefreshLayout swipeRefreshLayout;
     static TextView dueDays,dueAmount,roomNo,buildingName,ownerName,ownerPhNo,rentStatus;
+    ImageButton call;
 
     public MainPageFragment() {
     }
@@ -41,6 +46,13 @@ public class MainPageFragment extends Fragment {
         ownerName=(TextView)v.findViewById(R.id.ownerNameTenantTextView);
         ownerPhNo=(TextView)v.findViewById(R.id.ownerPhNoTenantTextView);
         rentStatus=(TextView)v.findViewById(R.id.rentStatusTenantTextView);
+        call=(ImageButton) v.findViewById(R.id.callOwnerBtn);
+        call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                callOwner();
+            }
+        });
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -48,6 +60,16 @@ public class MainPageFragment extends Fragment {
             }
         });
         return v;
+    }
+    void callOwner()
+    {
+        if(phNo!=null)
+        {
+            Intent i=new Intent(Intent.ACTION_DIAL);
+            i.setData(Uri.parse("tel:"+phNo));
+            startActivity(i);
+        }
+
     }
     void refresh()
     {
@@ -118,7 +140,7 @@ public class MainPageFragment extends Fragment {
             String ownerInfo=LoginActivity.sharedPreferences.getString("tenantOwnerInfo",null);
             if(ownerInfo!=null) {
                 JSONObject tenantOwnerInfo = new JSONObject(ownerInfo);
-                String phNo = tenantOwnerInfo.getString("mobileNo");
+                 phNo = tenantOwnerInfo.getString("mobileNo");
                 JSONObject name = tenantOwnerInfo.getJSONObject("name");
                 String nameValue = name.getString("firstName") + " " + name.getString("lastName");
                 ownerName.setText("Mr." + nameValue);
@@ -128,6 +150,7 @@ public class MainPageFragment extends Fragment {
             {
                 ownerName.setText("N/A");
                 ownerPhNo.setText("N/A");
+                phNo=null;
             }
             swipeRefreshLayout.setRefreshing(false);
         }
