@@ -56,6 +56,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
                                 Log.i("status","logout");
                                 LoginActivity.sharedPreferences.edit().clear().apply();
+                                if(GetRoomsService.tRooms!=null) {
+                                    GetRoomsService.tRooms.clear();
+                                    GetRoomsService.oRooms.clear();
+                                    GetRoomsService.eRooms.clear();
+                                }
                                 Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                                 startActivity(i);
 

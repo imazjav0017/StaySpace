@@ -75,6 +75,16 @@ public class MainPageFragment extends Fragment {
     {
         getContext().startService(new Intent(getContext(), GetTenantHomeService.class));
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(swipeRefreshLayout!=null)
+        {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();

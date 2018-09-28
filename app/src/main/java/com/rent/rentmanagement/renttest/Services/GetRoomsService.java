@@ -190,6 +190,7 @@ public class GetRoomsService extends IntentService {
             }
             else
             {
+                RoomsFragment.showProgress(false);
                 Toast.makeText(getApplicationContext(), "Please Check Your Internet Connection and try later!", Toast.LENGTH_SHORT).show();
             }
         }

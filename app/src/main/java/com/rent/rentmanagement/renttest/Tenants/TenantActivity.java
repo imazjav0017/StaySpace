@@ -68,7 +68,7 @@ public class TenantActivity extends AppCompatActivity {
                     loadFragment(fragment);
                     return true;
             }
-            return true;
+            return false;
         }
     };
     private Socket mSocket;

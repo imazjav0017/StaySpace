@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -153,7 +154,7 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
         try {
             setStaticData(LoginActivity.sharedPreferences.getString("getRoomsResp",null));
         } catch (JSONException e) {
-            e.printStackTrace();
+           Log.i("setStaticData",e.toString());
         }
         updateView();
         if(currentTab!=-1)
@@ -166,6 +167,7 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
             if (flag)
                 progressBar.setVisibility(View.VISIBLE);
             else {
+                Log.i("progrsss","ss");
                 RoomsFragment.progressBar.setProgress(100);
                 progressBar.setVisibility(View.INVISIBLE);
             }
@@ -190,12 +192,14 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
     }
 
     public void setStaticData(String s) throws JSONException {
+
         if (s != null) {
             erooms.clear();
             oRooms.clear();
             tRooms.clear();
             JSONArray mainArray = new JSONArray(s);
             for (int i = 0; i < mainArray.length(); i++) {
+                Log.i("addingRoom","i");
                 JSONObject mainObject = mainArray.getJSONObject(i);
                 String roomId = mainObject.getString("_id");
                 String roomType = mainObject.getString("roomType");
@@ -222,11 +226,13 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
                                 dueDate, isEmpty, isRentDue, dueDays,roomCapacity,totalRoomsCapacity));
                     }
                 }
+
             }
             adapter.notifyDataSetChanged();
             adapter2.notifyDataSetChanged();
             adapter3.notifyDataSetChanged();
             }
+
     }
 
 
