@@ -53,9 +53,9 @@ public class AddBuildingTask extends AsyncTask<String,Void,String> {
                 String response=getResponse(connection);
                 return response;
             }
-            else
+            else if(resp==422)
             {
-                return null;
+                return "422";
             }
 
         }catch(MalformedURLException e)
@@ -74,19 +74,25 @@ public class AddBuildingTask extends AsyncTask<String,Void,String> {
         super.onPostExecute(s);
        if(s!=null)
        {
-           Log.i("addBuildingResp",s);
-           JSONObject mainObject= null;
-           try {
-               mainObject = new JSONObject(s);
-               JSONArray buildings=mainObject.getJSONArray("build");
-               LoginActivity.sharedPreferences.edit()
-                       .putString("buildings",buildings.toString()).apply();
-           } catch (JSONException e) {
-               e.printStackTrace();
+           if(s.equals("422"))
+           {
+               Toast.makeText(context, "Building With Same Name Already Exists", Toast.LENGTH_SHORT).show();
            }
+           else {
+               Log.i("addBuildingResp", s);
+               JSONObject mainObject = null;
+               try {
+                   mainObject = new JSONObject(s);
+                   JSONArray buildings = mainObject.getJSONArray("build");
+                   LoginActivity.sharedPreferences.edit()
+                           .putString("buildings", buildings.toString()).apply();
+               } catch (JSONException e) {
+                   e.printStackTrace();
+               }
 
-           addBuildingResp.processFinish(true);
-           Toast.makeText(context, "Building Added!", Toast.LENGTH_SHORT).show();
+               addBuildingResp.processFinish(true);
+               Toast.makeText(context, "Building Added!", Toast.LENGTH_SHORT).show();
+           }
        }
         else
         {

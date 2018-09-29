@@ -12,18 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 
-    <TextView
-        android:id="@+id/noTenantsText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:text="No Tenants Available
-Get Started By Adding Rooms and Checking In"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:visibility="invisible" />
-
     <CheckBox
         android:layout_width="wrap_content"
         android:background="@color/green"
@@ -35,5 +23,15 @@ Get Started By Adding Rooms and Checking In"
         android:padding="5dp"
         android:text="Include Only Students In This Room?" />
 </android.support.v4.widget.SwipeRefreshLayout>
-
+    <TextView
+        android:id="@+id/noTenantsText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="No Tenants Available
+Get Started By Adding Rooms and Checking In"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:visibility="invisible" />
 </RelativeLayout>

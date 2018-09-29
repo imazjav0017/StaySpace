@@ -1,5 +1,6 @@
 package com.rent.rentmanagement.renttest.Owner;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,7 @@ String _id,name,phNo,roomNo,adhaarNo,roomId;
     EditText sRoomNo,sPhNo,sAadharNo,sName;
     Button edit,delete;
     String response;
+    ProgressDialog deleteStudentDialog;
     public class EditStudentsTask extends AsyncTask<String,Void,String>
     {
         @Override
@@ -169,6 +171,12 @@ String _id,name,phNo,roomNo,adhaarNo,roomId;
             data.put("studentId",_id);
         DeleteStudentTask task=new DeleteStudentTask();
         task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/deleteStudents",data.toString());
+        deleteStudentDialog=new ProgressDialog(studentProfile.this);
+        deleteStudentDialog.setMax(100);
+        deleteStudentDialog.setMessage("Deleting "+name);
+        deleteStudentDialog.setTitle("Delete Tenant");
+        deleteStudentDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        deleteStudentDialog.show();
     }
     class DeleteStudentTask extends AsyncTask<String,Void,String>
     {
@@ -211,6 +219,7 @@ String _id,name,phNo,roomNo,adhaarNo,roomId;
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            deleteStudentDialog.dismiss();
             if (s != null) {
                 Log.i("DELETESTUDENTRESP", s);
                 Toast.makeText(studentProfile.this, "Tenant Checked out!", Toast.LENGTH_SHORT).show();

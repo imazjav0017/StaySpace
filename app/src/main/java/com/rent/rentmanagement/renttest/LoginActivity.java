@@ -1,5 +1,6 @@
 package com.rent.rentmanagement.renttest;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -132,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
     }
-    public class LoginTask extends AsyncTask<String,Void,String>
+    public class LoginTask extends AsyncTask<String,Integer,String>
     {
         public void enableButton()
         {
@@ -175,6 +176,7 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
+                return null;
             }
 
             return null;
@@ -182,15 +184,14 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-            progressBar.setVisibility(View.INVISIBLE);
+           progressBar.setVisibility(View.INVISIBLE);
+
             if (response != null) {
                 if (response.equals("200")) {
                     Toast.makeText(getApplicationContext(), "Logged In!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "Check Your Credentials And Try Again!", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
             else
             {

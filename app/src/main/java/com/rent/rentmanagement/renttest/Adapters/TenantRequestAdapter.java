@@ -1,5 +1,6 @@
 package com.rent.rentmanagement.renttest.Adapters;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.rent.rentmanagement.renttest.AsyncTasks.SendRoomRequestResponseTask;
 import com.rent.rentmanagement.renttest.DataModels.TenantRequestModel;
 import com.rent.rentmanagement.renttest.LoginActivity;
+import com.rent.rentmanagement.renttest.Owner.HomePageActivity;
 import com.rent.rentmanagement.renttest.Owner.ownerTenantRequestDetails;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Services.GetRoomRequestsService;
@@ -30,6 +32,7 @@ import java.util.List;
 public class TenantRequestAdapter extends RecyclerView.Adapter<TenantRequestAdapter.ViewHolder>{
 
 List<TenantRequestModel>tenantRequestModels;
+   public static ProgressDialog progressDialog;
 
     public TenantRequestAdapter(List<TenantRequestModel> tenantRequestModels) {
         this.tenantRequestModels = tenantRequestModels;
@@ -93,16 +96,16 @@ List<TenantRequestModel>tenantRequestModels;
                     i.putExtra("data",requestResponse.toString());
                     i.putExtra("response",true);
                     i.putExtra("tenantName",model.getTenantname());
+                    progressDialog=new ProgressDialog(holder.context);
+                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    progressDialog.setMax(100);
+                    progressDialog.setMessage("Adding "+model.getTenantname());
+                    progressDialog.setTitle("Adding Tenant");
+                    progressDialog.show();
                     holder.context.startService(i);
-                    /*SendRoomRequestResponseTask task=new SendRoomRequestResponseTask(holder.context,model.getTenantname(),true);
-                    task.execute("https://sleepy-atoll-65823.herokuapp.com/users/responseToRoomRequest",requestResponse.toString());*/
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }/*finally {
-                    tenantRequestModels.remove(position);
-                    GetRoomRequestsService.removeElement(position);
-                    notifyDataSetChanged();
-                }*/
+                }
 
             }
         });
@@ -117,16 +120,16 @@ List<TenantRequestModel>tenantRequestModels;
                     i.putExtra("data",requestResponse.toString());
                     i.putExtra("response",false);
                     i.putExtra("tenantName",model.getTenantname());
+                    progressDialog=new ProgressDialog(holder.context);
+                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    progressDialog.setMax(100);
+                    progressDialog.setMessage("Rejecting "+model.getTenantname());
+                    progressDialog.setTitle("Rejecting Tenant");
+                    progressDialog.show();
                     holder.context.startService(i);
-                    //SendRoomRequestResponseTask task=new SendRoomRequestResponseTask(holder.context,model.getTenantname(),false);
-                    //task.execute("https://sleepy-atoll-65823.herokuapp.com/users/responseToRoomRequest",requestResponse.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }/*finally {
-                    tenantRequestModels.remove(position);
-                    GetRoomRequestsService.removeElement(position);
-                    notifyDataSetChanged();
-                }*/
+                }
             }
         });
 

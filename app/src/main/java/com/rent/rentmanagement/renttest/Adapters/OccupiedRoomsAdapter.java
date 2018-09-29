@@ -1,6 +1,7 @@
 package com.rent.rentmanagement.renttest.Adapters;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -66,6 +67,7 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
     List<RoomModel> roomList;
     Context context;
     JSONObject rentdetails;
+    public static  ProgressDialog progressDialog;
     public OccupiedRoomsAdapter(List<RoomModel> roomList, Context context) {
         this.roomList = roomList;
         this.context = context;
@@ -113,8 +115,7 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
         holder.reason.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // roomActivity.reasonPage.setVisibility(View.VISIBLE);
-                //roomActivity.isVisible=true;
+
                 AlertDialog.Builder builder=new AlertDialog.Builder(context);
                 View view=LayoutInflater.from(context).inflate(R.layout.owner_reason_dialog,null,false);
                 final EditText input=(EditText)view.findViewById(R.id.reasonInputText);
@@ -135,6 +136,12 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
                             Toast.makeText(context, "Please Give A Reason..", Toast.LENGTH_SHORT).show();
                         }
                         else {
+                            //progress dialog
+                            progressDialog=new ProgressDialog(holder.context);
+                            progressDialog.setMax(100);
+                            progressDialog.setMessage("Saving");
+                            progressDialog.setTitle("Reason");
+                            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                             Intent i=new Intent(holder.context, PaymentService.class);
                             i.putExtra("roomId",model.get_id());
                             i.putExtra("date",date);
@@ -143,6 +150,7 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
                             i.putExtra("isPayment",false);//indicates that collect pressed from occ
                             holder.context.startService(i);
                             dialog.dismiss();
+                            progressDialog.show();
                         }
                     }
                 });
@@ -181,6 +189,14 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
                         }
                         else
                          {
+                             progressDialog=new ProgressDialog(holder.context);
+                             progressDialog.setMax(100);
+                             progressDialog.setMessage("Collecting");
+                             progressDialog.setTitle("Collecting "+am+" from "+payeeeName);
+                             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+
+
                             collectedButton.setClickable(false);
                             Intent i = new Intent(holder.context, PaymentService.class);
                             i.putExtra("roomId", model.get_id());
@@ -191,6 +207,7 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
                             i.putExtra("isPayment", true);//indicates that collect pressed from occ
                             holder.context.startService(i);
                             dialog.dismiss();
+                            progressDialog.show();
                         }
                     }
                 });

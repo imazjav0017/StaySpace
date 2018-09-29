@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class TenantRequestListFragment extends Fragment{
     View v;
     RecyclerView requestList;
-    TextView noRequest;
+    static TextView noRequest;
     Context context;
     static SwipeRefreshLayout swipeRefreshLayout;
     public static ArrayList<TenantRequestModel> tenantRequestModels;
@@ -43,6 +43,7 @@ public class TenantRequestListFragment extends Fragment{
         swipeRefreshLayout=(SwipeRefreshLayout)v.findViewById(R.id.tenantRequestListSrl);
         requestList=(RecyclerView)v.findViewById(R.id.totalRequestsList);
         noRequest=(TextView)v.findViewById(R.id.noRequestsText);
+        noRequest.setVisibility(View.INVISIBLE);
         tenantRequestModels=new ArrayList<>();
         adapter=new TenantRequestAdapter(tenantRequestModels);
         LinearLayoutManager lm=new LinearLayoutManager(context);
@@ -78,6 +79,11 @@ public class TenantRequestListFragment extends Fragment{
             tenantRequestModels.addAll(GetRoomRequestsService.tenantRequestModels);
             adapter.notifyDataSetChanged();
             swipeRefreshLayout.setRefreshing(false);
+            noRequest.setVisibility(View.INVISIBLE);
+        }
+        if(tenantRequestModels.isEmpty())
+        {
+            noRequest.setVisibility(View.VISIBLE);
         }
 
     }

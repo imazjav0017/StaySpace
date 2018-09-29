@@ -1,6 +1,7 @@
 package com.rent.rentmanagement.renttest.Owner;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -50,6 +51,7 @@ public class manualActivity extends AppCompatActivity {
     List<AddedRoomModel> addedRooms;
     RecyclerView addedRoomsList;
     AddedRoomsAdapter adapter;
+    ProgressDialog progressDialog;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home)
@@ -76,7 +78,7 @@ public class manualActivity extends AppCompatActivity {
         }
         else {
             new AlertDialog.Builder(this)
-                    .setTitle("Add a room").setMessage("Are You Sure You Wish To Add a room "+roomType+" rooms?")
+                    .setTitle("Add a room").setMessage("Are You Sure You Wish To Add a  "+roomType+" room?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -120,6 +122,12 @@ public class manualActivity extends AppCompatActivity {
         roomsData.put("buildingId",buildingId);
         manualActivity.SendToken task = new manualActivity.SendToken();
         task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/addRooms",roomsData.toString());
+        progressDialog=new ProgressDialog(manualActivity.this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("Adding Room No"+rooms);
+        progressDialog.setTitle("Adding Room");
+        progressDialog.setMax(100);
+        progressDialog.show();
     }
     public class SendToken extends AsyncTask<String,Void,String> {
 
@@ -155,6 +163,7 @@ public class manualActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             response(s);
+            progressDialog.dismiss();
         }
     }
     public void response(String s) {
@@ -169,7 +178,13 @@ public class manualActivity extends AppCompatActivity {
                 addedRooms.add(new AddedRoomModel(rooms,roomType,rentAmount,buildingName));
                 adapter.notifyDataSetChanged();
                 enable();
-            } else {
+            }
+            else if(s.equals("422"))
+            {
+                enable();
+                Toast.makeText(this, "Room With Same No. Already Exists", Toast.LENGTH_SHORT).show();
+            }
+            else {
                 enable();
                 Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
             }

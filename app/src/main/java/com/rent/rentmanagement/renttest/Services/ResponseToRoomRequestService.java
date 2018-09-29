@@ -1,13 +1,16 @@
 package com.rent.rentmanagement.renttest.Services;
 
 import android.app.IntentService;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.rent.rentmanagement.renttest.Adapters.TenantRequestAdapter;
 import com.rent.rentmanagement.renttest.LoginActivity;
+import com.rent.rentmanagement.renttest.Owner.MainActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -104,6 +107,10 @@ public class ResponseToRoomRequestService extends IntentService {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            if(TenantRequestAdapter.progressDialog!=null)
+            {
+                TenantRequestAdapter.progressDialog.dismiss();
+            }
             if (s != null) {
                 Log.i("REQUESTRESPONSERESP", s);
                 if(response)
@@ -115,6 +122,7 @@ public class ResponseToRoomRequestService extends IntentService {
                 startService(new Intent(getApplicationContext(),GetRoomRequestsService.class));
                 startService(new Intent(getApplicationContext(),GetAllTenantsService.class));
                 startService(new Intent(getApplicationContext(),GetRoomsService.class));
+
             }
             else
             {

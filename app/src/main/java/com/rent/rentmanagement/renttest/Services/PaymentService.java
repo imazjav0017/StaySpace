@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.rent.rentmanagement.renttest.Adapters.OccupiedRoomsAdapter;
+import com.rent.rentmanagement.renttest.Adapters.TotalRoomsAdapter;
 import com.rent.rentmanagement.renttest.DataCallBack;
 import com.rent.rentmanagement.renttest.Fragments.RoomsFragment;
 import com.rent.rentmanagement.renttest.LoginActivity;
@@ -123,6 +124,13 @@ public class PaymentService extends IntentService {
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
+            if(TotalRoomsAdapter.progressDialog!=null) {
+                TotalRoomsAdapter.progressDialog.dismiss();
+            }
+            if(OccupiedRoomsAdapter.progressDialog!=null)
+            {
+                OccupiedRoomsAdapter.progressDialog.dismiss();
+            }
             if (response != null) {
                 Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
                 if(response.equals("Some Error,check if fields are missings!"))

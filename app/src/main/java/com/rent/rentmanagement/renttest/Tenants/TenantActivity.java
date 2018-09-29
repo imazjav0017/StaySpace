@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
+
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -38,7 +40,6 @@ public class TenantActivity extends AppCompatActivity {
     private boolean loadFragment(Fragment fragment) {
         //switching fragment
         if (fragment != null) {
-
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.tenantsFragmentContainer, fragment)
@@ -57,18 +58,16 @@ public class TenantActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     fragment = new MainPageFragment();
-                    loadFragment(fragment);
-                    return true;
+                     break;
                 case R.id.navigation_dashboard:
                     fragment = new AvailableRoomsFragment(getApplicationContext());
-                    loadFragment(fragment);
-                    return true;
+                    break;
                 case R.id.navigation_notifications:
                     fragment = new TenantProfileFragment(getApplicationContext());
-                    loadFragment(fragment);
-                    return true;
+                    break;
             }
-            return false;
+            loadFragment(fragment);
+            return true;
         }
     };
     private Socket mSocket;

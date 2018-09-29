@@ -124,6 +124,10 @@ public class TenantsFragment extends Fragment implements SearchView.OnQueryTextL
             studentModelList.addAll(GetAllTenantsService.studentsList);
             adapter.notifyDataSetChanged();
             swipeRefreshLayout.setRefreshing(false);
+            if(studentModelList.isEmpty())
+                empty.setVisibility(View.VISIBLE);
+            else
+                empty.setVisibility(View.INVISIBLE);
         }
     }
     @Override

@@ -1,5 +1,6 @@
 package com.rent.rentmanagement.renttest.Tenants;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import org.json.JSONObject;
 public class UpdateProfileActivity extends AppCompatActivity {
     EditText adhaarNoInput;
     boolean sendingRequest;
+    ProgressDialog progressDialog;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home)
@@ -57,14 +59,21 @@ public class UpdateProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Field Cant Be Empty!", Toast.LENGTH_SHORT).show();
         }
         else {
+            progressDialog=new ProgressDialog(UpdateProfileActivity.this);
+            progressDialog.setTitle("Updating..");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setMax(100);
+            progressDialog.setMessage("Updating Details");
             JSONObject data = new JSONObject();
             data.put("auth", LoginActivity.sharedPreferences.getString("token", null));
             data.put("tenantId", LoginActivity.sharedPreferences.getString("tenantId", null));
             data.put("adharNo", adhaarNo);
+            progressDialog.show();
             TenantUpdateTask task = new TenantUpdateTask(getApplicationContext(), new DataCallBack() {
                 @Override
                 public void datacallBack(String result, boolean response) {
                     if (response) {
+                        progressDialog.dismiss();
                         onBackPressed();
                     }
                 }

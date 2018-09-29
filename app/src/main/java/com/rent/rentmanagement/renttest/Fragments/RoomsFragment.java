@@ -164,8 +164,9 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
     public static void showProgress(boolean flag)
     {
         if(progressBar!=null) {
-            if (flag)
+            if (flag) {
                 progressBar.setVisibility(View.VISIBLE);
+            }
             else {
                 Log.i("progrsss","ss");
                 RoomsFragment.progressBar.setProgress(100);
@@ -199,7 +200,6 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
             tRooms.clear();
             JSONArray mainArray = new JSONArray(s);
             for (int i = 0; i < mainArray.length(); i++) {
-                Log.i("addingRoom","i");
                 JSONObject mainObject = mainArray.getJSONObject(i);
                 String roomId = mainObject.getString("_id");
                 String roomType = mainObject.getString("roomType");

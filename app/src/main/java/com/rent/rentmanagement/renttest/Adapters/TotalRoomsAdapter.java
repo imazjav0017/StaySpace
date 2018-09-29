@@ -2,6 +2,7 @@ package com.rent.rentmanagement.renttest.Adapters;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -55,6 +56,7 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
     List<RoomModel> roomList;
     JSONObject rentdetails;
     Context context;
+    public static ProgressDialog progressDialog;
 
     public TotalRoomsAdapter(List<RoomModel> roomList, Context context) {
         this.roomList = roomList;
@@ -178,11 +180,14 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
                         builder.setView(view);
                         final AlertDialog dialog=builder.create();
                         dialog.show();
+
+
                         collectedButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 String payeeeName=payee.getText().toString();
                                 String am=rentCollectedInput.getText().toString();
+
                                 if (payeeeName.equals("")) {
                                     Toast.makeText(holder.context, "Payee name Cannot be empty!", Toast.LENGTH_SHORT).show();
                                 }
@@ -191,6 +196,14 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
                                 }
                                 else
                                 {
+                                    //progress dialog
+                                    progressDialog=new ProgressDialog(holder.context);
+                                    progressDialog.setMax(100);
+                                    progressDialog.setMessage("Collecting "+am+" from "+payeeeName);
+                                    progressDialog.setTitle("Collecting");
+                                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+
                                     collectedButton.setClickable(false);
                                     Intent i = new Intent(holder.context, PaymentService.class);
                                     i.putExtra("roomId", model.get_id());
@@ -201,6 +214,8 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
                                     i.putExtra("isPayment", true);//indicates that collect pressed from occ
                                     holder.context.startService(i);
                                     dialog.dismiss();
+                                    progressDialog.show();
+
                                 }
                             }
                         });
@@ -233,6 +248,12 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
         data.put("roomId",roomId);
         CheckoutTask task = new CheckoutTask(context);
         task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/vacateRooms", data.toString());
+        progressDialog=new ProgressDialog(context);
+        progressDialog.setMax(100);
+        progressDialog.setMessage("Vacating");
+        progressDialog.setTitle("Vacating Room");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
 
     }
     class CheckoutTask extends AsyncTask<String,Void,String> {
@@ -277,6 +298,7 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
 
         @Override
         protected void onPostExecute(String s) {
+            progressDialog.dismiss();
             if (s != null) {
                 Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
                 if (s.equals("checked out from Room")) {

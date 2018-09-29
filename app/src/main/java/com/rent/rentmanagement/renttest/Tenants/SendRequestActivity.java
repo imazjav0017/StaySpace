@@ -1,6 +1,7 @@
 package com.rent.rentmanagement.renttest.Tenants;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +31,7 @@ public class SendRequestActivity extends AppCompatActivity implements DatePicker
     vacancyTv,datePickerTv;
     Button sendRequest;
     ImageButton call;
+    ProgressDialog progressDialog;
     String data,buildingName,ownerName,phNo,roomNo,roomType,rent,roomId,ownerId,buildingId,address;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -120,6 +122,11 @@ public class SendRequestActivity extends AppCompatActivity implements DatePicker
     {
         JSONObject requestObject=new JSONObject();
         try {
+            progressDialog=new ProgressDialog(SendRequestActivity.this);
+            progressDialog.setTitle("Sending Request");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setMax(100);
+            progressDialog.setMessage("Sending Request to Room No: "+roomNo);
             String auth=LoginActivity.sharedPreferences.getString("token",null);
             String _id= LoginActivity.sharedPreferences.getString("tenantId",null);
             if(auth!=null)
@@ -132,11 +139,13 @@ public class SendRequestActivity extends AppCompatActivity implements DatePicker
             requestObject.put("buildingId",buildingId);
             requestObject.put("tenantId",_id);
             requestObject.put("requestCheckInDate",datePickerTv.getText().toString());
+            progressDialog.show();
             RoomRequestTask task=new RoomRequestTask(getApplicationContext(), new DataCallBack() {
                 @Override
                 public void datacallBack(String result, boolean response) {
                     if(response)
                     {
+                        progressDialog.dismiss();
                         onBackPressed();
                     }
                 }

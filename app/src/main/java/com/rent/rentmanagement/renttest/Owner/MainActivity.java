@@ -117,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 break;
             case R.id.roomViewItem:
                 fragment=new RoomsFragment(MainActivity.this);
-
                 break;
             case R.id.tenantsViewiTem:
                 fab.setVisibility(View.INVISIBLE);
