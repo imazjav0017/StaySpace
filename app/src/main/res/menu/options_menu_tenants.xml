@@ -8,6 +8,12 @@
         app:showAsAction="always"
         app:actionViewClass="android.support.v7.widget.SearchView"
         />
+    <item android:id="@+id/filterMenuTenant"
+        android:title="filter"
+        android:visible="false"
+        android:icon="@drawable/ic_action_filter"
+        app:showAsAction="always"
+        />
     <item
         android:id="@+id/logoutTenantOption"
         android:title="Logout">

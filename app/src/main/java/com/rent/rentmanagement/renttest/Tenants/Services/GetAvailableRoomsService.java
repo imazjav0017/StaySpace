@@ -90,6 +90,7 @@ public class GetAvailableRoomsService extends IntentService {
     }
     //store the available rooms in static array list
     public static List<AvailableRoomModel> availableRooms;
+    public static List<String> buildings=new ArrayList<>();
     public static void setAvailableroomsData(String s,Context c) throws JSONException
     {
         if(s!=null)
@@ -110,6 +111,7 @@ public class GetAvailableRoomsService extends IntentService {
                     JSONObject buildingObject=object.getJSONObject("building");
                     String buildingId=buildingObject.getString("_id");
                     String buildingName=buildingObject.getString("name");
+                    buildings.add(buildingName);
                     String address=buildingObject.getString("address");
                     String floors=String.valueOf(buildingObject.getInt("floor"));
                     JSONObject ownerObject=object.getJSONObject("owner");

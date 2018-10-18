@@ -83,21 +83,39 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Tenants.TenantActivity"
-            android:label="@string/title_activity_tenant" />
+            android:label="@string/title_activity_tenant"
+            android:resizeableActivity="false"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".Tenants.Services.GetAvailableRoomsService"
             android:exported="false" />
 
-        <activity android:name=".Owner.ownerTenantRequestDetails" />
+        <activity
+            android:name=".Owner.ownerTenantRequestDetails"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:resizeableActivity="false"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".Services.GetRoomRequestsService"
             android:exported="false" />
 
-        <activity android:name=".Tenants.UpdateProfileActivity" />
-        <activity android:name=".Owner.UpdateOwnerProfileActivity" />
-        <activity android:name=".Owner.UpdateOwnerExtraActivity" />
+        <activity
+            android:name=".Tenants.UpdateProfileActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:resizeableActivity="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Owner.UpdateOwnerProfileActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:resizeableActivity="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Owner.UpdateOwnerExtraActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:resizeableActivity="false"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".Services.getOwnerDetailsService"
@@ -106,13 +124,21 @@
             android:name=".Tenants.Services.GetTenantHomeService"
             android:exported="false" />
 
-        <activity android:name=".Owner.SelectBuildingActivity" />
+        <activity
+            android:name=".Owner.SelectBuildingActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:resizeableActivity="false"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".Services.GetRoomsService"
             android:exported="false" />
 
-        <activity android:name=".Owner.SwitchBuildingActivity" />
+        <activity
+            android:name=".Owner.SwitchBuildingActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:resizeableActivity="false"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".Services.ResponseToRoomRequestService"
@@ -124,7 +150,17 @@
             android:name=".Services.PaymentService"
             android:exported="false" />
 
-        <activity android:name=".Tenants.SendRequestActivity"></activity>
+        <activity
+            android:name=".Tenants.SendRequestActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:resizeableActivity="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ForgotPassword"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:resizeableActivity="false"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Tenants.EditProfileActivity"></activity>
     </application>
 
 </manifest>

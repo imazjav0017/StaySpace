@@ -88,6 +88,10 @@ public class ResponseToRoomRequestService extends IntentService {
                     String response=getResponse(connection);
                     return response;
                 }
+                else if(resp==422)
+                {
+                    return "422";
+                }
                 else
                 {
                     return null;
@@ -113,15 +117,21 @@ public class ResponseToRoomRequestService extends IntentService {
             }
             if (s != null) {
                 Log.i("REQUESTRESPONSERESP", s);
-                if(response)
-                    Toast.makeText(getApplicationContext(), "Added "+name+" Successfully!", Toast.LENGTH_SHORT).show();
-                else
+                if(s.equals("422"))
                 {
-                    Toast.makeText(getApplicationContext(), "Rejected "+name+" !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Tenant Already Checked in with some other room/owner", Toast.LENGTH_SHORT).show();
                 }
-                startService(new Intent(getApplicationContext(),GetRoomRequestsService.class));
-                startService(new Intent(getApplicationContext(),GetAllTenantsService.class));
-                startService(new Intent(getApplicationContext(),GetRoomsService.class));
+                else {
+                    if (response)
+                        Toast.makeText(getApplicationContext(), "Added " + name + " Successfully!", Toast.LENGTH_SHORT).show();
+                    else {
+                        Toast.makeText(getApplicationContext(), "Rejected " + name + " !", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+                startService(new Intent(getApplicationContext(), GetRoomRequestsService.class));
+                startService(new Intent(getApplicationContext(), GetAllTenantsService.class));
+                startService(new Intent(getApplicationContext(), GetRoomsService.class));
 
             }
             else

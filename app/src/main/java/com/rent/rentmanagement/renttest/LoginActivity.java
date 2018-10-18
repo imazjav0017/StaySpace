@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rent.rentmanagement.renttest.Owner.MainActivity;
@@ -34,6 +35,7 @@ import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity {
     EditText emailInput,passwordInput;
+    TextView forgotPass;
     Button loginButton;
     String accessToken=null;
     int resp;
@@ -254,8 +256,21 @@ public class LoginActivity extends AppCompatActivity {
         emailInput=(EditText)findViewById(R.id.emailInput);
         passwordInput=(EditText)findViewById(R.id.passwordInput);
         loginButton=(Button)findViewById(R.id.loginButton);
-
-
-
+        forgotPass=(TextView)findViewById(R.id.forgotPasswordOption);
+        forgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                forgotPassWord();
+            }
+        });
+    }
+    void forgotPassWord()
+    {
+        Log.i("switching","ForgotPass");
+        Intent i=new Intent(getApplicationContext(),ForgotPassword.class);
+        String email=emailInput.getText().toString();
+        if(!email.equals(""))
+        i.putExtra("email",email);
+        startActivity(i);
     }
 }

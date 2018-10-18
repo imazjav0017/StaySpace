@@ -203,8 +203,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     JSONObject buildingObject = buildingArray.getJSONObject(buildingIndex);
                     String buildName = buildingObject.getString("name");
                     setTitle(buildName);
-                } else
-                    setTitle("TenKeyz");
+                }
             }catch (JSONException e)
             {
                 e.printStackTrace();

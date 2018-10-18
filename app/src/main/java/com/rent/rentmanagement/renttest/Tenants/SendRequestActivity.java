@@ -146,6 +146,7 @@ public class SendRequestActivity extends AppCompatActivity implements DatePicker
                     if(response)
                     {
                         progressDialog.dismiss();
+                        if(!(result.equals("adhaar")))
                         onBackPressed();
                     }
                 }

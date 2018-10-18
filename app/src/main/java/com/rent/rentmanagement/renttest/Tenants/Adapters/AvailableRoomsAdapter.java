@@ -74,6 +74,12 @@ public class AvailableRoomsAdapter extends RecyclerView.Adapter<AvailableRoomsAd
         roomModelList.addAll(filteredList);
         notifyDataSetChanged();
     }
+    public void removeFilter(List<AvailableRoomModel> fullList)
+    {
+        roomModelList=new ArrayList<>();
+        roomModelList.addAll(fullList);
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {

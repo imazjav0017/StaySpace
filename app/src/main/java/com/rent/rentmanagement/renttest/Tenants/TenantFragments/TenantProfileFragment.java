@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
+import com.rent.rentmanagement.renttest.Tenants.EditProfileActivity;
 import com.rent.rentmanagement.renttest.Tenants.UpdateProfileActivity;
 
 import org.json.JSONArray;
@@ -51,7 +52,7 @@ public class TenantProfileFragment extends android.support.v4.app.Fragment {
         updateProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(context, UpdateProfileActivity.class);
+                Intent i=new Intent(context, EditProfileActivity.class);
                 startActivity(i);
             }
         });
