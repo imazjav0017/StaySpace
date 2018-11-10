@@ -148,61 +148,81 @@ public class AvailableRoomsFragment extends Fragment implements SearchView.OnQue
     public boolean onQueryTextSubmit(String query) {
         return false;
     }
-
     @Override
     public boolean onQueryTextChange(String newText) {
         newText=newText.toLowerCase();
         List<AvailableRoomModel> filteredList1=new ArrayList<>();
-        filteredList1.clear();
+
+        //if the list is in filter state
         if(filterState)
         {
+            filteredList1.clear();
+            //if text is empty
             if(newText.isEmpty())
             {
                 filteredList1.addAll(filteredList);
             }
-            if(filteredList!=null)
+            else
             {
-                for(AvailableRoomModel model : filteredList)
+                //if text is not empty
+                if(filteredList!=null)
                 {
-                    if(model.getRoomNo().toLowerCase().contains(newText))
+                    for(AvailableRoomModel model : filteredList)
                     {
-                        filteredList1.add(model);
+                        if(model.getRoomNo().toLowerCase().contains(newText))
+                        {
+                            filteredList1.add(model);
+                        }
+                        if(model.getBuildingName().toLowerCase().contains(newText))
+                            filteredList1.add(model);
+                        if (model.getOwnerName().toLowerCase().equals(newText))
+                            filteredList1.add(model);
+                        if(model.getPhoneNo().equals(newText))
+                            filteredList1.add(model);
                     }
-                    if(model.getBuildingName().toLowerCase().contains(newText))
-                        filteredList1.add(model);
-                    if (model.getOwnerName().toLowerCase().contains(newText))
-                        filteredList1.add(model);
-                    if(model.getPhoneNo().equals(newText))
-                        filteredList1.add(model);
-                }
-                if(adapter!=null)
-                {
-                    adapter.setFilter(filteredList1);
+
                 }
             }
+
+            //common for both empty and non empty
+            if(adapter!=null)
+            {
+                adapter.setFilter(filteredList1);
+            }
+
         }
+
+        //if not in filter state
         else
         {
+            filteredList1.clear();
         if(newText.isEmpty())
         {
+           // Log.i("empty","called");
             filteredList1.addAll(availableRooms);
         }
-        if(availableRooms!=null) {
-            for (AvailableRoomModel model : availableRooms) {
-                if (model.getRoomNo().toLowerCase().contains(newText)) {
-                    filteredList1.add(model);
+        else {
+            //text non empty
+            if (availableRooms != null) {
+                for (AvailableRoomModel model : availableRooms) {
+                    if (model.getRoomNo().toLowerCase().contains(newText)) {
+                        filteredList1.add(model);
+                    }
+                    if (model.getBuildingName().toLowerCase().contains(newText))
+                        filteredList1.add(model);
+                    if (model.getOwnerName().toLowerCase().equals(newText))
+                        filteredList1.add(model);
+                    if (model.getPhoneNo().equals(newText))
+                        filteredList1.add(model);
                 }
-                if (model.getBuildingName().toLowerCase().contains(newText))
-                    filteredList1.add(model);
-                if (model.getOwnerName().toLowerCase().contains(newText))
-                    filteredList1.add(model);
-                if (model.getPhoneNo().equals(newText))
-                    filteredList1.add(model);
+               // Log.i("emptyElse",String.valueOf(filteredList1.size()));
             }
+        }
+
+        //common to both empty and non empty
             if (adapter != null) {
                 adapter.setFilter(filteredList1);
             }
-        }
         }
         return true;
     }
@@ -246,7 +266,6 @@ public class AvailableRoomsFragment extends Fragment implements SearchView.OnQue
         filterState=true;
         Log.i("xyz",bName);
         rNo.toLowerCase();
-
         filteredList.clear();
         if(bName.isEmpty() && rNo.isEmpty()) {
             filteredList.addAll(availableRooms);

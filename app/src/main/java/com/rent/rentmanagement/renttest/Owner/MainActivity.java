@@ -104,6 +104,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             loadFragment(new RoomsFragment(MainActivity.this));
         //getRoomRequestsList
 
+        if(getIntent().getBooleanExtra("deletedStudent",false)==true)
+        {
+            loadFragment(new RoomsFragment(MainActivity.this));
+        }
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

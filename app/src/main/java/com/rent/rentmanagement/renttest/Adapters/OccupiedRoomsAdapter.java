@@ -109,6 +109,8 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
                 i.putExtra("roomType",model.getRoomType());
                 i.putExtra("roomRent",model.getRoomRent());
                 i.putExtra("due",model.getDueAmount());
+                i.putExtra("roomCapacity",model.getRoomCapacity());
+                i.putExtra("totalRoomCapacity",model.getTotalRoomCapacity());
                 holder.context.startActivity(i);
             }
         });

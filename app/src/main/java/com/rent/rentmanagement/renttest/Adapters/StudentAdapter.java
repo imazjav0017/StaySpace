@@ -19,6 +19,8 @@ import com.rent.rentmanagement.renttest.Owner.studentProfile;
 
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by imazjav0017 on 12-03-2018.
  */
@@ -69,7 +71,6 @@ StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentViewHolder> {
                 i.putExtra("total",false);
                 i.putExtra("roomId",model.getRoomId());
                 holder.context.startActivity(i);
-                ((Activity)holder.context).finish();
             }
         });
 

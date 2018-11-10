@@ -34,6 +34,7 @@ import com.rent.rentmanagement.renttest.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -51,7 +52,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class roomDetailActivity extends AppCompatActivity {
-    TextView rn,rt,rr,studentsExpandingView,paymentsExpandLayout;
+    TextView rn,rt,rr,studentsExpandingView,paymentsExpandLayout,dueAmount,roomCapacity,totalRoomCapacity;
     RecyclerView studentsRV,paymentsHistoryList;
     StudentAdapter adapter;
     List<StudentModel> studentsList;
@@ -59,7 +60,7 @@ public class roomDetailActivity extends AppCompatActivity {
     Button checkOut;
     PaymentHistoryAdapter pAdapter;
     ExpandableRelativeLayout expandableRelativeLayout,expandablePayments;
-    String roomNo,roomType,roomRent,_id,response,dueAmnt;
+    String roomNo,roomType,roomRent,_id,response,dueAmnt,roomC,totalRoomC;
     boolean fromTotal;
 
     @Override
@@ -373,6 +374,7 @@ public class roomDetailActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
@@ -413,11 +415,16 @@ public class roomDetailActivity extends AppCompatActivity {
         fromTotal=i.getBooleanExtra("fromTotal",false);
         roomRent=i.getStringExtra("roomRent");
         dueAmnt=i.getStringExtra("due");
+        roomC=String.valueOf(i.getIntExtra("roomCapacity",0));
+        totalRoomC=String.valueOf(i.getIntExtra("totalRoomCapacity",0));
         setTitle("RoomNo: "+i.getStringExtra("roomNo"));
         checkOut=(Button)findViewById(R.id.empt_checkin);
         rn = (TextView) findViewById(R.id.roomno);
         rt = (TextView) findViewById(R.id.roomtype);
         rr = (TextView) findViewById(R.id.roomrent);
+        dueAmount=(TextView)findViewById(R.id.dueAmount);
+        roomCapacity=(TextView)findViewById(R.id.roomCapacity);
+        totalRoomCapacity=(TextView)findViewById(R.id.totalRoomCapacity);
         studentsExpandingView = (TextView) findViewById(R.id.studentsExpandingView);
         paymentsExpandLayout = (TextView) findViewById(R.id.paymentsExpandLayout);
         expandableRelativeLayout=(ExpandableRelativeLayout)findViewById(R.id.studentsLayout);
@@ -425,6 +432,10 @@ public class roomDetailActivity extends AppCompatActivity {
         rn.setText(roomNo);
         rt.setText(roomType);
         rr.setText("\u20B9"+roomRent);
+        if(dueAmnt!=null)
+            dueAmount.setText("\u20B9"+dueAmnt);
+        roomCapacity.setText(roomC);
+        totalRoomCapacity.setText(totalRoomC);
         studentsRV=(RecyclerView)findViewById(R.id.studentsRecyclerView);
         studentsList=new ArrayList<>();
         adapter=new StudentAdapter(studentsList,getApplicationContext());
@@ -467,4 +478,6 @@ public class roomDetailActivity extends AppCompatActivity {
             expandablePayments.toggle();
         }
     }
+
+
 }

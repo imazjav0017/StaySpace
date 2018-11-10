@@ -200,9 +200,9 @@ String _id,name,phNo,roomNo,adhaarNo,roomId;
                     String response=getResponse(connection);
                     return response;
                 }
-                else
+                else if(resp==422)
                 {
-                    return null;
+                    return "422";
                 }
 
             }catch(MalformedURLException e)
@@ -221,9 +221,16 @@ String _id,name,phNo,roomNo,adhaarNo,roomId;
             super.onPostExecute(s);
             deleteStudentDialog.dismiss();
             if (s != null) {
-                Log.i("DELETESTUDENTRESP", s);
-                Toast.makeText(studentProfile.this, "Tenant Checked out!", Toast.LENGTH_SHORT).show();
-                onBackPressed();
+                if(s.equals("422"))
+                {
+                    Toast.makeText(studentProfile.this, "Please Collect rent payment to checkout!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(studentProfile.this, "Tenant Checked out!", Toast.LENGTH_SHORT).show();
+                    Intent i=new Intent(getApplicationContext(),MainActivity.class);
+                    i.putExtra("deletedStudent",true);
+                    startActivity(i);
+                }
             }
             else
             {

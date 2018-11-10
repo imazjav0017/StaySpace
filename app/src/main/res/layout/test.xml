@@ -131,7 +131,7 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:background="@drawable/ic_action_person"/>
+                        android:background="@drawable/ic_action_tenant"/>
                     <TextView
                         android:id="@+id/noOfTenantsTextView"
                         android:layout_width="match_parent"
