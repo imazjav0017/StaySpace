@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -162,12 +164,65 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
         holder.collect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                List<String>tenants=null;
+                String s=LoginActivity.sharedPreferences.getString("allTenants",null);
+                if(s!=null)
+                {
+                    tenants=new ArrayList<>();
+                    try {
+                        JSONObject tObject=new JSONObject(s);
+                        JSONArray tArray=tObject.getJSONArray("tenants");
+                        for(int i1=0;i1<tArray.length();i1++)
+                        {
+                            JSONObject mainObj=tArray.getJSONObject(i1);
+                            JSONObject nameObject=mainObj.getJSONObject("name");
+                            JSONObject roomObject=mainObj.getJSONObject("room");
+                            String roomNo=roomObject.getString("roomNo");
+                            if(roomNo.equals(model.getRoomNo()))
+                            {
+                                tenants.add(nameObject.getString("firstName"));
+                            }
+                        }
+                        JSONArray tStuds=tObject.getJSONArray("student");
+                        for(int j=0;j<tStuds.length();j++)
+                        {
+                            JSONObject mainObj=tStuds.getJSONObject(j);
+                            String roomNo=mainObj.getString("roomNo");
+                            if(roomNo.equals(model.getRoomNo())) {
+                                JSONArray studentsDetailArray = mainObj.getJSONArray("students");
+                                for (int j1 = 0; j1 < studentsDetailArray.length(); j1++) {
+                                    JSONObject studentDetails = studentsDetailArray.getJSONObject(j1);
+                                    String name = studentDetails.getString("name");
+                                    tenants.add(name);
+                                }
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
+                }
                 AlertDialog.Builder builder=new AlertDialog.Builder(context);
                 View view=LayoutInflater.from(context).inflate(R.layout.owner_dialog_collect,null,false);
                 final Button collectedButton=(Button)view.findViewById(R.id.collectedbutton);
                 final EditText rentCollectedInput=(EditText)view.findViewById(R.id.rentcollectedinput);
-                final EditText payee=(EditText)view.findViewById(R.id.payee);
+                final AutoCompleteTextView payee=(AutoCompleteTextView) view.findViewById(R.id.payee);
+                ArrayAdapter<String> adapter=null;
+                if(tenants!=null) {
+                    payee.setText(tenants.get(0));
+                    adapter = new ArrayAdapter(holder.context, android.R.layout.select_dialog_item, tenants);
+                    payee.setThreshold(1);
+                    payee.setAdapter(adapter);
+                    payee.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            payee.showDropDown();
+                        }
+                    });
+                }
+
+
+
                 rentCollectedInput.setText(model.getDueAmount());
                 rentCollectedInput.setSelection(rentCollectedInput.getText().toString().length());
                 DateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");

@@ -54,11 +54,11 @@
                 android:textStyle="bold"
 
                 />
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/payee"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="hello"
+                android:text=""
                 android:gravity="center"
                 android:textSize="15sp"
                 />

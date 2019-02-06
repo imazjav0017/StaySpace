@@ -88,7 +88,7 @@ public class TenantActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle("Tenant Side");
+        setTitle("Stay Space");
         loadFragment(new MainPageFragment());
         mSocket.connect();
     }

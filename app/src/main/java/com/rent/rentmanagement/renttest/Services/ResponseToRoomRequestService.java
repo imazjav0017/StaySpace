@@ -111,10 +111,6 @@ public class ResponseToRoomRequestService extends IntentService {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if(TenantRequestAdapter.progressDialog!=null)
-            {
-                TenantRequestAdapter.progressDialog.dismiss();
-            }
             if (s != null) {
                 Log.i("REQUESTRESPONSERESP", s);
                 if(s.equals("422"))
@@ -132,6 +128,10 @@ public class ResponseToRoomRequestService extends IntentService {
                 startService(new Intent(getApplicationContext(), GetRoomRequestsService.class));
                 startService(new Intent(getApplicationContext(), GetAllTenantsService.class));
                 startService(new Intent(getApplicationContext(), GetRoomsService.class));
+                if(TenantRequestAdapter.progressDialog!=null)
+                {
+                    TenantRequestAdapter.progressDialog.dismiss();
+                }
 
             }
             else

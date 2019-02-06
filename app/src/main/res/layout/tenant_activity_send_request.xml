@@ -26,9 +26,24 @@
            android:layout_height="wrap_content"
            android:orientation="vertical">
            <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:padding="5dp"
+               android:background="@drawable/round_bg"
+               android:orientation="horizontal">
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:text="Building:"
+                   android:textSize="18sp"
+                   />
+           </LinearLayout>
+           <LinearLayout
+               android:layout_marginTop="5dp"
+               android:padding="5dp"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:orientation="vertical"
+               android:orientation="horizontal"
               >
 
                <TextView
@@ -45,8 +60,7 @@
                    android:text="N/A"
                    android:id="@+id/availableBuildingNameTextView"
                    android:gravity="center"
-                   android:textColor="#000"
-                   android:textSize="20sp"/>
+                   android:textSize="18sp"/>
            </LinearLayout>
 
            <TextView
@@ -55,12 +69,12 @@
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:textSize="15sp"
-               android:textColor="#112a86"
                android:text="Address: N/A"/>
            <LinearLayout
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:orientation="vertical">
+               android:orientation="horizontal"
+               android:padding="5dp">
                <TextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
@@ -75,9 +89,7 @@
                    android:text="N/A"
                    android:id="@+id/availableOwnerTv"
                    android:gravity="center"
-                   android:textColor="#000"
-                   android:textStyle="italic"
-                   android:textSize="18sp"/>
+                   android:textSize="15sp"/>
            </LinearLayout>
 
            <LinearLayout
@@ -89,8 +101,8 @@
                    android:layout_width="wrap_content"
                    android:padding="5dp"
                    android:layout_height="wrap_content"
-                   android:text="phNo: N/A"
-                   android:textSize="18sp"
+                   android:text="Phone No: N/A"
+                   android:textSize="15sp"
                    android:id="@+id/availableOwnerPhNoTv"
                    android:layout_weight="1"/>
                <ImageButton
@@ -123,9 +135,23 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:background="@drawable/round_bg"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Room:"
+                    android:textSize="18sp"
+                    />
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:padding="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -141,14 +167,13 @@
                     android:text="N/A"
                     android:gravity="center"
                     android:id="@+id/availableRoomNoTv"
-                    android:textColor="#000"
-                    android:textSize="20sp"/>
+                    android:textSize="18sp"/>
             </LinearLayout>
             <TextView
                 android:padding="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:id="@+id/availableRoomTypeTv"
                 android:text="Room Type: N/A"/>
             <TextView
@@ -158,8 +183,7 @@
                 android:text="Vacancy: N/A"
                 android:id="@+id/availableVacancyTv"
                 android:gravity="center"
-                android:textStyle="italic"
-                android:textSize="18sp"/>
+                android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -167,7 +191,7 @@
                     android:id="@+id/availableRoomRentTv"
                     android:layout_height="wrap_content"
                     android:text="Room Rent : N/A"
-                    android:textSize="18sp"/>
+                    android:textSize="15sp"/>
         </LinearLayout>
     </android.support.v7.widget.CardView>
     <android.support.v7.widget.CardView

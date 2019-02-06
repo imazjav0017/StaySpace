@@ -1,9 +1,11 @@
 package com.rent.rentmanagement.renttest.Tenants;
 
+import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.rent.rentmanagement.renttest.LoginActivity;
+import com.rent.rentmanagement.renttest.Owner.UpdateOwnerProfileActivity;
 import com.rent.rentmanagement.renttest.R;
 
 import org.json.JSONException;
@@ -94,6 +97,24 @@ public class EditProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+    public void changePassword(View view)
+    {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileActivity.this);
+        View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.reset_password_dialog, null, false);
+        EditText oldPasswd=(EditText)v.findViewById(R.id.oldPasswordInput);
+        EditText newPasswd=(EditText)v.findViewById(R.id.newPasswordInput);
+        Button reset=(Button)v.findViewById(R.id.resetPasswordBtn);
+        builder.setView(v);
+        final AlertDialog resetDialog = builder.create();
+        resetDialog.show();
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetDialog.dismiss();
+            }
+        });
     }
     void saveChanges()
     {

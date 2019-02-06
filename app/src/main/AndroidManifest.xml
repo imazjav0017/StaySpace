@@ -160,7 +160,11 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:resizeableActivity="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".Tenants.EditProfileActivity"></activity>
+        <activity android:name=".Tenants.EditProfileActivity" />
+
+        <service
+            android:name=".Services.ForgotPasswordService"
+            android:exported="false"></service>
     </application>
 
 </manifest>
