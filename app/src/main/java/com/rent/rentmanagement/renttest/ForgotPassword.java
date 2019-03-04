@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.rent.rentmanagement.renttest.Services.ForgotPasswordService;
 
 public class ForgotPassword extends AppCompatActivity {
-    EditText emailInput,otpInput;
+    EditText emailInput;
     Button sendEmail,verifyOtp,sendEmailAgain;
     static RelativeLayout otpLayout,emailLayout;
     static int currentLayout=0;
@@ -28,13 +28,14 @@ public class ForgotPassword extends AppCompatActivity {
         emailInput=(EditText) findViewById(R.id.forgotPasswordEmail);
         sendEmail=(Button)findViewById(R.id.sendForgotPasswordRequest);
         sendEmailAgain=(Button)findViewById(R.id.sendEmailAgainButton);
-        otpInput=(EditText)findViewById(R.id.otpEditText);
         verifyOtp=(Button)findViewById(R.id.checkOtpButton);
         otpLayout=(RelativeLayout)findViewById(R.id.otpLayout);
         emailLayout=(RelativeLayout)findViewById(R.id.sendEmailLayout);
         final String[] email = {getIntent().getStringExtra("email")};
-        if(email[0] !=null)
+        if(email[0] !=null) {
             emailInput.setText(email[0]);
+            emailInput.setSelection(email[0].length());
+        }
         sendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,6 +50,10 @@ public class ForgotPassword extends AppCompatActivity {
             }
         });
 
+    }
+    public void verified(View v)
+    {
+        super.onBackPressed();
     }
     void sendRequest(String email)
     {

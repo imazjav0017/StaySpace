@@ -89,9 +89,14 @@ public class EditProfileActivity extends AppCompatActivity {
         lastName.setText(lName);
         email.setText(emailId);
         mobileNo.setText(mobNo);
+        firstName.setSelection(fName.length());
+        lastName.setSelection(lName.length());
+        email.setSelection(emailId.length());
+        mobileNo.setSelection(mobNo.length());
         try {
             String adNo = tenantObject.getString("adharNo");
             adhaarNo.setText(adNo);
+            adhaarNo.setSelection(adNo.length());
         }catch (Exception e)
         {
             e.printStackTrace();
@@ -105,6 +110,7 @@ public class EditProfileActivity extends AppCompatActivity {
         View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.reset_password_dialog, null, false);
         EditText oldPasswd=(EditText)v.findViewById(R.id.oldPasswordInput);
         EditText newPasswd=(EditText)v.findViewById(R.id.newPasswordInput);
+        EditText newPasswdAgain=(EditText)v.findViewById(R.id.newPasswordAgainInput);
         Button reset=(Button)v.findViewById(R.id.resetPasswordBtn);
         builder.setView(v);
         final AlertDialog resetDialog = builder.create();

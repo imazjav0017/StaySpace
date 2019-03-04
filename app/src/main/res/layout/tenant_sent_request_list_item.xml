@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/requestRoomBg"
+    android:layout_height="wrap_content">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="2dp"
+        android:layout_margin="5dp"
+        android:background="#ffffff">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/emptyRoomsLinearLayout"
+            android:background="#ffffff"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:weightSum="2">
+                    <TextView
+                        android:padding="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Building Name"
+                        android:id="@+id/sentRBuildingName"
+                        android:layout_marginTop="5dp"
+                        android:textColor="#000"
+                        android:textSize="22sp"
+                        android:layout_weight="0.5"
+                        />
+                    <android.support.v4.widget.Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="5dp"
+                        android:padding="5dp"
+                        android:layout_gravity="right"
+                        android:layout_weight="1">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Room No :"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:textSize="15sp"
+                            />
+                        <TextView
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="#000"
+                            android:id="@+id/sentRRoomNo"
+                            android:textSize="20sp"
+                            />
+                    </LinearLayout>
+
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Owner Name"
+                    android:textStyle="italic"
+                    android:padding="5dp"
+                    android:textSize="18sp"
+                    android:id="@+id/sentROwnerName"
+                    android:gravity="center"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1"
+                    android:background="#ffffff"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="\u20b95256"
+                        android:textSize="18sp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="#707070"
+                        android:padding="5dp"
+                        android:id="@+id/sentRRoomRent"
+                        android:layout_weight="1"
+
+                        />
+                    <Button
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="Cancel"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:textAllCaps="false"
+                        android:textColor="#fa1212"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="10dp"
+                        android:id="@+id/cancelRoomRequestBtn"
+                        android:background="#f5f5f5"
+
+                        />
+
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
+
+</RelativeLayout>

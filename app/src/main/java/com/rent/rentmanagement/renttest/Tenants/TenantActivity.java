@@ -1,12 +1,15 @@
 package com.rent.rentmanagement.renttest.Tenants;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.CoordinatorLayout;
 
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -14,21 +17,24 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
-import com.rent.rentmanagement.renttest.Fragments.RoomsFragment;
-import com.rent.rentmanagement.renttest.Fragments.TenantsFragment;
+import com.rent.rentmanagement.renttest.AsyncTasks.LogoutTask;
 import com.rent.rentmanagement.renttest.LoginActivity;
+import com.rent.rentmanagement.renttest.MyFirebaseInstanceIdService;
+import com.rent.rentmanagement.renttest.Owner.MainActivity;
+import com.rent.rentmanagement.renttest.Services.DeleteTokenService;
 import com.rent.rentmanagement.renttest.R;
+import com.rent.rentmanagement.renttest.Services.GetRoomsService;
 import com.rent.rentmanagement.renttest.Tenants.Services.GetAvailableRoomsService;
 import com.rent.rentmanagement.renttest.Tenants.Services.GetTenantHomeService;
+import com.rent.rentmanagement.renttest.Tenants.Services.SendTokenTenantService;
 import com.rent.rentmanagement.renttest.Tenants.TenantFragments.AvailableRoomsFragment;
 import com.rent.rentmanagement.renttest.Tenants.TenantFragments.MainPageFragment;
 import com.rent.rentmanagement.renttest.Tenants.TenantFragments.TenantProfileFragment;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
@@ -36,7 +42,7 @@ import java.net.URISyntaxException;
 public class TenantActivity extends AppCompatActivity {
 
     BottomNavigationView navigation;
-
+    BroadcastReceiver tokenReciever;
     private boolean loadFragment(Fragment fragment) {
         //switching fragment
         if (fragment != null) {
@@ -92,10 +98,30 @@ public class TenantActivity extends AppCompatActivity {
         loadFragment(new MainPageFragment());
         mSocket.connect();
     }
+    void sendToken()
+    {
+        Intent i=new Intent(getApplicationContext(), SendTokenTenantService.class);
+        startService(i);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(tokenReciever);
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
+        tokenReciever=new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.i("token","recieved");
+                if(LoginActivity.sharedPreferences.getBoolean("isOwner",true)==false)
+                    sendToken();
+            }
+        };
+        registerReceiver(tokenReciever,new IntentFilter(MyFirebaseInstanceIdService.TOKEN_BROADCAST));
         startService(new Intent(getApplicationContext(), GetTenantHomeService.class));
         startService(new Intent(getApplicationContext(), GetAvailableRoomsService.class));
     }
@@ -120,16 +146,52 @@ public class TenantActivity extends AppCompatActivity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Log.i("status", "logout");
-                            LoginActivity.sharedPreferences.edit().clear().apply();
-                            mSocket.disconnect();
-                            Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-                            startActivity(i);
-
+                            Log.i("logout", "rec");
+                            final ProgressDialog progressDialog;
+                            progressDialog=new ProgressDialog(TenantActivity.this);
+                            progressDialog.setTitle("Sending Request");
+                            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                            progressDialog.setMax(100);
+                            progressDialog.setMessage("Logging out...");
+                            String auth=LoginActivity.sharedPreferences.getString("token",null);
+                            String nToken=LoginActivity.sharedPreferences.getString("nToken",null);
+                            if(auth!=null && nToken!=null) {
+                                JSONObject data = new JSONObject();
+                                try {
+                                    data.put("auth", auth);
+                                    data.put("nToken", nToken);
+                                    progressDialog.show();
+                                    LogoutTask task=new LogoutTask(getApplicationContext(), new LogoutTask.LogoutResp() {
+                                        @Override
+                                        public void processFinish(Boolean output,Boolean isSuccess) {
+                                            if(output) {
+                                                progressDialog.dismiss();
+                                                if (isSuccess) {
+                                                    LoginActivity.sharedPreferences.edit().clear().apply();
+                                                    mSocket.disconnect();
+                                                    Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                                                    startActivity(i);
+                                                    startService(new Intent(getApplicationContext(), DeleteTokenService.class));
+                                                }
+                                            }
+                                        }
+                                    });
+                                    task.execute(LoginActivity.URL+"/users/logout",data.toString());
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else
+                                Log.i("LogoutError","nTokenMissing");
                         }
                     }).setNegativeButton("No", null).show();
             return true;
 
+        }
+        else if(item.getItemId()==R.id.sentRoomRequestsOption)
+        {
+            startActivity(new Intent(getApplicationContext(),SentRoomRequestActivity.class));
+            return true;
         }
 
         return false;

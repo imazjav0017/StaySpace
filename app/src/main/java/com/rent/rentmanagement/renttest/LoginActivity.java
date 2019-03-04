@@ -16,7 +16,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.rent.rentmanagement.renttest.Owner.MainActivity;
+import com.rent.rentmanagement.renttest.Owner.StudentActivity;
 import com.rent.rentmanagement.renttest.Services.getOwnerDetailsService;
 import com.rent.rentmanagement.renttest.Tenants.Services.GetTenantHomeService;
 import com.rent.rentmanagement.renttest.Tenants.TenantActivity;
@@ -41,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     int resp;
     JSONObject tokenJson;
     ProgressBar progressBar;
+    public static final String URL="https://sleepy-atoll-65823.herokuapp.com";
     public static SharedPreferences sharedPreferences;
     public String getResponse(HttpURLConnection connection)
     {
@@ -191,6 +194,7 @@ public class LoginActivity extends AppCompatActivity {
             if (response != null) {
                 if (response.equals("200")) {
                     Toast.makeText(getApplicationContext(), "Logged In!", Toast.LENGTH_SHORT).show();
+                    getToken();
                 } else {
                     Toast.makeText(getApplicationContext(), "Check Your Credentials And Try Again!", Toast.LENGTH_SHORT).show();
                 }
@@ -200,6 +204,15 @@ public class LoginActivity extends AppCompatActivity {
                 enableButton();
                 Toast.makeText(LoginActivity.this, "Please Check Your Internet Connection and Try Again", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+     void getToken()
+    {
+      FirebaseInstanceId.getInstance().getToken();
+      String nToken=LoginActivity.sharedPreferences.getString("nToken",null);
+        if(nToken!=null)
+        {
+            getApplicationContext().sendBroadcast(new Intent(MyFirebaseInstanceIdService.TOKEN_BROADCAST));
         }
     }
 
@@ -242,9 +255,36 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         sharedPreferences=this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
         Log.i("isLogedIn",String.valueOf(sharedPreferences.getBoolean("isLoggedIn",false)));
-        if(sharedPreferences.getBoolean("isLoggedIn",false)==true)
+        Bundle b=getIntent().getExtras();
+        //to check if notification data exists
+        boolean isData=b!=null && b.get("title")!=null;
+        if(b!=null)
+        Log.i("bundle",b.toString());
+        if(isData)
+        {
+            String title=b.get("title").toString();
+            Log.i("NotificationData", b.get("title").toString());
+            switch(title) {
+                case "Check-in Request":
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                i.putExtra("fromN", StudentActivity.FROM_NOTIFICATION);
+                startActivity(i);
+                finish();
+                break;
+                case "Check-in Response":
+                    gotoHome();
+                    break;
+                case "Payment":
+                    gotoHome();
+                    break;
+                default:
+                    gotoHome();
+            }
+        }
+        if(sharedPreferences.getBoolean("isLoggedIn",false)==true &&!isData)
         {
             gotoHome();
         }

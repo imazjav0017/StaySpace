@@ -1,8 +1,12 @@
 package com.rent.rentmanagement.renttest.Owner;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -15,18 +19,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.rent.rentmanagement.renttest.AsyncTasks.LogoutTask;
 import com.rent.rentmanagement.renttest.Fragments.AllTenantsFragment;
 import com.rent.rentmanagement.renttest.Fragments.OwnerProfileFragment;
 import com.rent.rentmanagement.renttest.Fragments.ProfileFragment;
 import com.rent.rentmanagement.renttest.Fragments.RoomsFragment;
 import com.rent.rentmanagement.renttest.Fragments.TenantsFragment;
+import com.rent.rentmanagement.renttest.MyFirebaseInstanceIdService;
+import com.rent.rentmanagement.renttest.Services.DeleteTokenService;
 import com.rent.rentmanagement.renttest.Services.GetAllTenantsService;
 import com.rent.rentmanagement.renttest.Services.GetRoomRequestsService;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Services.GetRoomsService;
+import com.rent.rentmanagement.renttest.Services.SendTokenOwnerService;
 import com.rent.rentmanagement.renttest.Services.getOwnerDetailsService;
-import com.rent.rentmanagement.renttest.Tenants.Async.GetAvailableRoomsTask;
+import com.rent.rentmanagement.renttest.Tenants.SendRequestActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,16 +43,11 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
    public static BottomNavigationView bottomNavigationView;
     public static FloatingActionButton fab;
-    public static String roomInfo;
     boolean showSv=false;
     String Buildings;
-    public static boolean completedTasks=true;
+    private BroadcastReceiver tokenReciever;
+    int requestNotification=0;
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()== R.id.logoutMenuOption)
-        {
-
-
-        }
         switch(item.getItemId())
         {
             case R.id.logoutMenuOption :
@@ -53,17 +56,47 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
                                 Log.i("status","logout");
-                                LoginActivity.sharedPreferences.edit().clear().apply();
-                                if(GetRoomsService.tRooms!=null) {
-                                    GetRoomsService.tRooms.clear();
-                                    GetRoomsService.oRooms.clear();
-                                    GetRoomsService.eRooms.clear();
+                                final ProgressDialog progressDialog;
+                                progressDialog=new ProgressDialog(MainActivity.this);
+                                progressDialog.setTitle("Sending Request");
+                                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                progressDialog.setMax(100);
+                                progressDialog.setMessage("Logging out...");
+                                String auth=LoginActivity.sharedPreferences.getString("token",null);
+                                String nToken=LoginActivity.sharedPreferences.getString("nToken",null);
+                                if(auth!=null && nToken!=null) {
+                                    JSONObject data = new JSONObject();
+                                    try {
+                                        data.put("auth", auth);
+                                        data.put("nToken", nToken);
+                                        progressDialog.show();
+                                        LogoutTask task=new LogoutTask(getApplicationContext(), new LogoutTask.LogoutResp() {
+                                            @Override
+                                            public void processFinish(Boolean output,Boolean isSuccess) {
+                                                if(output) {
+                                                    progressDialog.dismiss();
+                                                    if (isSuccess) {
+                                                        LoginActivity.sharedPreferences.edit().clear().apply();
+                                                        if (GetRoomsService.tRooms != null) {
+                                                            GetRoomsService.tRooms.clear();
+                                                            GetRoomsService.oRooms.clear();
+                                                            GetRoomsService.eRooms.clear();
+                                                        }
+                                                        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                                                        startActivity(i);
+                                                        startService(new Intent(getApplicationContext(), DeleteTokenService.class));
+                                                    }
+                                                }
+                                            }
+                                        });
+                                        task.execute(LoginActivity.URL+"/users/logout",data.toString());
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-                                startActivity(i);
-
+                                else
+                                    Log.i("LogoutError","nTokenMissing");
                             }
                         }).setNegativeButton("No",null).show();
                 return true;
@@ -98,16 +131,25 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             }
         });
         fab.setVisibility(View.INVISIBLE);
-        if(getIntent().getIntExtra("fromN",-1)!= StudentActivity.FROM_NOTIFICATION)
-        loadFragment(new ProfileFragment(MainActivity.this));
+        requestNotification=getIntent().getIntExtra("fromN",-1);
+        Log.i("Notification","recieved"+requestNotification);
+        if(requestNotification==StudentActivity.FROM_NOTIFICATION) {
+
+            bottomNavigationView.setSelectedItemId(R.id.tenantsViewiTem);
+        }
         else
-            loadFragment(new RoomsFragment(MainActivity.this));
+            loadFragment(new ProfileFragment(MainActivity.this));
         //getRoomRequestsList
 
         if(getIntent().getBooleanExtra("deletedStudent",false)==true)
         {
             loadFragment(new RoomsFragment(MainActivity.this));
         }
+    }
+    void sendToken()
+    {
+        Intent i=new Intent(getApplicationContext(), SendTokenOwnerService.class);
+        startService(i);
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -124,8 +166,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 break;
             case R.id.tenantsViewiTem:
                 fab.setVisibility(View.INVISIBLE);
-
-                fragment=new AllTenantsFragment(MainActivity.this);
+                fragment=new AllTenantsFragment(MainActivity.this,requestNotification);
                 Log.i("current","tenants");
                 break;
             case R.id.myProfileViewTab:
@@ -195,9 +236,24 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+       unregisterReceiver(tokenReciever);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-         Buildings=LoginActivity.sharedPreferences.getString("buildings",null);
+        tokenReciever=new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.i("token","recieved");
+                if(LoginActivity.sharedPreferences.getBoolean("isOwner",false)==true)
+                    sendToken();
+            }
+        };
+        registerReceiver(tokenReciever,new IntentFilter(MyFirebaseInstanceIdService.TOKEN_BROADCAST));
+        Buildings=LoginActivity.sharedPreferences.getString("buildings",null);
         if(Buildings!=null)
         {
             int  buildingIndex= LoginActivity.sharedPreferences.getInt("buildingIndex",0);

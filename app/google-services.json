@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "164163955909",
+    "firebase_url": "https://stayspace-mansa.firebaseio.com",
+    "project_id": "stayspace-mansa",
+    "storage_bucket": "stayspace-mansa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:164163955909:android:c8d891e6d0e4afed",
+        "android_client_info": {
+          "package_name": "com.rent.rentmanagement.renttest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "164163955909-lu9buimplrg4fv00ofj2l0elpqms503s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rent.rentmanagement.renttest",
+            "certificate_hash": "9906eb6196c561354ef1b56a19eb19e0320009bb"
+          }
+        },
+        {
+          "client_id": "164163955909-cb7g3uv1r8kug185bnc4amstnsjtvf3e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9YtDN6mFBomw9vfssk3UQYWisXwHCgA0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "164163955909-cb7g3uv1r8kug185bnc4amstnsjtvf3e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

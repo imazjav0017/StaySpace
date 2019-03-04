@@ -1,11 +1,13 @@
 package com.rent.rentmanagement.renttest.Fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +21,14 @@ public class AllTenantsFragment extends Fragment {
     ViewPager viewPager;
     ViewPagerAdapter viewPagerAdapter;
     Context context;
+    int n;
     public AllTenantsFragment() {
     }
 
-    public AllTenantsFragment(Context context) {
+    @SuppressLint("ValidFragment")
+    public AllTenantsFragment(Context context, int n) {
         this.context = context;
+        this.n=n;
     }
 
     @Nullable
@@ -39,6 +44,10 @@ public class AllTenantsFragment extends Fragment {
         viewPagerAdapter.addFragment(new TenantRequestListFragment(context),"Room Requests");
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+        Log.i("nnnnnnnnn",""+n);
+        if(n==1)
+            viewPager.setCurrentItem(1,true);
+        else
         viewPager.setCurrentItem(0,true);
         return v;
     }
