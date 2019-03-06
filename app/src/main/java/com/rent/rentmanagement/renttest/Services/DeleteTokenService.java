@@ -68,6 +68,7 @@ public class DeleteTokenService extends IntentService {
                 FirebaseInstanceId.getInstance().deleteInstanceId();
             } catch (IOException e) {
                 e.printStackTrace();
+                Log.i("token","errr deleting");
             }
         }
     }

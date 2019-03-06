@@ -89,7 +89,7 @@ public class AvailableRoomsAdapter extends RecyclerView.Adapter<AvailableRoomsAd
     public class ViewHolder extends RecyclerView.ViewHolder
     {
         RelativeLayout availableRoomsBg;
-        TextView roomNo,buildingName,rent,ownerName;
+        TextView roomNo,buildingName,rent,ownerName,vacancy;
         Button request;
         Context context;
 

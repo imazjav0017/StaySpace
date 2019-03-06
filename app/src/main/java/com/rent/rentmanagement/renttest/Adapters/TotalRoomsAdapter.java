@@ -449,12 +449,12 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
         roomList.addAll(filteredList);
         notifyDataSetChanged();
     }
-    void goBack(Context context)
+    /*void goBack(Context context)
     {
        // RoomsFragment ob=new RoomsFragment();
         //ob.refresh();
         new RoomsFragment(context).onResume();
-    }
+    }*/
     void enable(Button btn)
     {
         btn.setClickable(true);

@@ -6,27 +6,30 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Tenants.Adapters.SentRequestAdapter;
 import com.rent.rentmanagement.renttest.Tenants.DataModels.AvailableRoomModel;
-import com.rent.rentmanagement.renttest.Tenants.Services.GetAvailableRoomsService;
 import com.rent.rentmanagement.renttest.Tenants.Services.SentRequestsService;
 
 import java.util.ArrayList;
 
 public class SentRoomRequestActivity extends AppCompatActivity {
     RecyclerView sentRequestsRv;
+    public static ProgressBar progressBar;
     public static ArrayList<AvailableRoomModel>sentRequestsList;
     static SentRequestAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sent_room_request);
+        setContentView(R.layout.tenant_activity_sent_room_request);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("Stay Space");
         sentRequestsRv=(RecyclerView) findViewById(R.id.sentRequestsRv);
+        progressBar=(ProgressBar)findViewById(R.id.sentRoomRequestsProgress);
         sentRequestsList=new ArrayList<>();
         adapter=new SentRequestAdapter(sentRequestsList);
         LinearLayoutManager lm=new LinearLayoutManager(getApplicationContext());
@@ -39,6 +42,7 @@ public class SentRoomRequestActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         startService(new Intent(getApplicationContext(), SentRequestsService.class));
+        progressBar.setVisibility(View.VISIBLE);
         setView();
     }
     public static void updateNow()
@@ -55,6 +59,12 @@ public class SentRoomRequestActivity extends AppCompatActivity {
             sentRequestsList.clear();
             sentRequestsList.addAll(SentRequestsService.requestList);
             adapter.notifyDataSetChanged();
+            progressBar.setVisibility(View.INVISIBLE);
         }
+        if(SentRequestsService.failed)
+        {
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+
     }
 }

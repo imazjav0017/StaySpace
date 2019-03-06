@@ -53,12 +53,14 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
     public static ArrayList<RoomModel> oRooms;
     public static ArrayList<RoomModel> tRooms;
     public static int currentTab;
+    public int n;
     //android.support.v4.app.FragmentManager fragmentManager;
     public RoomsFragment() {
     }
 
-    public RoomsFragment(Context context) {
+    public RoomsFragment(Context context,int n) {
         this.context = context;
+        this.n=n;
     }
     @Nullable
     @Override
@@ -80,6 +82,12 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
         viewPagerAdapter.addFragment(new RentDueFragment(context),"Rent Due");
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+        if(n==1)
+        {
+            viewPager.setCurrentItem(2,true);
+        }
+        else
+            viewPager.setCurrentItem(0,true);
         progressBar=(ProgressBar)v.findViewById(R.id.progressBar);
         progressBar.setProgress(0);
         progressBar.setMax(100);

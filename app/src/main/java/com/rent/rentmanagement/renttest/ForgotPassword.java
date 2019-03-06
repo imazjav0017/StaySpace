@@ -1,5 +1,6 @@
 package com.rent.rentmanagement.renttest;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ public class ForgotPassword extends AppCompatActivity {
     static RelativeLayout otpLayout,emailLayout;
     static int currentLayout=0;
     String email;
+     public static ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,8 +61,14 @@ public class ForgotPassword extends AppCompatActivity {
     {
 
         if(!email.isEmpty()) {
+            progressDialog=new ProgressDialog(ForgotPassword.this);
+            progressDialog.setTitle("Send Email");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setMax(100);
+            progressDialog.setMessage("Sending");
             Intent i = new Intent(getApplicationContext(), ForgotPasswordService.class);
             i.putExtra("email",email);
+            progressDialog.show();
             startService(i);
         }
         else

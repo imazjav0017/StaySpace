@@ -1,6 +1,8 @@
 package com.rent.rentmanagement.renttest.Tenants;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.Owner.UpdateOwnerProfileActivity;
 import com.rent.rentmanagement.renttest.R;
+import com.rent.rentmanagement.renttest.Services.ChangeOwnerPasswordService;
+import com.rent.rentmanagement.renttest.Tenants.Services.EditProfileTenantService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +30,9 @@ public class EditProfileActivity extends AppCompatActivity {
     Button save;
     ProgressBar progressBar;
     RadioGroup gendergroup;
-    String gender=null,id;
+    String id;
+    public static AlertDialog resetDialog;
+    public static ProgressDialog progressDialog,EProgressDialog;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home)
@@ -48,23 +54,10 @@ public class EditProfileActivity extends AppCompatActivity {
         lastName=(EditText)findViewById(R.id.EditLastNameInputT);
         progressBar=(ProgressBar)findViewById(R.id.editProgressT);
         email=(EditText)findViewById(R.id.EditemailInputT);
+        email.setEnabled(false);
         adhaarNo=(EditText)findViewById(R.id.editAdhaarNoT);
         save=(Button)findViewById(R.id.editSaveT);
         mobileNo=(EditText)findViewById(R.id.editMobileNoT);
-        gendergroup=(RadioGroup)findViewById(R.id.editGenderRadioGroupT);
-        gendergroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                if(i==R.id.editMaleRadioBtnT)
-                {
-                    gender="m";
-                }
-                else
-                {
-                    gender="f";
-                }
-            }
-        });
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,28 +101,41 @@ public class EditProfileActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileActivity.this);
         View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.reset_password_dialog, null, false);
-        EditText oldPasswd=(EditText)v.findViewById(R.id.oldPasswordInput);
-        EditText newPasswd=(EditText)v.findViewById(R.id.newPasswordInput);
-        EditText newPasswdAgain=(EditText)v.findViewById(R.id.newPasswordAgainInput);
+        final EditText oldPasswd=(EditText)v.findViewById(R.id.oldPasswordInput);
+        final EditText newPasswd=(EditText)v.findViewById(R.id.newPasswordInput);
+        final EditText newPasswdAgain=(EditText)v.findViewById(R.id.newPasswordAgainInput);
         Button reset=(Button)v.findViewById(R.id.resetPasswordBtn);
         builder.setView(v);
-        final AlertDialog resetDialog = builder.create();
+         resetDialog = builder.create();
         resetDialog.show();
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                resetDialog.dismiss();
+                String op=oldPasswd.getText().toString();
+                String np=newPasswd.getText().toString();
+                String npa=newPasswdAgain.getText().toString();
+                if(npa.equals(np))
+                {
+                    progressDialog=new ProgressDialog(EditProfileActivity.this);
+                    progressDialog.setTitle("Changing Password");
+                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    progressDialog.setMax(100);
+                    progressDialog.setMessage("Changing...");
+                    Intent i=new Intent(getApplicationContext(), ChangeOwnerPasswordService.class);
+                    i.putExtra("op",op);
+                    i.putExtra("np",np);
+                    startService(i);
+                    progressDialog.show();
+                }
+                else
+                    Toast.makeText(EditProfileActivity.this, "Passwords Do Not Match", Toast.LENGTH_SHORT).show();
+               // resetDialog.dismiss();
             }
         });
     }
     void saveChanges()
     {
         Log.i("saving","changes");
-        if(gender==null)
-        {
-            Toast.makeText(getApplicationContext(), "Select Your Gender", Toast.LENGTH_SHORT).show();
-        }
-        else {
             String fName = firstName.getText().toString();
             String lName = lastName.getText().toString();
             String emailId = email.getText().toString();
@@ -140,9 +146,22 @@ public class EditProfileActivity extends AppCompatActivity {
             }
             else
             {
-                onBackPressed();
+                EProgressDialog=new ProgressDialog(EditProfileActivity.this);
+                EProgressDialog.setTitle("Edit Profile");
+                EProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                EProgressDialog.setMax(100);
+                EProgressDialog.setMessage("Saving...");
+                Intent i=new Intent(getApplicationContext(), EditProfileTenantService.class);
+                Bundle b=new Bundle();
+                b.putString("fName",fName);
+                b.putString("lName",lName);
+                b.putString("mobNo",mobNo);
+                b.putString("adharNo",adNo);
+                i.putExtras(b);
+                startService(i);
+                EProgressDialog.show();
             }
         }
 
-    }
+
 }

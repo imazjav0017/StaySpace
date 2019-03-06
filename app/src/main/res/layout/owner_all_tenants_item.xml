@@ -75,7 +75,7 @@
             android:background="@drawable/ic_action_call" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/sendTenantSmsButton"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_margin="5dp"

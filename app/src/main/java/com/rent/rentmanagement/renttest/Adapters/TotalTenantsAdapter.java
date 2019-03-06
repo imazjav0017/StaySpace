@@ -49,6 +49,14 @@ public class TotalTenantsAdapter extends RecyclerView.Adapter<TotalTenantsAdapte
 
             }
         });
+        holder.sms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String number = model.getPhNo();
+                String msg="Hi,"+model.getName()+" Your Rent Is Due, Please Pay As Soon As Possible From "+"Your Room Owner";                   // The number on which you want to send SMS
+                holder.context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null)).putExtra("sms_body",msg));
+            }
+        });
         holder.rl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +93,7 @@ public class TotalTenantsAdapter extends RecyclerView.Adapter<TotalTenantsAdapte
 
     public static class TotalTenantsHolder extends RecyclerView.ViewHolder {
         TextView studentName,phNo;
-        Button call;
+        Button call,sms;
         Context context;
         RelativeLayout rl;
         public TotalTenantsHolder(View itemView) {
@@ -93,6 +101,7 @@ public class TotalTenantsAdapter extends RecyclerView.Adapter<TotalTenantsAdapte
             studentName=(TextView)itemView.findViewById(R.id.studentNameTextView2);
             phNo=(TextView)itemView.findViewById(R.id.studentPhoneNumber2);
             call=(Button)itemView.findViewById(R.id.callButton1);
+            sms=(Button)itemView.findViewById(R.id.sendTenantSmsButton);
             rl=(RelativeLayout)itemView.findViewById(R.id.viewDetailsRl);
             context=itemView.getContext();
 

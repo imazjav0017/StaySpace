@@ -1,5 +1,6 @@
 package com.rent.rentmanagement.renttest.Tenants.TenantFragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rent.rentmanagement.renttest.LoginActivity;
@@ -24,6 +27,7 @@ public class TenantProfileFragment extends android.support.v4.app.Fragment {
     Button updateProfile;
     View v;
     Context context;
+    ImageView ad;
     public TenantProfileFragment() {
     }
 
@@ -48,6 +52,13 @@ public class TenantProfileFragment extends android.support.v4.app.Fragment {
         name=(TextView)v.findViewById(R.id.tenantNameTextView);
         email=(TextView)v.findViewById(R.id.tenantEmailTextView);
         phNo=(TextView)v.findViewById(R.id.tenantNumberTextView);
+        ad=(ImageView)v.findViewById(R.id.tenantSideAd);
+        ad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAd();
+            }
+        });
         updateProfile=(Button)v.findViewById(R.id.tenantUpdateProfileBtn);
         updateProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,5 +83,13 @@ public class TenantProfileFragment extends android.support.v4.app.Fragment {
             email.setText(tEmail);
             phNo.setText(tPhoneNO);
         }
+    }
+    void showAd()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        View v = LayoutInflater.from(getContext()).inflate(R.layout.dialog_show_ad, null, false);
+        builder.setView(v);
+        final AlertDialog resetDialog = builder.create();
+        resetDialog.show();
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 import com.rent.rentmanagement.renttest.DataModels.TenantRequestModel;
 import com.rent.rentmanagement.renttest.Fragments.TenantRequestListFragment;
@@ -68,6 +69,7 @@ public class GetRoomRequestsService extends IntentService {
      */
 
     int buildingIndex;
+    public static boolean failed=false;
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
@@ -142,6 +144,14 @@ public class GetRoomRequestsService extends IntentService {
         TenantRequestListFragment.upateView();
     }
     class GetRoomRequestsTask extends AsyncTask<String,Integer,String> {
+        /*@Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            if(TenantRequestListFragment.progressBar!=null)
+            {
+                TenantRequestListFragment.progressBar.setVisibility(View.VISIBLE);
+            }
+        }*/
 
         @Override
         protected String doInBackground(String... params) {
@@ -183,6 +193,7 @@ public class GetRoomRequestsService extends IntentService {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (s != null) {
+                failed=false;
                 Log.i("GETROOMREQUESTSRESP", s);
                 try {
                     GetRoomRequestsService.setRequestsData(s);
@@ -192,6 +203,7 @@ public class GetRoomRequestsService extends IntentService {
             }
             else
             {
+                failed=true;
                 Toast.makeText(getApplicationContext(), "Please Check Your Internet Connection and try later!", Toast.LENGTH_SHORT).show();
             }
         }

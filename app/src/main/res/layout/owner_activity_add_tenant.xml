@@ -178,7 +178,7 @@
                 android:layout_below="@+id/checkInButton"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:text="Click on finish after checkin all tenants."
+                android:text="Click On Finish After Adding All Tenants."
                 android:textSize="16sp"
                 android:textStyle="bold" />
 

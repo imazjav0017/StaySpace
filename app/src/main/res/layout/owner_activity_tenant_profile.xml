@@ -23,7 +23,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="45dp"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/img" />
+        android:src="@drawable/ima" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -40,8 +40,10 @@
         android:layout_below="@+id/img"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="Jade magician"
+        android:text="N/A"
         android:background="@android:color/transparent"
+        android:drawableEnd="@drawable/ic_action_edit1"
+        android:textAlignment="center"
         android:textSize="18sp"
         android:id="@+id/studentNameField" />
 

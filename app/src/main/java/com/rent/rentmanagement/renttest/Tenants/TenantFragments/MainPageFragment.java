@@ -29,7 +29,7 @@ public class MainPageFragment extends Fragment {
     static String phNo;
     static SwipeRefreshLayout swipeRefreshLayout;
     static TextView dueDays,dueAmount,roomNo,buildingName,ownerName,ownerPhNo,rentStatus;
-    ImageButton call;
+    ImageButton call,sms;
 
     public MainPageFragment() {
     }
@@ -47,6 +47,13 @@ public class MainPageFragment extends Fragment {
         ownerPhNo=(TextView)v.findViewById(R.id.ownerPhNoTenantTextView);
         rentStatus=(TextView)v.findViewById(R.id.rentStatusTenantTextView);
         call=(ImageButton) v.findViewById(R.id.callOwnerBtn);
+        sms=(ImageButton)v.findViewById(R.id.messageOwnerBtn);
+        sms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                smsOwner();
+            }
+        });
         call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,6 +67,14 @@ public class MainPageFragment extends Fragment {
             }
         });
         return v;
+    }
+    void smsOwner()
+    {
+        if(phNo!=null)
+        {
+                    String number = phNo;
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null)));
+        }
     }
     void callOwner()
     {

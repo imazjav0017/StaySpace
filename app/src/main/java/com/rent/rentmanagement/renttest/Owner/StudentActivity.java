@@ -1,6 +1,8 @@
 package com.rent.rentmanagement.renttest.Owner;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -45,7 +47,7 @@ public class StudentActivity extends AppCompatActivity implements DatePickerDial
     String _id;
     ArrayList<String> tenantsNames;
     JSONObject studentDetails;
-    boolean fromTotal,added=false;
+    boolean fromTotal,added=false,isFinished=false;
     Button checkin,finish;
     void enable()
     {
@@ -111,12 +113,12 @@ public class StudentActivity extends AppCompatActivity implements DatePickerDial
         @Override
         protected void onPostExecute(String s) {
             enable();
+            added=true;
             progressBar.setVisibility(View.GONE);
             bg.setClickable(true);
             if(s!=null)
             {
                 tenantsNames.add(sName);
-                added=true;
                 finish.setClickable(true);
                 Toast.makeText(getApplicationContext(),s, Toast.LENGTH_SHORT).show();
                 if(s.equals("success"))
@@ -132,6 +134,7 @@ public class StudentActivity extends AppCompatActivity implements DatePickerDial
     }
     public void back(View v)
     {
+        isFinished=true;
         onBackPressed();
         String names="";
         Iterator<String> it=tenantsNames.iterator();
@@ -267,7 +270,18 @@ public class StudentActivity extends AppCompatActivity implements DatePickerDial
 
     @Override
     public void onBackPressed() {
+        if(isFinished)
         super.onBackPressed();
+        else
+        {
+           new AlertDialog.Builder(this).setTitle("Are You Sure You Want To Go Back?").setMessage("Click Yes If You Have Added All Tenants ").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+               @Override
+               public void onClick(DialogInterface dialogInterface, int i) {
+                   isFinished=true;
+                   onBackPressed();
+               }
+           }).setNegativeButton("No",null).show();
+        }
     }
 }
 

@@ -24,9 +24,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rent.rentmanagement.renttest.Tenants.Async.GetAvailableRoomsTask;
 import com.rent.rentmanagement.renttest.Tenants.DataModels.AvailableRoomModel;
 import com.rent.rentmanagement.renttest.R;
 import com.rent.rentmanagement.renttest.Tenants.Adapters.AvailableRoomsAdapter;
@@ -48,6 +50,7 @@ public class AvailableRoomsFragment extends Fragment implements SearchView.OnQue
     static AvailableRoomsAdapter adapter;
     public static SearchView searchView;
     boolean filterState=false;
+    public static ProgressBar progressBar;
     List<AvailableRoomModel>filteredList;
     public AvailableRoomsFragment() {
     }
@@ -62,6 +65,7 @@ public class AvailableRoomsFragment extends Fragment implements SearchView.OnQue
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v=inflater.inflate(R.layout.tenant_available_rooms_fragment,container,false);
         availableRoomsList=(RecyclerView)v.findViewById(R.id.availableRoomsList);
+        progressBar=(ProgressBar)v.findViewById(R.id.availableRoomsProgress);
         availableRooms=new ArrayList<>();
         buildings=new ArrayList<>();
         filteredList=new ArrayList<>();
@@ -231,6 +235,7 @@ public class AvailableRoomsFragment extends Fragment implements SearchView.OnQue
     public void onResume() {
         super.onResume();
         Log.i("in 2","frag");
+        progressBar.setVisibility(View.VISIBLE);
         setView();
 
     }
@@ -249,7 +254,10 @@ public class AvailableRoomsFragment extends Fragment implements SearchView.OnQue
             availableRooms.clear();
             availableRooms.addAll(GetAvailableRoomsService.availableRooms);
             adapter.notifyDataSetChanged();
+            progressBar.setVisibility(View.INVISIBLE);
         }
+        if(GetAvailableRoomsTask.failed)
+            progressBar.setVisibility(View.INVISIBLE);
     }
     public static void setBuildings()
     {

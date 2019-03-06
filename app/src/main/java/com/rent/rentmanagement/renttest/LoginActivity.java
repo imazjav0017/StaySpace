@@ -280,6 +280,15 @@ public class LoginActivity extends AppCompatActivity {
                 case "Payment":
                     gotoHome();
                     break;
+                case "Payment Due":
+                    gotoHome();
+                    break;
+                case "Collect Rent":
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.putExtra("fromPayment", StudentActivity.FROM_NOTIFICATION);
+                    startActivity(intent);
+                    finish();
+                    break;
                 default:
                     gotoHome();
             }

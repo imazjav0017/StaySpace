@@ -107,13 +107,13 @@ public class TenantActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(tokenReciever);
+        //unregisterReceiver(tokenReciever);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        tokenReciever=new BroadcastReceiver() {
+       /* tokenReciever=new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.i("token","recieved");
@@ -121,7 +121,7 @@ public class TenantActivity extends AppCompatActivity {
                     sendToken();
             }
         };
-        registerReceiver(tokenReciever,new IntentFilter(MyFirebaseInstanceIdService.TOKEN_BROADCAST));
+        registerReceiver(tokenReciever,new IntentFilter(MyFirebaseInstanceIdService.TOKEN_BROADCAST));*/
         startService(new Intent(getApplicationContext(), GetTenantHomeService.class));
         startService(new Intent(getApplicationContext(), GetAvailableRoomsService.class));
     }
@@ -149,7 +149,7 @@ public class TenantActivity extends AppCompatActivity {
                             Log.i("logout", "rec");
                             final ProgressDialog progressDialog;
                             progressDialog=new ProgressDialog(TenantActivity.this);
-                            progressDialog.setTitle("Sending Request");
+                            progressDialog.setTitle("Logout");
                             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                             progressDialog.setMax(100);
                             progressDialog.setMessage("Logging out...");

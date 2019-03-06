@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     String Buildings;
     private BroadcastReceiver tokenReciever;
     int requestNotification=0;
+    public static int paymentNotification=0;
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId())
         {
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                                 Log.i("status","logout");
                                 final ProgressDialog progressDialog;
                                 progressDialog=new ProgressDialog(MainActivity.this);
-                                progressDialog.setTitle("Sending Request");
+                                progressDialog.setTitle("Logout");
                                 progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                                 progressDialog.setMax(100);
                                 progressDialog.setMessage("Logging out...");
@@ -132,10 +133,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         });
         fab.setVisibility(View.INVISIBLE);
         requestNotification=getIntent().getIntExtra("fromN",-1);
+        paymentNotification=getIntent().getIntExtra("fromPayment",-1);
         Log.i("Notification","recieved"+requestNotification);
         if(requestNotification==StudentActivity.FROM_NOTIFICATION) {
-
             bottomNavigationView.setSelectedItemId(R.id.tenantsViewiTem);
+        }
+        else if(paymentNotification==StudentActivity.FROM_NOTIFICATION)
+        {
+            bottomNavigationView.setSelectedItemId(R.id.roomViewItem);
         }
         else
             loadFragment(new ProfileFragment(MainActivity.this));
@@ -143,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         if(getIntent().getBooleanExtra("deletedStudent",false)==true)
         {
-            loadFragment(new RoomsFragment(MainActivity.this));
+            loadFragment(new RoomsFragment(MainActivity.this,paymentNotification));
         }
     }
     void sendToken()
@@ -162,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 fragment=new ProfileFragment(MainActivity.this);
                 break;
             case R.id.roomViewItem:
-                fragment=new RoomsFragment(MainActivity.this);
+                fragment=new RoomsFragment(MainActivity.this,paymentNotification);
                 break;
             case R.id.tenantsViewiTem:
                 fab.setVisibility(View.INVISIBLE);
@@ -238,13 +243,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onPause() {
         super.onPause();
-       unregisterReceiver(tokenReciever);
+      // unregisterReceiver(tokenReciever);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        tokenReciever=new BroadcastReceiver() {
+        /*tokenReciever=new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.i("token","recieved");
@@ -252,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     sendToken();
             }
         };
-        registerReceiver(tokenReciever,new IntentFilter(MyFirebaseInstanceIdService.TOKEN_BROADCAST));
+        registerReceiver(tokenReciever,new IntentFilter(MyFirebaseInstanceIdService.TOKEN_BROADCAST));*/
         Buildings=LoginActivity.sharedPreferences.getString("buildings",null);
         if(Buildings!=null)
         {

@@ -61,7 +61,7 @@ public class roomDetailActivity extends AppCompatActivity {
     PaymentHistoryAdapter pAdapter;
     ExpandableRelativeLayout expandableRelativeLayout,expandablePayments;
     String roomNo,roomType,roomRent,_id,response,dueAmnt,roomC,totalRoomC;
-    boolean fromTotal;
+    boolean fromTotal,fromEditOrDelete;
 
     @Override
     public void onBackPressed() {
@@ -181,11 +181,30 @@ public class roomDetailActivity extends AppCompatActivity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                startCheckout();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                                if (dueAmnt != null) {
+                                    Log.i("vacate",""+Integer.parseInt(dueAmnt));
+                                    if (Integer.parseInt(dueAmnt) != 0) {
+                                        new AlertDialog.Builder(roomDetailActivity.this).setTitle("Unpaid Rent").setMessage("Rent is still due for this room ,are you sure you wish to vacate this room?")
+                                                .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        try {
+                                                            startCheckout();
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+                                                }).setNegativeButton("no",null).show();
+                                    }
+                                    else
+                                    {
+                                        try {
+                                            startCheckout();
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
                         }
                     })
                     .setNegativeButton("No", null).show();
@@ -201,12 +220,12 @@ public class roomDetailActivity extends AppCompatActivity {
 
     }
     void startCheckout() throws JSONException {
-        JSONObject data=new JSONObject();
-        String auth = LoginActivity.sharedPreferences.getString("token", null);
-        data.put("auth",auth);
-        data.put("roomId",_id);
-        CheckoutTask task = new CheckoutTask();
-        task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/vacateRooms", data.toString());
+            JSONObject data = new JSONObject();
+            String auth = LoginActivity.sharedPreferences.getString("token", null);
+            data.put("auth", auth);
+            data.put("roomId", _id);
+            CheckoutTask task = new CheckoutTask();
+            task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/vacateRooms", data.toString());
 
     }
     class CheckoutTask extends AsyncTask<String,Void,String> {
@@ -252,9 +271,10 @@ public class roomDetailActivity extends AppCompatActivity {
                 }
                 else if (s.equals("First clear Dues!")) {
                     Toast.makeText(roomDetailActivity.this, s, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(roomDetailActivity.this, "Please Check Your Internet Connection and try later!", Toast.LENGTH_SHORT).show();
                 }
+            }
+            else {
+                Toast.makeText(roomDetailActivity.this, "Please Check Your Internet Connection and try later!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -408,6 +428,7 @@ public class roomDetailActivity extends AppCompatActivity {
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        fromEditOrDelete=false;
         Intent i=getIntent();
         _id=i.getStringExtra("id");
         roomNo=i.getStringExtra("roomNo");
@@ -450,6 +471,10 @@ public class roomDetailActivity extends AppCompatActivity {
         paymentsHistoryList.setLayoutManager(lm2);
         paymentsHistoryList.setHasFixedSize(true);
         paymentsHistoryList.setAdapter(pAdapter);
+        if(fromEditOrDelete)
+        {
+
+        }
 
     }
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)

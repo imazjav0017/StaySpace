@@ -28,6 +28,7 @@ import java.util.ArrayList;
 public class SentRequestsService extends IntentService {
 
    public static ArrayList<AvailableRoomModel>requestList;
+   public static boolean failed=false;
     public SentRequestsService() {
         super("SentRequestsService");
     }
@@ -65,6 +66,7 @@ public class SentRequestsService extends IntentService {
                 String roomRent=room.getString("roomRent");
                 String roomNo=room.getString("roomNo");
                 String roomId=room.getString("_id");
+                String roomCapacity=room.getString("roomCapacity");
                 JSONObject building=object.getJSONObject("buildingDetail");
                 String buildingId=building.getString("_id");
                 String buildingName=building.getString("name");
@@ -77,7 +79,7 @@ public class SentRequestsService extends IntentService {
                 String Ownername=ownerNameObject.getString("firstName")
                         +" "+ownerNameObject.getString("lastName");
                 requestList.add(new AvailableRoomModel(roomType,roomNo,roomRent,roomId,ownerId,Ownername,
-                        ownerPhoneNo,buildingId,buildingName,floors,address ));
+                        ownerPhoneNo,buildingId,buildingName,floors,address,roomCapacity ));
             }
             SentRoomRequestActivity.updateNow();
         }
@@ -106,18 +108,22 @@ public class SentRequestsService extends IntentService {
 
            } catch (MalformedURLException e) {
                e.printStackTrace();
+               return null;
            } catch (ProtocolException e) {
                e.printStackTrace();
+               return null;
            } catch (IOException e) {
                e.printStackTrace();
+               return null;
            }
-           return null;
+
        }
 
        @Override
        protected void onPostExecute(String s) {
            super.onPostExecute(s);
            if (s != null) {
+               failed=false;
                Log.i("SentRequestsResp",s);
                try {
                    setRequestList(s);
@@ -125,6 +131,7 @@ public class SentRequestsService extends IntentService {
                    e.printStackTrace();
                }
            } else {
+               failed=true;
                Toast.makeText(SentRequestsService.this, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
            }
        }

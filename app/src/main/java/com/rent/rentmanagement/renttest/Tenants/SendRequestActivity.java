@@ -30,9 +30,9 @@ public class SendRequestActivity extends AppCompatActivity implements DatePicker
     TextView buildingNameTv,addresstv,OwnerNameTv,OwnerPhNoTv,RoomNoTv,roomTypeTv,roomRentTv,
     vacancyTv,datePickerTv;
     Button sendRequest;
-    ImageButton call;
+    ImageButton call,sms;
     ProgressDialog progressDialog;
-    String data,buildingName,ownerName,phNo,roomNo,roomType,rent,roomId,ownerId,buildingId,address;
+    String data,buildingName,ownerName,phNo,roomNo,roomType,rent,roomId,ownerId,buildingId,address,vacancy;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home)
@@ -64,6 +64,7 @@ public class SendRequestActivity extends AppCompatActivity implements DatePicker
         datePickerTv=(TextView)findViewById(R.id.tenantDatePicker);
         sendRequest=(Button)findViewById(R.id.sendRequestButton);
         call=(ImageButton)findViewById(R.id.callRequestingOwnerBtn);
+        sms=(ImageButton)findViewById(R.id.availableOwnerSmsButon);
         try {
             extractInfo();
         } catch (JSONException e) {
@@ -168,6 +169,7 @@ public class SendRequestActivity extends AppCompatActivity implements DatePicker
             roomType=s.getString("roomType");
             rent=s.getString("roomRent");
             address=s.getString("address");
+            vacancy=s.getString("vacancy");
             setTitle("Room No :\n"+roomNo);
             buildingNameTv.setText(buildingName);
             OwnerNameTv.setText(ownerName);
@@ -176,6 +178,7 @@ public class SendRequestActivity extends AppCompatActivity implements DatePicker
             roomTypeTv.setText("Room Type :"+roomType);
             roomRentTv.setText("Rent :\u20b9"+rent);
             addresstv.setText("Address: "+address);
+            vacancyTv.setText("Vacancy: "+vacancy);
         }
     }
     public void callOwner(View v)
@@ -184,6 +187,14 @@ public class SendRequestActivity extends AppCompatActivity implements DatePicker
             Intent i = new Intent(Intent.ACTION_DIAL);
             i.setData(Uri.parse("tel:" + phNo));
             startActivity(i);
+        }
+    }
+    public void smsOwner(View v)
+    {
+        if(phNo!=null)
+        {
+            String number = phNo;
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null)));
         }
     }
 

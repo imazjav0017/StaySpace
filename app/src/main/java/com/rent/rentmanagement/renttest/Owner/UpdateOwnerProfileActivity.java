@@ -2,6 +2,8 @@
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +20,10 @@ import android.widget.Toast;
 import com.rent.rentmanagement.renttest.Fragments.EditProfileFragment;
 import com.rent.rentmanagement.renttest.LoginActivity;
 import com.rent.rentmanagement.renttest.R;
+import com.rent.rentmanagement.renttest.Services.ChangeOwnerPasswordService;
+import com.rent.rentmanagement.renttest.Services.EditProfileOwnerService;
+import com.rent.rentmanagement.renttest.Tenants.EditProfileActivity;
+import com.rent.rentmanagement.renttest.Tenants.SendRequestActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,8 +32,9 @@ import org.json.JSONObject;
      EditText firstName,lastName,email,mobileNo;
      Button save;
      ProgressBar progressBar;
-     RadioGroup gendergroup;
-     String gender=null,id;
+     String id;
+     public static AlertDialog resetDialog;
+     public static ProgressDialog progressDialog,EProgressDialog;
      @Override
      public boolean onOptionsItemSelected(MenuItem item) {
          if(item.getItemId()==android.R.id.home)
@@ -52,20 +59,6 @@ import org.json.JSONObject;
          email=(EditText)findViewById(R.id.EditemailInput);
          save=(Button)findViewById(R.id.editSave);
          mobileNo=(EditText)findViewById(R.id.editMobileNo);
-         gendergroup=(RadioGroup)findViewById(R.id.editGenderRadioGroup);
-         gendergroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-             @Override
-             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                 if(i==R.id.editMaleRadioBtn)
-                 {
-                     gender="m";
-                 }
-                 else
-                 {
-                     gender="f";
-                 }
-             }
-         });
          save.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
@@ -92,6 +85,7 @@ import org.json.JSONObject;
                  firstName.setText(fName);
                  lastName.setText(lName);
                  email.setText(emailId);
+                 email.setEnabled(false);
                  mobileNo.setText(mobNo);
                  firstName.setSelection(fName.length());
                  lastName.setSelection(lName.length());
@@ -104,28 +98,40 @@ import org.json.JSONObject;
 
          AlertDialog.Builder builder = new AlertDialog.Builder(UpdateOwnerProfileActivity.this);
          View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.reset_password_dialog, null, false);
-         EditText oldPasswd=(EditText)v.findViewById(R.id.oldPasswordInput);
-         EditText newPasswd=(EditText)v.findViewById(R.id.newPasswordInput);
-         EditText newPasswdAgain=(EditText)v.findViewById(R.id.newPasswordAgainInput);
+         final EditText oldPasswd=(EditText)v.findViewById(R.id.oldPasswordInput);
+         final EditText newPasswd=(EditText)v.findViewById(R.id.newPasswordInput);
+         final EditText newPasswdAgain=(EditText)v.findViewById(R.id.newPasswordAgainInput);
          Button reset=(Button)v.findViewById(R.id.resetPasswordBtn);
          builder.setView(v);
-         final AlertDialog resetDialog = builder.create();
+         resetDialog = builder.create();
          resetDialog.show();
          reset.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
-                 resetDialog.dismiss();
+                 String op=oldPasswd.getText().toString();
+                 String np=newPasswd.getText().toString();
+                 String npa=newPasswdAgain.getText().toString();
+                 if(npa.equals(np))
+                 {
+                     progressDialog=new ProgressDialog(UpdateOwnerProfileActivity.this);
+                     progressDialog.setTitle("Changing Password");
+                     progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                     progressDialog.setMax(100);
+                     progressDialog.setMessage("Changing...");
+                     Intent i=new Intent(getApplicationContext(), ChangeOwnerPasswordService.class);
+                     i.putExtra("op",op);
+                     i.putExtra("np",np);
+                     progressDialog.show();
+                     startService(i);
+                 }
+                 else
+                     Toast.makeText(UpdateOwnerProfileActivity.this, "Passwords Do Not Match", Toast.LENGTH_SHORT).show();
              }
          });
      }
      void saveChanges()
      {
          Log.i("saving","changes");
-         if(gender==null)
-         {
-             Toast.makeText(getApplicationContext(), "Select Your Gender", Toast.LENGTH_SHORT).show();
-         }
-         else {
              String fName = firstName.getText().toString();
              String lName = lastName.getText().toString();
              String emailId = email.getText().toString();
@@ -135,9 +141,22 @@ import org.json.JSONObject;
              }
              else
              {
-                 onBackPressed();
+                 EProgressDialog=new ProgressDialog(UpdateOwnerProfileActivity.this);
+                 EProgressDialog.setTitle("Edit Profile");
+                 EProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                 EProgressDialog.setMax(100);
+                 EProgressDialog.setMessage("Saving...");
+                 Intent i=new Intent(getApplicationContext(), EditProfileOwnerService.class);
+                 Bundle b=new Bundle();
+                 b.putString("fName",fName);
+                 b.putString("lName",lName);
+                 b.putString("mobNo",mobNo);
+                 b.putString("email",emailId);
+                 i.putExtras(b);
+                 startService(i);
+                 EProgressDialog.show();
+                 //onBackPressed();
              }
          }
 
-     }
 }

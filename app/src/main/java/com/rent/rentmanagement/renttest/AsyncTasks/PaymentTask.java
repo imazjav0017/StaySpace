@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.rent.rentmanagement.renttest.Adapters.OccupiedRoomsAdapter;
 import com.rent.rentmanagement.renttest.Fragments.RoomsFragment;
+import com.rent.rentmanagement.renttest.Owner.MainActivity;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -81,7 +82,7 @@ Button btn;
     }
     public static void goBack(Context context)
     {
-        new RoomsFragment(context).onResume();
+        new RoomsFragment(context, MainActivity.paymentNotification).onResume();
 
     }
     public static void enable(Button btn)

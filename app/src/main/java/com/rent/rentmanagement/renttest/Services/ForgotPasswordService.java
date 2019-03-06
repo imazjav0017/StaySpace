@@ -103,17 +103,24 @@ public class ForgotPasswordService extends IntentService {
                 }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+                return null;
             } catch (ProtocolException e) {
                 e.printStackTrace();
+                return null;
             } catch (IOException e) {
                 e.printStackTrace();
+                return null;
             }
-            return null;
+
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            if(ForgotPassword.progressDialog!=null)
+            {
+                ForgotPassword.progressDialog.dismiss();
+            }
             if(s!=null)
             {
                 if(!s.equals("UNF")) {

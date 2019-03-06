@@ -4,7 +4,7 @@
     android:id="@+id/activity_home_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.rent.rentmanagement.renttest.Owner.BuildActivity">
+    tools:context="com.rent.rentmanagement.renttest.Owner.manualActivity">
     <include
         layout="@layout/actionbarlayout"/>
     <LinearLayout
@@ -77,8 +77,7 @@
                 android:id="@+id/addroomsButton"
                 android:textSize="18sp"
                 android:layout_gravity="center"
-                android:background="#172ea4"
-                android:textColor="#fff"
+                android:textColor="#172ea4"
                 android:text="Add Rooms"
                 android:layout_marginTop="20dp"/>
 
@@ -91,8 +90,7 @@
             android:id="@+id/finishAddRoomsBtn"
             android:textSize="18sp"
             android:layout_gravity="center"
-            android:background="#172ea4"
-            android:textColor="#fff"
+            android:textColor="#172ea4"
             android:text="Finish"
             android:layout_marginTop="20dp"/>
         <TextView

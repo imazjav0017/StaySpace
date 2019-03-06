@@ -72,6 +72,10 @@ public class FirebaseRecieveNotificationService extends FirebaseMessagingService
         notf.setWhen(System.currentTimeMillis());
         notf.setContentTitle(data.get("title"));
         notf.setContentText(data.get("body"));
+        NotificationCompat.BigTextStyle bigTextStyle=new NotificationCompat.BigTextStyle();
+        bigTextStyle.setBigContentTitle(data.get("title"));
+        bigTextStyle.bigText(data.get("body"));
+        notf.setStyle(bigTextStyle);
         Intent i;
         PendingIntent pi;
         NotificationManager nm;
@@ -112,6 +116,30 @@ public class FirebaseRecieveNotificationService extends FirebaseMessagingService
                 notf.setLargeIcon(bm);
                 nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
                 nm.notify(111111, notf.build());
+                break;
+            case "Payment Due":
+                i = new Intent(getApplicationContext(),LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                b.putString("title","Payment Due");
+                i.putExtras(b);
+                pi = PendingIntent.getActivity(getApplicationContext(), 0, i, PendingIntent.FLAG_ONE_SHOT);
+                notf.setContentIntent(pi);
+                notf.setSmallIcon(R.drawable.ic_action_payment);
+                notf.setLargeIcon(bm);
+                nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+                nm.notify(111112, notf.build());
+                break;
+            case "Collect Rent":
+                i = new Intent(getApplicationContext(),LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                b.putString("title","Collect Rent");
+                i.putExtras(b);
+                pi = PendingIntent.getActivity(getApplicationContext(), 0, i, PendingIntent.FLAG_ONE_SHOT);
+                notf.setContentIntent(pi);
+                notf.setSmallIcon(R.drawable.ic_action_payment);
+                notf.setLargeIcon(bm);
+                nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+                nm.notify(111113, notf.build());
                 break;
             default:
                 notf.setSmallIcon(R.drawable.ic_action_notifications);

@@ -6,7 +6,7 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
-
+    <uses-permission android:name="android.permission.SEND_SMS"/>
     <application
         android:allowBackup="true"
         android:configChanges="orientation|screenSize"
@@ -192,10 +192,22 @@
             android:name=".Tenants.Services.SendTokenTenantService"
             android:exported="false" />
 
-        <activity android:name=".Tenants.SentRoomRequestActivity" />
+        <activity android:name=".Tenants.SentRoomRequestActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:resizeableActivity="false"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".Tenants.Services.SentRequestsService"
+            android:exported="false" />
+        <service
+            android:name=".Services.EditProfileOwnerService"
+            android:exported="false" />
+        <service
+            android:name=".Services.ChangeOwnerPasswordService"
+            android:exported="false" />
+        <service
+            android:name=".Tenants.Services.EditProfileTenantService"
             android:exported="false"></service>
     </application>
 

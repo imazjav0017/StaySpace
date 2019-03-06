@@ -147,38 +147,6 @@
                 >
 
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Gender"
-                    android:layout_marginTop="10dp"
-                    android:textSize="18sp"/>
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="50dp"
-                    android:padding="5dp"
-                    android:id="@+id/editGenderRadioGroup"
-                    android:orientation="horizontal">
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Male"
-                        android:id="@+id/editMaleRadioBtn"
-                        android:textSize="18sp"/>
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Female"
-                        android:id="@+id/editFemaleRadioBtn"
-                        android:layout_marginLeft="30dp"
-                        android:textSize="18sp"/>
-                </RadioGroup>
-            </LinearLayout>
         <LinearLayout
             android:orientation="horizontal"
             android:layout_marginTop="20dp"

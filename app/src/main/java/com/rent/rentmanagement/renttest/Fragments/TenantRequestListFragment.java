@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.rent.rentmanagement.renttest.Adapters.TenantRequestAdapter;
@@ -28,6 +29,7 @@ public class TenantRequestListFragment extends Fragment{
     static SwipeRefreshLayout swipeRefreshLayout;
     public static ArrayList<TenantRequestModel> tenantRequestModels;
     public static TenantRequestAdapter adapter;
+    public static ProgressBar progressBar;
 
     public TenantRequestListFragment(Context context) {
         this.context = context;
@@ -43,6 +45,7 @@ public class TenantRequestListFragment extends Fragment{
         swipeRefreshLayout=(SwipeRefreshLayout)v.findViewById(R.id.tenantRequestListSrl);
         requestList=(RecyclerView)v.findViewById(R.id.totalRequestsList);
         noRequest=(TextView)v.findViewById(R.id.noRequestsText);
+        progressBar=(ProgressBar)v.findViewById(R.id.tenantRequestsProgress);
         noRequest.setVisibility(View.INVISIBLE);
         tenantRequestModels=new ArrayList<>();
         adapter=new TenantRequestAdapter(tenantRequestModels);
@@ -65,6 +68,7 @@ public class TenantRequestListFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+        progressBar.setVisibility(View.VISIBLE);
         setView();
     }
     public static void upateView()
@@ -80,10 +84,15 @@ public class TenantRequestListFragment extends Fragment{
             adapter.notifyDataSetChanged();
             swipeRefreshLayout.setRefreshing(false);
             noRequest.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
         }
         if(tenantRequestModels.isEmpty())
         {
             noRequest.setVisibility(View.VISIBLE);
+        }
+        if(GetRoomRequestsService.failed)
+        {
+            progressBar.setVisibility(View.INVISIBLE);
         }
 
     }

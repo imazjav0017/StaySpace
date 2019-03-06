@@ -33,7 +33,7 @@ String _id,name,phNo,roomNo,adhaarNo,roomId;
     EditText sRoomNo,sPhNo,sAadharNo,sName;
     Button edit,delete;
     String response;
-    ProgressDialog deleteStudentDialog;
+    ProgressDialog deleteStudentDialog,editStudentDialog;
     public class EditStudentsTask extends AsyncTask<String,Void,String>
     {
         @Override
@@ -58,7 +58,9 @@ String _id,name,phNo,roomNo,adhaarNo,roomId;
                 }
                 else
                 {
-                    return null;
+                    response=getResponse(connection);
+                    Log.i("EDIT",response);
+                    return response;
                 }
 
             }catch(MalformedURLException e)
@@ -74,8 +76,13 @@ String _id,name,phNo,roomNo,adhaarNo,roomId;
 
         @Override
         protected void onPostExecute(String s) {
+            editStudentDialog.dismiss();
             if (s != null) {
+                enable(edit);
+                if(s.equals("ok"))
                 Toast.makeText(getApplicationContext(),"Saved Changes",Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(studentProfile.this, "Bad Request!", Toast.LENGTH_SHORT).show();
             }
             else
             {
@@ -126,8 +133,15 @@ String _id,name,phNo,roomNo,adhaarNo,roomId;
                         token.put("name",name);
                         token.put("adharNo",adhaarNo);
                         token.put("mobileNo",phNo);
+                        token.put("roomId",roomId);
                         EditStudentsTask task=new EditStudentsTask();
                         task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/editStudents", token.toString());
+                        editStudentDialog=new ProgressDialog(studentProfile.this);
+                        editStudentDialog.setMax(100);
+                        editStudentDialog.setMessage("Edit "+name);
+                        editStudentDialog.setTitle("Editing...");
+                        editStudentDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        editStudentDialog.show();
                     }
                 }
 
@@ -287,6 +301,7 @@ String _id,name,phNo,roomNo,adhaarNo,roomId;
         sRoomNo.setText(roomNo);
         sPhNo.setText(phNo);
         sAadharNo.setText(adhaarNo);
+        sRoomNo.setEnabled(false);
     }
 
     @Override

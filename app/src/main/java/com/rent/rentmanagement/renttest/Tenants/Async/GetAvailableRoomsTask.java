@@ -3,6 +3,7 @@ package com.rent.rentmanagement.renttest.Tenants.Async;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.rent.rentmanagement.renttest.Tenants.Services.GetAvailableRoomsService;
@@ -22,6 +23,7 @@ import java.net.URL;
 
 public class GetAvailableRoomsTask extends AsyncTask<String,Integer,String> {
     Context context;
+    public static  boolean failed=false;
 
     public GetAvailableRoomsTask(Context context) {
         this.context = context;
@@ -55,19 +57,22 @@ public class GetAvailableRoomsTask extends AsyncTask<String,Integer,String> {
         }catch(MalformedURLException e)
         {
             e.printStackTrace();
+            return null;
         } catch (ProtocolException e) {
             e.printStackTrace();
+            return null;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
+
     }
 
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         if (s != null) {
-
+            failed=false;
             Log.i("availableRooms", s);
             try {
                 GetAvailableRoomsService.setAvailableroomsData(s,context);
@@ -77,6 +82,7 @@ public class GetAvailableRoomsTask extends AsyncTask<String,Integer,String> {
         }
         else
         {
+            failed=true;
             Toast.makeText(context, "Please Check Your Internet Connection and try later!", Toast.LENGTH_SHORT).show();
         }
     }
