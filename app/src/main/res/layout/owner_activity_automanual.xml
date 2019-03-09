@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:padding="5dp"
     android:layout_height="match_parent"
-    tools:context="com.rent.rentmanagement.renttest.Owner.automanualActivity">
+    tools:context="com.mansa.StaySpace.Owner.automanualActivity">
 
 
     <TextView

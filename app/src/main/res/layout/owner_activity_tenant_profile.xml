@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.rent.rentmanagement.renttest.Owner.studentProfile">
+    tools:context="com.mansa.StaySpace.Owner.studentProfile">
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -230,7 +230,7 @@
                             android:id="@+id/studentAadharNoField"
                             android:text="55050525545202"
 
-                            android:inputType="number"
+                            android:inputType="textPersonName"
                             android:background="@android:color/transparent"
                             android:layout_marginTop="5dp"/>
 

@@ -4,7 +4,7 @@
     android:id="@+id/activity_home_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.rent.rentmanagement.renttest.Owner.manualActivity">
+    tools:context="com.mansa.StaySpace.Owner.manualActivity">
     <include
         layout="@layout/actionbarlayout"/>
     <LinearLayout

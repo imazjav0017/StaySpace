@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:164163955909:android:c8d891e6d0e4afed",
+        "mobilesdk_app_id": "1:164163955909:android:aa4f9973a81a89af",
         "android_client_info": {
-          "package_name": "com.rent.rentmanagement.renttest"
+          "package_name": "com.mansa.StaySpace"
         }
       },
       "oauth_client": [
         {
-          "client_id": "164163955909-lu9buimplrg4fv00ofj2l0elpqms503s.apps.googleusercontent.com",
+          "client_id": "164163955909-fbesa9a0cku5jortkp625vq1qdp9ef1u.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.rent.rentmanagement.renttest",
+            "package_name": "com.mansa.StaySpace",
             "certificate_hash": "9906eb6196c561354ef1b56a19eb19e0320009bb"
           }
         },

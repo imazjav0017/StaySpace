@@ -168,26 +168,25 @@
             </LinearLayout>
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <Button
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="Change Password"
-                    android:textColor="#ffffff"
+                    android:textColor="#1b30ea"
                     android:textAllCaps="false"
                     android:onClick="changePassword"
                     android:layout_weight="1"
                     android:textSize="20sp"
-                    android:background="#FFFF1818"
                     />
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="40dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 

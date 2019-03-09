@@ -29,12 +29,12 @@
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:padding="5dp"
-               android:background="@drawable/round_bg"
                android:orientation="horizontal">
                <TextView
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:text="Building:"
+                   android:textColor="#000"
                    android:textSize="18sp"
                    />
            </LinearLayout>
@@ -56,6 +56,7 @@
                <TextView
                    android:layout_width="wrap_content"
                    android:padding="5dp"
+                   android:textColor="#000"
                    android:layout_height="wrap_content"
                    android:text="N/A"
                    android:id="@+id/availableBuildingNameTextView"
@@ -140,12 +141,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:background="@drawable/round_bg"
                 android:orientation="horizontal">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Room:"
+                    android:textColor="#000"
                     android:textSize="18sp"
                     />
             </LinearLayout>
@@ -167,6 +168,7 @@
                     android:padding="5dp"
                     android:layout_height="wrap_content"
                     android:text="N/A"
+                    android:textColor="#000"
                     android:gravity="center"
                     android:id="@+id/availableRoomNoTv"
                     android:textSize="18sp"/>
@@ -217,6 +219,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Checkin :"
+                android:textColor="#000"
                 android:textSize="18sp"/>
             <TextView
                 android:layout_marginLeft="40dp"
