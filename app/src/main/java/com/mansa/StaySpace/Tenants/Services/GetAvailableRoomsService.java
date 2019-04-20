@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
 
+import com.mansa.StaySpace.Tenants.AvailableRoomsActivity;
 import com.mansa.StaySpace.Tenants.DataModels.AvailableRoomModel;
 import com.mansa.StaySpace.LoginActivity;
 import com.mansa.StaySpace.Tenants.Async.GetAvailableRoomsTask;
@@ -51,7 +52,7 @@ public class GetAvailableRoomsService extends IntentService {
         intent.putExtra(EXTRA_PARAM2, param2);
         context.startService(intent);
     }
-
+    String bid;
     /**
      * Starts this service to perform action Baz with the given parameters. If
      * the service is already performing a task this action will be queued.
@@ -70,6 +71,8 @@ public class GetAvailableRoomsService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
+            bid=intent.getStringExtra("buildingId");
+            if(bid!=null)
             startTask();
         }
 
@@ -81,11 +84,12 @@ public class GetAvailableRoomsService extends IntentService {
         if (auth != null) {
             try {
                 obj.put("auth", auth);
+                obj.put("buildingId",bid);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             GetAvailableRoomsTask task = new GetAvailableRoomsTask(getApplicationContext());
-            task.execute("https://sleepy-atoll-65823.herokuapp.com/students/getEmptyRooms", obj.toString());
+            task.execute(LoginActivity.MAINURL+"/students/getEmptyRooms", obj.toString());
         }
     }
     //store the available rooms in static array list
@@ -113,7 +117,12 @@ public class GetAvailableRoomsService extends IntentService {
                     String buildingId=buildingObject.getString("_id");
                     String buildingName=buildingObject.getString("name");
                     buildings.add(buildingName);
-                    String address=buildingObject.getString("address");
+                    JSONObject addressObject=buildingObject.getJSONObject("address");
+                    String address="";
+                    address+=addressObject.getString("addressLine1")+",";
+                    address+=addressObject.getString("addressLine2")+",";
+                    address+=addressObject.getString("city")+" ";
+                    address+=addressObject.getString("pincode");
                     String floors=String.valueOf(buildingObject.getInt("floor"));
                     JSONObject ownerObject=object.getJSONObject("owner");
                     String ownerId=ownerObject.getString("_id");
@@ -124,8 +133,8 @@ public class GetAvailableRoomsService extends IntentService {
                     availableRooms.add(new AvailableRoomModel(roomType,roomNo,roomRent,roomId,ownerId,Ownername,
                             ownerPhoneNo,buildingId,buildingName,floors,address,roomCapacity ));
                 }
-                AvailableRoomsFragment.updateNow();
             }
+            AvailableRoomsActivity.updateNow();
         }
     }
 }

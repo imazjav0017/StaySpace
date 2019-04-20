@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="paddingPercent" value="50" />
+                                                <entry key="paddingPercent" value="10" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -35,7 +35,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/home/imaz/Downloads/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/editor/ic_mode_edit_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/home/imaz/Downloads/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/communication/ic_message_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -56,8 +56,8 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_action_edit1" />
-                                      <entry key="themeColor" value="ffffff" />
+                                      <entry key="outputName" value="ic_message" />
+                                      <entry key="themeColor" value="0031ff" />
                                     </map>
                                   </option>
                                 </PersistentState>

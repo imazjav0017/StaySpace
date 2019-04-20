@@ -24,6 +24,7 @@ import com.mansa.StaySpace.Services.getOwnerDetailsService;
 import com.mansa.StaySpace.Tenants.Services.GetTenantHomeService;
 import com.mansa.StaySpace.Tenants.Services.SendTokenTenantService;
 import com.mansa.StaySpace.Tenants.TenantActivity;
+import com.mansa.StaySpace.Tenants.TenantChatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,7 +46,9 @@ public class LoginActivity extends AppCompatActivity {
     int resp;
     JSONObject tokenJson;
     ProgressBar progressBar;
-    public static final String URL="https://sleepy-atoll-65823.herokuapp.com";
+   // public static final String URL="https://sleepy-atoll-65823.herokuapp.com";
+   // public static final String MAINURL="https://sleepy-atoll-65823.herokuapp.com";
+    public static final String MAINURL="https://mansastudios.com";
     public static SharedPreferences sharedPreferences;
     public String getResponse(HttpURLConnection connection)
     {
@@ -76,6 +79,8 @@ public class LoginActivity extends AppCompatActivity {
             Log.i("respone111",token);
             accessToken=tokenJson.getString("token");
             sharedPreferences.edit().putString("token",accessToken).apply();
+            String userId=tokenJson.getString("userId");
+            sharedPreferences.edit().putString("userId",userId).apply();
             boolean isOwner=tokenJson.getBoolean("isOwner");
             if(isOwner==true)
             {
@@ -232,7 +237,7 @@ public class LoginActivity extends AppCompatActivity {
                 loginDetails.put("email", emailInput.getText().toString());
                 loginDetails.put("password", passwordInput.getText().toString());
                 LoginTask task=new LoginTask();
-                task.execute("https://sleepy-atoll-65823.herokuapp.com/users/signin",loginDetails.toString());
+                task.execute(MAINURL+"/users/signin",loginDetails.toString());
                 progressBar.setVisibility(View.VISIBLE);
             }
             else
@@ -296,6 +301,15 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                     break;
+                case "Message":
+                    Intent intent1=new Intent(getApplicationContext(), TenantChatActivity.class);
+                    intent1.putExtra("name",b.get("name").toString());
+                    intent1.putExtra("chatId",b.get("chatId").toString());
+                    intent1.putExtra("isGroup",b.getBoolean("isGroup"));
+                    startActivity(intent1);
+                    finish();
+                    break;
+
                 default:
                     gotoHome();
             }

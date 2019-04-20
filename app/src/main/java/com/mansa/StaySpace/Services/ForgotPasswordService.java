@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.mansa.StaySpace.ForgotPassword;
+import com.mansa.StaySpace.LoginActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +45,7 @@ public class ForgotPasswordService extends IntentService {
         JSONObject data=new JSONObject();
         data.put("email",email);
         ForgotPasswordTask task=new ForgotPasswordTask();
-        task.execute("https://sleepy-atoll-65823.herokuapp.com/users/forgot_password",data.toString());
+        task.execute(LoginActivity.MAINURL+"/users/forgot_password",data.toString());
     }
     public String  getResponse(HttpURLConnection connection)
     {

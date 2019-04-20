@@ -22,7 +22,7 @@
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Adhaar no"
+        android:hint="ID Proof"
         android:inputType="textPersonName"
         android:id="@+id/tenantAdhaarNoUpdate"
         android:layout_centerInParent="true"/>

@@ -146,6 +146,7 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
             @Override
             public void onClick(View v) {
                 Intent i=new Intent(holder.context,roomDetailActivity.class);
+                i.putExtra("isEmpty",model.isEmpty);
                 i.putExtra("id",model.get_id());
                 i.putExtra("roomNo",model.getRoomNo());
                 i.putExtra("roomType",model.getRoomType());
@@ -154,6 +155,13 @@ public class TotalRoomsAdapter extends RecyclerView.Adapter<TotalRoomsAdapter.To
                 i.putExtra("due",model.getDueAmount());
                 i.putExtra("roomCapacity",model.getRoomCapacity());
                 i.putExtra("totalRoomCapacity",model.getTotalRoomCapacity());
+                if(!model.isEmpty) {
+                    i.putExtra("checkInDate", model.getCheckInDate());
+                    i.putExtra("dueDate", model.getDueDate());
+                }
+                else {
+                    i.putExtra("checkOutDate", model.getCheckOutDate());
+                }
                 holder.context.startActivity(i);
             }
         });

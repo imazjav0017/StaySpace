@@ -80,7 +80,7 @@ public class GetRoomsService extends IntentService {
             data.put("buildingId",buildId);
             data.put("ownerId",ownerId);
             GetRoomsTask task = new GetRoomsTask();
-            task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/getRooms",data.toString());
+            task.execute(LoginActivity.MAINURL+"/rooms/getRooms",data.toString());
         }
     }
     public static ArrayList<RoomModel> tRooms;
@@ -119,11 +119,12 @@ public class GetRoomsService extends IntentService {
                 String dueAmount=String.valueOf(mainObject.getInt("dueAmount"));
                 String dueDays=mainObject.getString("dueDays");
                 String dueDate=mainObject.getString("dueDate");
-                tRooms.add(new RoomModel(roomType,roomNo,roomRent,dueAmount,roomId,
+                String checkInDate=mainObject.getString("checkInDate");
+                tRooms.add(new RoomModel(roomType,roomNo,roomRent,dueAmount,roomId,checkInDate,
                         dueDate,isEmpty,isRentDue,dueDays,roomCapacity,totalRoomsCapacity));
                 if(isRentDue==true)
                 {
-                    oRooms.add(new RoomModel(roomType,roomNo,roomRent,dueAmount,roomId, dueDate,isEmpty,isRentDue,dueDays,roomCapacity,totalRoomsCapacity));
+                    oRooms.add(new RoomModel(roomType,roomNo,roomRent,dueAmount,roomId,checkInDate, dueDate,isEmpty,isRentDue,dueDays,roomCapacity,totalRoomsCapacity));
                 }
             }
         }

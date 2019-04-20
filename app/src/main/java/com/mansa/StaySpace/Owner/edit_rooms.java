@@ -1,5 +1,6 @@
 package com.mansa.StaySpace.Owner;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +34,7 @@ String roomNo,roomType,roomRent,_id,response,type,buildingId;
     RadioGroup newRoomType;
     boolean isChanged=false,from;
     Button edit;
+    ProgressDialog progressDialog;
 
     void enableButton(Button btn,boolean val)
     {
@@ -48,8 +50,8 @@ String roomNo,roomType,roomRent,_id,response,type,buildingId;
                 i.putExtra("roomRent", roomRent);
             if(from)
                 i.putExtra("fromTotal",from);
-                startActivity(i);
-                finish();
+            startActivity(i);
+            finish();
 
         }
         else
@@ -92,7 +94,13 @@ String roomNo,roomType,roomRent,_id,response,type,buildingId;
                         }
                         token.put("buildingId",buildingId);
                         EditTask task = new EditTask();
-                        task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/editRooms", token.toString());
+                        task.execute(LoginActivity.MAINURL+"/rooms/editRooms", token.toString());
+                        progressDialog=new ProgressDialog(edit_rooms.this);
+                        progressDialog.setTitle("Edit Room");
+                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        progressDialog.setMax(100);
+                        progressDialog.setMessage("Editing.... ");
+                        progressDialog.show();
                     }
                 }
             }
@@ -117,7 +125,7 @@ String roomNo,roomType,roomRent,_id,response,type,buildingId;
                 Log.i("data", params[1]);
                 int resp = connection.getResponseCode();
                 Log.i("editResp",String.valueOf(resp));
-                if(resp==200)
+               /* if(resp==200)
                 {
                     response=getResponse(connection);
                     return response;
@@ -125,7 +133,9 @@ String roomNo,roomType,roomRent,_id,response,type,buildingId;
                 else
                 {
                     return null;
-                }
+                }*/
+                response=getResponse(connection);
+                return response;
 
             }catch(MalformedURLException e)
             {
@@ -140,10 +150,29 @@ String roomNo,roomType,roomRent,_id,response,type,buildingId;
 
         @Override
         protected void onPostExecute(String s) {
+            progressDialog.dismiss();
             if (s != null) {
-                Toast.makeText(edit_rooms.this,"Saved Changes",Toast.LENGTH_SHORT).show();
-                isChanged=true;
-                onBackPressed();
+                Log.i("editResp",s);
+                try {
+                    JSONObject response=new JSONObject(s);
+                    int code=response.getInt("code");
+                    if(code==200)
+                    {
+                        Toast.makeText(edit_rooms.this,"Saved Changes",Toast.LENGTH_SHORT).show();
+                        isChanged=true;
+                        onBackPressed();
+                    }
+                    else
+                    {
+                        enableButton(edit,true);
+                        String message=response.getString("message");
+                        Toast.makeText(edit_rooms.this, message, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    enableButton(edit,true);
+                    e.printStackTrace();
+                    Toast.makeText(edit_rooms.this, "Some Error Occured", Toast.LENGTH_SHORT).show();
+                }
             }
             else
             {

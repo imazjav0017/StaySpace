@@ -24,8 +24,8 @@ import java.util.List;
 
 public class SelectBuildingActivity extends AppCompatActivity {
     RecyclerView buildingsList;
-    List<BuildingListModel> buildingListModels;
-    BuildingListAdapter adapter;
+    static List<BuildingListModel> buildingListModels;
+    static BuildingListAdapter adapter;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home)
@@ -57,7 +57,11 @@ public class SelectBuildingActivity extends AppCompatActivity {
         super.onResume();
         setData();
     }
-
+    static public void update()
+    {
+        if(buildingListModels!=null)
+            setData();
+    }
     public void addBuilding(View v)
     {
         Log.i("addBuilding","clicked");
@@ -65,7 +69,7 @@ public class SelectBuildingActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    void setData() {
+    static void setData() {
         buildingListModels.clear();
         String Buildings = LoginActivity.sharedPreferences.getString("buildings", null);
         if (Buildings != null) {

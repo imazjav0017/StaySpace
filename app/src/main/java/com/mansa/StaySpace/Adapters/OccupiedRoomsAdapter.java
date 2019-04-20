@@ -84,7 +84,7 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
         final RoomModel model=roomList.get(position);
         holder.roomNo.setText("Room No. "+model.getRoomNo());
         holder.amount.setText("Due Amount: \u20B9"+model.getDueAmount());
-        holder.date.setText(model.getCheckInDate());
+        holder.date.setText(model.getDueDate());
         holder.dueDays.setText(model.getDays());
         holder.roomType.setText(", "+model.getRoomType()+",");
 
@@ -111,6 +111,9 @@ public class OccupiedRoomsAdapter extends RecyclerView.Adapter<ViewHolder2> {
                 i.putExtra("due",model.getDueAmount());
                 i.putExtra("roomCapacity",model.getRoomCapacity());
                 i.putExtra("totalRoomCapacity",model.getTotalRoomCapacity());
+                i.putExtra("checkInDate", model.getCheckInDate());
+                i.putExtra("dueDate", model.getDueDate());
+                i.putExtra("isEmpty",model.isEmpty);
                 holder.context.startActivity(i);
             }
         });

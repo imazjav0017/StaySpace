@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.mansa.StaySpace.Adapters.IdProofAdapter;
 import com.mansa.StaySpace.Adapters.TotalTenantsAdapter;
 import com.mansa.StaySpace.LoginActivity;
 import com.mansa.StaySpace.R;
@@ -26,6 +29,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class studentProfile extends AppCompatActivity {
 String _id,name,phNo,roomNo,adhaarNo,roomId;
@@ -34,6 +40,18 @@ String _id,name,phNo,roomNo,adhaarNo,roomId;
     Button edit,delete;
     String response;
     ProgressDialog deleteStudentDialog,editStudentDialog;
+    RecyclerView idProofsRv;
+    String idPicsUrls;
+    List<String> idPics;
+    IdProofAdapter adapter;
+    public void viewPhotos(View view) {
+        String idPicsUrls=getIntent().getStringExtra("idProofPics");
+        if(idPicsUrls!=null)
+        {
+
+        }
+    }
+
     public class EditStudentsTask extends AsyncTask<String,Void,String>
     {
         @Override
@@ -135,7 +153,7 @@ String _id,name,phNo,roomNo,adhaarNo,roomId;
                         token.put("mobileNo",phNo);
                         token.put("roomId",roomId);
                         EditStudentsTask task=new EditStudentsTask();
-                        task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/editStudents", token.toString());
+                        task.execute(LoginActivity.MAINURL+"/rooms/editStudents", token.toString());
                         editStudentDialog=new ProgressDialog(studentProfile.this);
                         editStudentDialog.setMax(100);
                         editStudentDialog.setMessage("Edit "+name);
@@ -184,7 +202,7 @@ String _id,name,phNo,roomNo,adhaarNo,roomId;
         else
             data.put("studentId",_id);
         DeleteStudentTask task=new DeleteStudentTask();
-        task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/deleteStudents",data.toString());
+        task.execute(LoginActivity.MAINURL+"/rooms/deleteStudents",data.toString());
         deleteStudentDialog=new ProgressDialog(studentProfile.this);
         deleteStudentDialog.setMax(100);
         deleteStudentDialog.setMessage("Deleting "+name);
@@ -290,6 +308,7 @@ String _id,name,phNo,roomNo,adhaarNo,roomId;
         from=i.getBooleanExtra("total",false);
         adhaarNo=i.getStringExtra("aadharNo");
         isTenant=i.getBooleanExtra("isTenant",false);
+        idPicsUrls=getIntent().getStringExtra("idProofPics");
         Log.i("aadharNo",adhaarNo);
         sName=(EditText) findViewById(R.id.studentNameField);
         sRoomNo=(EditText)findViewById(R.id.studentRoomNoField);
@@ -302,6 +321,20 @@ String _id,name,phNo,roomNo,adhaarNo,roomId;
         sPhNo.setText(phNo);
         sAadharNo.setText(adhaarNo);
         sRoomNo.setEnabled(false);
+        if(idPicsUrls!=null){
+            setIdPhotos();
+        }
+    }
+    void setIdPhotos()
+    {
+        idProofsRv=(RecyclerView)findViewById(R.id.tenantIdProofsRv);
+        String[]ids=idPicsUrls.split(",");
+        idPics= Arrays.asList(ids);
+        adapter=new IdProofAdapter(idPics);
+        LinearLayoutManager lm2=new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false);
+        idProofsRv.setLayoutManager(lm2);
+        idProofsRv.setHasFixedSize(true);
+        idProofsRv.setAdapter(adapter);
     }
 
     @Override

@@ -106,7 +106,7 @@ public class GetRoomRequestsService extends IntentService {
             }
             object.put("buildingId",buildId);
             GetRoomRequestsTask task = new GetRoomRequestsTask();
-            task.execute("https://sleepy-atoll-65823.herokuapp.com/users/getRoomRequest", object.toString());
+            task.execute(LoginActivity.MAINURL+"/users/getRoomRequest", object.toString());
 
         }
     }

@@ -2,11 +2,13 @@ package com.mansa.StaySpace.AsyncTasks;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.mansa.StaySpace.LoginActivity;
+import com.mansa.StaySpace.Services.GetBuilidngsService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,15 +25,17 @@ import java.net.URL;
 
 public class AddBuildingTask extends AsyncTask<String,Void,String> {
     Context context;
+    int mode; //0-add , 1-edit
     public interface AddBuildingResp
     {
         void processFinish(Boolean output);
     }
 
     AddBuildingResp addBuildingResp=null;
-    public AddBuildingTask(Context context,AddBuildingResp resp) {
+    public AddBuildingTask(Context context,AddBuildingResp resp,int mode) {
         this.context = context;
         this.addBuildingResp=resp;
+        this.mode=mode;
     }
     @Override
     protected String doInBackground(String... params) {
@@ -80,19 +84,27 @@ public class AddBuildingTask extends AsyncTask<String,Void,String> {
            }
            else {
                Log.i("addBuildingResp", s);
-               JSONObject mainObject = null;
-               try {
-                   mainObject = new JSONObject(s);
-                   JSONArray buildings = mainObject.getJSONArray("build");
-                   LoginActivity.sharedPreferences.edit()
-                           .putString("buildings", buildings.toString()).apply();
-               } catch (JSONException e) {
-                   e.printStackTrace();
-               }
+               if (mode == 0) {
+                   JSONObject mainObject = null;
+                   try {
+                       mainObject = new JSONObject(s);
+                       JSONArray buildings = mainObject.getJSONArray("build");
+                       LoginActivity.sharedPreferences.edit()
+                               .putString("buildings", buildings.toString()).apply();
+                   } catch (JSONException e) {
+                       e.printStackTrace();
+                   }
 
-               addBuildingResp.processFinish(true);
-               Toast.makeText(context, "Building Added!", Toast.LENGTH_SHORT).show();
+                   addBuildingResp.processFinish(true);
+                   Toast.makeText(context, "Building Added!", Toast.LENGTH_SHORT).show();
+               }
+               else if(mode==1)
+               {
+                   addBuildingResp.processFinish(true);
+                   Toast.makeText(context, "Building Saved!", Toast.LENGTH_SHORT).show();
+               }
            }
+
        }
         else
         {

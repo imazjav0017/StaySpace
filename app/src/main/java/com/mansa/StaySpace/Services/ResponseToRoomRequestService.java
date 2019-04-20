@@ -57,7 +57,7 @@ public class ResponseToRoomRequestService extends IntentService {
     void startTask() throws JSONException {
         JSONObject jsonData=new JSONObject(data);
         SendRoomRequestResponseTask task=new SendRoomRequestResponseTask(tenantname,response);
-        task.execute("https://sleepy-atoll-65823.herokuapp.com/users/responseToRoomRequest",jsonData.toString());
+        task.execute(LoginActivity.MAINURL+"/users/responseToRoomRequest",jsonData.toString());
     }
      class SendRoomRequestResponseTask extends AsyncTask<String,Integer,String> {
         String name;

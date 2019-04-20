@@ -27,7 +27,7 @@ public class MainPageFragment extends Fragment {
     View v;
     static String phNo;
     static SwipeRefreshLayout swipeRefreshLayout;
-    static TextView dueDays,dueAmount,roomNo,buildingName,ownerName,ownerPhNo,rentStatus;
+    static TextView dueDays,dueAmount,roomNo,buildingName,ownerName,ownerPhNo,rentStatus,roomRent,checkInDate;
     ImageButton call,sms;
 
     public MainPageFragment() {
@@ -36,7 +36,7 @@ public class MainPageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v=inflater.inflate(R.layout.tenant_main_page,container,false);
+        v=inflater.inflate(R.layout.tenant_mian_page,container,false);
         swipeRefreshLayout=(SwipeRefreshLayout)v.findViewById(R.id.tenantMainPageSrl);
         dueDays=(TextView)v.findViewById(R.id.dueDaysTenantTextView);
         dueAmount=(TextView)v.findViewById(R.id.dueAmountTenantTextView);
@@ -45,6 +45,8 @@ public class MainPageFragment extends Fragment {
         ownerName=(TextView)v.findViewById(R.id.ownerNameTenantTextView);
         ownerPhNo=(TextView)v.findViewById(R.id.ownerPhNoTenantTextView);
         rentStatus=(TextView)v.findViewById(R.id.rentStatusTenantTextView);
+        roomRent=v.findViewById(R.id.tenantRoomRentTV);
+        checkInDate=v.findViewById(R.id.tenantCheckInDateTv);
         call=(ImageButton) v.findViewById(R.id.callOwnerBtn);
         sms=(ImageButton)v.findViewById(R.id.messageOwnerBtn);
         sms.setOnClickListener(new View.OnClickListener() {
@@ -116,6 +118,10 @@ public class MainPageFragment extends Fragment {
             if(roomDetails!=null) {
             JSONObject tenantRoomDetails = new JSONObject(roomDetails);
             String roomNoValue = tenantRoomDetails.getString("roomNo");
+            String rr=tenantRoomDetails.getString("roomRent");
+            String cid=tenantRoomDetails.getString("checkInDate");
+            roomRent.setText("\u20B9"+rr);
+            checkInDate.setText(cid);
             roomNo.setText(roomNoValue);
                  }
                  else
@@ -129,7 +135,7 @@ public class MainPageFragment extends Fragment {
                 String dueDaysValue=tenantPaymentDetail.getString("dueDate");
                 int dueAmountValue=tenantPaymentDetail.getInt("dueAmount");
                 boolean isRentDue=tenantPaymentDetail.getBoolean("isRentDue");
-                    dueDays.setText("Due On: " + dueDaysValue);
+                    dueDays.setText(dueDaysValue);
                 dueAmount.setText("\u20B9"+String.valueOf(dueAmountValue));
                 if(dueAmountValue==0)
                     dueAmount.setTextColor(Color.parseColor("#3aa335"));
@@ -145,7 +151,7 @@ public class MainPageFragment extends Fragment {
             }
             else
             {
-                dueDays.setText("Due On:N/A");
+                dueDays.setText("N/A");
                 dueAmount.setText("N/A");
                 rentStatus.setText("N/A");
 

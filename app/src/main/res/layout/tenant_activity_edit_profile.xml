@@ -147,12 +147,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Adhar No:"
+                    android:text="ID Proof:"
                     android:textSize="18sp"/>
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Adhaar No"
+                    android:hint="ID Proof"
                     android:layout_marginLeft="10dp"
                     android:background="@android:color/transparent"
                     android:ems="10"

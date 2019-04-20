@@ -69,7 +69,7 @@ public class PaymentService extends IntentService {
         }else
             Toast.makeText(this, "Missing Fields", Toast.LENGTH_SHORT).show();
         PaymentTask task=new PaymentTask();
-        task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/paymentDetail",data.toString());
+        task.execute(LoginActivity.MAINURL+"/rooms/paymentDetail",data.toString());
     }
     void startReason() throws JSONException {
         String auth = LoginActivity.sharedPreferences.getString("token", null);

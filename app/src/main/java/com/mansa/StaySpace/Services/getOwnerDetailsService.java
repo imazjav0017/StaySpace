@@ -55,7 +55,9 @@ public class getOwnerDetailsService extends IntentService {
                 try {
                     JSONArray buildings=new JSONArray(builidngArray);
                     if (buildings.length()>0) {
-                        JSONObject bObject = buildings.getJSONObject(0);
+                        /*JSONObject bObject = buildings.getJSONObject(0);
+                        buildingId=bObject.getString("_id");*/
+                        JSONObject bObject = buildings.getJSONObject(LoginActivity.sharedPreferences.getInt("buildingIndex",0));
                         buildingId=bObject.getString("_id");
                     }
 
@@ -76,7 +78,7 @@ public class getOwnerDetailsService extends IntentService {
 
 
             GetOwnerDetailsTask task=new GetOwnerDetailsTask();
-            task.execute("https://sleepy-atoll-65823.herokuapp.com/users/ownerHome",data.toString());
+            task.execute(LoginActivity.MAINURL+"/users/ownerHome",data.toString());
         }
     }
     void addToSharedPref(String tag,String value)

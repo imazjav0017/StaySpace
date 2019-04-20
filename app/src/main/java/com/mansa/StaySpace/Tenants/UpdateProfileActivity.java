@@ -78,7 +78,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     }
                 }
             });
-            task.execute("https://sleepy-atoll-65823.herokuapp.com/students/editTenantProfile", data.toString());
+            task.execute(LoginActivity.MAINURL+"/students/editTenantProfile", data.toString());
         }
     }
 }

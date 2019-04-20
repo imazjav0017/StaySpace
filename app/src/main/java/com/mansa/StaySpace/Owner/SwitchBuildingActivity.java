@@ -25,8 +25,8 @@ import java.util.List;
 
 public class SwitchBuildingActivity extends AppCompatActivity {
     RecyclerView buildingsList;
-    List<BuildingListModel> buildingListModels;
-    BuildingListSwitchingAdapter adapter;
+   static List<BuildingListModel> buildingListModels;
+    static BuildingListSwitchingAdapter adapter;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home)
@@ -65,7 +65,12 @@ public class SwitchBuildingActivity extends AppCompatActivity {
         Intent i=new Intent(getApplicationContext(),UpdateOwnerExtraActivity.class);
         startActivity(i);
     }
-    void setData() {
+    static public void update()
+    {
+        if(buildingListModels!=null)
+        setData();
+    }
+    static void setData() {
         buildingListModels.clear();
         String Buildings = LoginActivity.sharedPreferences.getString("buildings", null);
         if (Buildings != null) {

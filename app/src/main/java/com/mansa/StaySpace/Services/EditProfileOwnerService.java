@@ -60,7 +60,7 @@ public class EditProfileOwnerService extends IntentService {
                 data.put("email",email);
                 data.put("mobileNo",mobNo);
                 EditTask task=new EditTask();
-                task.execute(LoginActivity.URL+"/users/ownerProfileEdit",data.toString());
+                task.execute(LoginActivity.MAINURL+"/users/ownerProfileEdit",data.toString());
             }
             else
                 Log.i("EDITPROFILE","AUTH is null");

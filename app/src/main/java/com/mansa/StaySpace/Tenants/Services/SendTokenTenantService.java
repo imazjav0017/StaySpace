@@ -46,7 +46,7 @@ public class SendTokenTenantService extends IntentService {
             data.put("auth",auth);
             data.put("nToken",nToken);
             SendTask task=new SendTask();
-            task.execute(LoginActivity.URL+"/users/getTokenTenant",data.toString());
+            task.execute(LoginActivity.MAINURL+"/users/getTokenTenant",data.toString());
         }
         else
         {

@@ -8,8 +8,13 @@
 
     <item
         android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="Rooms" />
+        android:icon="@drawable/ic_action_search_room"
+        android:title="Search" />
+    <item
+        android:id="@+id/complaintsTenant"
+        android:title="Complaints"
+        android:icon="@drawable/ic_complaints"
+        />
 
     <item
         android:id="@+id/navigation_notifications"

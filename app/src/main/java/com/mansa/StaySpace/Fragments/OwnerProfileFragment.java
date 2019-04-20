@@ -11,8 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mansa.StaySpace.LoginActivity;
@@ -24,6 +22,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Created by nitish on 27-03-2018.
  */
@@ -31,6 +31,7 @@ import org.json.JSONObject;
 public class OwnerProfileFragment extends Fragment {
     TextView name,email,phNo;
     Context context;
+    CircleImageView img;
     CardView updateProfile;
     Button editProfile;
     public OwnerProfileFragment() {
@@ -71,6 +72,7 @@ public class OwnerProfileFragment extends Fragment {
                 editProfileAction();
             }
         });
+        img=v.findViewById(R.id.img);
 
         //if no building only then set as visible
 
@@ -81,6 +83,13 @@ public class OwnerProfileFragment extends Fragment {
                 updateProfileAction();
             }
         });
+       /* img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), PhotoActivity.class));
+            }
+        });*/
+
         return v;
     }
     public void updateProfileAction()

@@ -50,7 +50,7 @@ public class SentRequestsService extends IntentService {
         data.put("auth",auth);
         data.put("tenantId",tenantId);
         SentRequestsTask task=new SentRequestsTask();
-        task.execute(LoginActivity.URL+"/students/getSentRoomRequest",data.toString());
+        task.execute(LoginActivity.MAINURL+"/students/getSentRoomRequest",data.toString());
     }
     void setRequestList(String s) throws JSONException {
         if(s!=null)
@@ -70,7 +70,12 @@ public class SentRequestsService extends IntentService {
                 JSONObject building=object.getJSONObject("buildingDetail");
                 String buildingId=building.getString("_id");
                 String buildingName=building.getString("name");
-                String address=building.getString("address");
+                JSONObject addressObject=building.getJSONObject("address");
+                String address="";
+                address+=addressObject.getString("addressLine1")+",";
+                address+=addressObject.getString("addressLine2")+",";
+                address+=addressObject.getString("city")+" ";
+                address+=addressObject.getString("pincode");
                 String floors=String.valueOf(building.getInt("floor"));
                 JSONObject ownerObject=object.getJSONObject("ownerDetail");
                 String ownerId=ownerObject.getString("_id");

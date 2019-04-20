@@ -47,7 +47,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.roomType.setText(", "+model.getRoomType()+",");
         holder.roomRent.setText(" \u20B9"+model.getRoomRent());
         holder.emptyDays.setText(model.getDays());
-        holder.date.setText(model.getCheckInDate());
+        holder.date.setText(model.getCheckOutDate());
         holder.ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,6 +59,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 i.putExtra("due",model.getDueAmount());
                 i.putExtra("roomCapacity",model.getRoomCapacity());
                 i.putExtra("totalRoomCapacity",model.getTotalRoomCapacity());
+                i.putExtra("isEmpty",model.isEmpty);
+                i.putExtra("checkOutDate", model.getCheckOutDate());
                 holder.context.startActivity(i);
             }
         });

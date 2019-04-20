@@ -20,6 +20,10 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.mansa.StaySpace.Owner.MainActivity;
 import com.mansa.StaySpace.Owner.StudentActivity;
+import com.mansa.StaySpace.Services.GetOwnerPeersService;
+import com.mansa.StaySpace.Tenants.Services.GetTenantPeerChatService;
+import com.mansa.StaySpace.Tenants.Services.GetTenantPeersService;
+import com.mansa.StaySpace.Tenants.TenantChatActivity;
 
 import java.util.Map;
 
@@ -281,6 +285,113 @@ public class FirebaseRecieveNotificationService extends FirebaseMessagingService
                     notf.setChannelId(id);
                 }
                 nm.notify(111113, notf.build());
+                break;
+            case "Message":
+                String chatId=data.get("chatId");
+                boolean isGroup=Boolean.parseBoolean(data.get("isGroup"));
+                if(TenantChatActivity.isRunning)
+                {
+                    //app is running
+                    if(TenantChatActivity.chatId.equals(chatId)) {
+                        Intent refreshChatIntent = new Intent(getApplicationContext(), GetTenantPeerChatService.class);
+                        refreshChatIntent.putExtra("chatId", chatId);
+                        refreshChatIntent.putExtra("isGroup", TenantChatActivity.isGroup);
+                        startService(refreshChatIntent);
+                    }
+                    else
+                    {
+                        i = new Intent(getApplicationContext(),LoginActivity.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        b.putString("title","Message");
+                        b.putString("name","StaySpace Chat");
+                        b.putString("chatId",chatId);
+                        b.putBoolean("isGroup",isGroup);
+                        i.putExtras(b);
+                        pi = PendingIntent.getActivity(getApplicationContext(), 0, i, PendingIntent.FLAG_ONE_SHOT);
+                        notf.setContentIntent(pi);
+                        notf.setSmallIcon(R.drawable.ic_message);
+                        notf.setLargeIcon(bm);
+                        nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+                        id = "Message";
+// The user-visible name of the channel.
+                        name = "Message";
+
+// The user-visible description of the channel.
+                        description = "New Message Received ";
+
+                        importance = NotificationManager.IMPORTANCE_HIGH;
+
+
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            mChannel = new NotificationChannel(id, name, importance);
+                            mChannel.setDescription(description);
+                            mChannel.enableLights(true);
+// Sets the notification light color for notifications posted to this
+// channel, if the device supports this feature.
+                            AudioAttributes att = new AudioAttributes.Builder()
+                                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                                    .build();
+                            mChannel.setLightColor(Color.RED);
+                            mChannel.enableVibration(true);
+                            mChannel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), att);
+                            mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+                            nm.createNotificationChannel(mChannel);
+                            notf.setChannelId(id);
+                        }
+                        nm.notify(11262, notf.build());
+                    }
+                        Intent refreshPeersIntent;
+                        if (LoginActivity.sharedPreferences.getBoolean("isOwner", false) == true)
+                            refreshPeersIntent = new Intent(getApplicationContext(), GetOwnerPeersService.class);
+                        else
+                            refreshPeersIntent = new Intent(getApplicationContext(), GetTenantPeersService.class);
+                        startService(refreshPeersIntent);
+
+                }
+                else
+                {
+                    i = new Intent(getApplicationContext(),LoginActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    b.putString("title","Message");
+                    b.putString("name","StaySpace Chat");
+                    b.putString("chatId",chatId);
+                    b.putBoolean("isGroup",isGroup);
+                    i.putExtras(b);
+                    pi = PendingIntent.getActivity(getApplicationContext(), 0, i, PendingIntent.FLAG_ONE_SHOT);
+                    notf.setContentIntent(pi);
+                    notf.setSmallIcon(R.drawable.ic_message);
+                    notf.setLargeIcon(bm);
+                    nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+                    id = "Message";
+// The user-visible name of the channel.
+                    name = "Message";
+
+// The user-visible description of the channel.
+                    description = "New Message Received ";
+
+                    importance = NotificationManager.IMPORTANCE_HIGH;
+
+
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        mChannel = new NotificationChannel(id, name, importance);
+                        mChannel.setDescription(description);
+                        mChannel.enableLights(true);
+// Sets the notification light color for notifications posted to this
+// channel, if the device supports this feature.
+                        AudioAttributes att = new AudioAttributes.Builder()
+                                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                                .build();
+                        mChannel.setLightColor(Color.RED);
+                        mChannel.enableVibration(true);
+                        mChannel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), att);
+                        mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+                        nm.createNotificationChannel(mChannel);
+                        notf.setChannelId(id);
+                    }
+                    nm.notify(111001, notf.build());
+                }
                 break;
             default:
                 notf.setSmallIcon(R.drawable.ic_action_notifications);

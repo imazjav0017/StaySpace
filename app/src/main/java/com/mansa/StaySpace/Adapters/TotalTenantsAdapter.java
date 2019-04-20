@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,19 @@ public class TotalTenantsAdapter extends RecyclerView.Adapter<TotalTenantsAdapte
                 i.putExtra("roomNo",model.getRoomNo());
                 i.putExtra("roomId",model.getRoomId());
                 i.putExtra("isTenant",model.isTenant());
+                if(model.isTenant())
+                {
+                    List<String>idProofs=model.getIdProofs();
+                    if(idProofs.size()>0) {
+                        String result = "";
+                        for (String s : idProofs) {
+                            result += s + ",";
+                        }
+                        result = result.substring(0, result.length() - 1);
+                        Log.i("idProofPics", result);
+                        i.putExtra("idProofPics", result);
+                    }
+                }
                 i.putExtra("aadharNo",model.getAadharNo());
                 i.putExtra("phNo",model.getPhNo());
                 i.putExtra("total",true);

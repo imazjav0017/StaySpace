@@ -1,6 +1,7 @@
 package com.mansa.StaySpace.Owner;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -30,6 +31,7 @@ import com.mansa.StaySpace.DataModels.PaymentHistoryModel;
 import com.mansa.StaySpace.DataModels.StudentModel;
 import com.mansa.StaySpace.LoginActivity;
 import com.mansa.StaySpace.R;
+import com.mansa.StaySpace.Tenants.SendRequestActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,7 +54,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class roomDetailActivity extends AppCompatActivity {
-    TextView rn,rt,rr,studentsExpandingView,paymentsExpandLayout,dueAmount,roomCapacity,totalRoomCapacity;
+    TextView rn,rt,rr,studentsExpandingView,paymentsExpandLayout,dueAmount,roomCapacity,totalRoomCapacity
+           , checkInDateTv,dueDateTv,checkInDateTitle;
     RecyclerView studentsRV,paymentsHistoryList;
     StudentAdapter adapter;
     List<StudentModel> studentsList;
@@ -60,8 +63,9 @@ public class roomDetailActivity extends AppCompatActivity {
     Button checkOut;
     PaymentHistoryAdapter pAdapter;
     ExpandableRelativeLayout expandableRelativeLayout,expandablePayments;
-    String roomNo,roomType,roomRent,_id,response,dueAmnt,roomC,totalRoomC;
-    boolean fromTotal,fromEditOrDelete;
+    String roomNo,roomType,roomRent,_id,response,dueAmnt,roomC,totalRoomC,checkInDate,checkOutDate,dueDate;
+    boolean fromTotal,fromEditOrDelete,isEmpty;
+    ProgressDialog progressDialog;
 
     @Override
     public void onBackPressed() {
@@ -79,7 +83,13 @@ public class roomDetailActivity extends AppCompatActivity {
                 token.put("date" ,dateFormat.format(new Date()).toString());
                 if(mode.equals("delete")) {
                     DeleteRoomsTask task = new DeleteRoomsTask();
-                    task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/deleteRooms", token.toString());
+                    task.execute(LoginActivity.MAINURL+"/rooms/deleteRooms", token.toString());
+                    progressDialog=new ProgressDialog(roomDetailActivity.this);
+                    progressDialog.setTitle("Deleting Room");
+                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    progressDialog.setMax(100);
+                    progressDialog.setMessage("Deleting "+roomNo);
+                    progressDialog.show();
                 }
 
             }
@@ -126,8 +136,8 @@ public class roomDetailActivity extends AppCompatActivity {
                 outputStream.writeBytes(params[1]);
                 Log.i("data", params[1]);
                 int resp = connection.getResponseCode();
-                Log.i("deletRoomResp",String.valueOf(resp));
-                if(resp==200)
+                Log.i("deleteRoomResp",String.valueOf(resp));
+                /*if(resp==200)
                 {
                     response=getResponse(connection);
                     return response;
@@ -135,7 +145,9 @@ public class roomDetailActivity extends AppCompatActivity {
                 else
                 {
                     return null;
-                }
+                }*/
+                response=getResponse(connection);
+                return response;
 
             }catch(MalformedURLException e)
             {
@@ -150,9 +162,26 @@ public class roomDetailActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
+            progressDialog.dismiss();
             if (s != null) {
-                Toast.makeText(roomDetailActivity.this, "Room Deleted!", Toast.LENGTH_SHORT).show();
-                onBackPressed();
+                Log.i("deleteRoomResp",s);
+                try {
+                    JSONObject response=new JSONObject(s);
+                    int code=response.getInt("code");
+                    if(code==200)
+                    {
+                        Toast.makeText(roomDetailActivity.this, "Room Deleted!", Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    }
+                    else
+                    {
+                        String message=response.getString("message");
+                        Toast.makeText(roomDetailActivity.this, message, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(roomDetailActivity.this, "Some Error Occured", Toast.LENGTH_SHORT).show();
+                }
             }
             else
             {
@@ -225,7 +254,13 @@ public class roomDetailActivity extends AppCompatActivity {
             data.put("auth", auth);
             data.put("roomId", _id);
             CheckoutTask task = new CheckoutTask();
-            task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/vacateRooms", data.toString());
+            task.execute(LoginActivity.MAINURL+"/rooms/vacateRooms", data.toString());
+        progressDialog=new ProgressDialog(roomDetailActivity.this);
+        progressDialog.setTitle("Vacating Room");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMax(100);
+        progressDialog.setMessage("Vacating.... "+roomNo);
+        progressDialog.show();
 
     }
     class CheckoutTask extends AsyncTask<String,Void,String> {
@@ -264,6 +299,7 @@ public class roomDetailActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
+            progressDialog.dismiss();
             if (s != null) {
                 Toast.makeText(roomDetailActivity.this, s, Toast.LENGTH_SHORT).show();
                 if (s.equals("checked out from Room")) {
@@ -364,19 +400,24 @@ public class roomDetailActivity extends AppCompatActivity {
                 String tenantId = tenantObject.getString("_id");
                 String mobileNo = tenantObject.getString("mobileNo");
                 JSONObject nameObject = tenantObject.getJSONObject("name");
+                JSONArray idProofs=tenantObject.getJSONArray("idProofPics");
+                List<String> idProofPics=new ArrayList<>();
+                if(idProofs.length()>0) {
+                    for (int k = 0; k < idProofs.length(); k++) {
+                        idProofPics.add(idProofs.getString(k));
+                    }
+                }
                 String name = nameObject.getString("firstName") + " " + nameObject.getString("lastName");
                 JSONObject roomObject = tenantObject.getJSONObject("room");
                 String roomId = roomObject.getString("_id");
                 String roomNo = roomObject.getString("roomNo");
                 String adharNo = tenantObject.getString("adharNo");
                 if(roomId.equals(_id))
-                studentsList.add(new StudentModel(name, mobileNo, roomNo, tenantId, adharNo, roomId,true));
+                studentsList.add(new StudentModel(name, mobileNo, roomNo, tenantId, adharNo, roomId,true,idProofPics));
             }
-            if (studentsList.size() == 0) {
-
+           /* if (studentsList.size() == 0) {
                 checkOut.setText("Checkin");
-
-            }
+            }*/
             adapter.notifyDataSetChanged();
         }
     }
@@ -430,6 +471,7 @@ public class roomDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         fromEditOrDelete=false;
         Intent i=getIntent();
+        isEmpty=i.getBooleanExtra("isEmpty",true);
         _id=i.getStringExtra("id");
         roomNo=i.getStringExtra("roomNo");
         roomType=i.getStringExtra("roomType");
@@ -443,6 +485,9 @@ public class roomDetailActivity extends AppCompatActivity {
         rn = (TextView) findViewById(R.id.roomno);
         rt = (TextView) findViewById(R.id.roomtype);
         rr = (TextView) findViewById(R.id.roomrent);
+        checkInDateTitle=(TextView)findViewById(R.id.checkInDateTitleTv);
+        checkInDateTv=(TextView)findViewById(R.id.checkInDateText);
+        dueDateTv=(TextView)findViewById(R.id.dueDateText);
         dueAmount=(TextView)findViewById(R.id.dueAmount);
         roomCapacity=(TextView)findViewById(R.id.roomCapacity);
         totalRoomCapacity=(TextView)findViewById(R.id.totalRoomCapacity);
@@ -450,6 +495,29 @@ public class roomDetailActivity extends AppCompatActivity {
         paymentsExpandLayout = (TextView) findViewById(R.id.paymentsExpandLayout);
         expandableRelativeLayout=(ExpandableRelativeLayout)findViewById(R.id.studentsLayout);
         expandablePayments=(ExpandableRelativeLayout)findViewById(R.id.paymentsLayout);
+
+
+
+        if(isEmpty) {
+            checkOut.setText("Checkin");
+            checkInDateTitle.setText("CheckOut Date");
+            checkOutDate=i.getStringExtra("checkOutDate");
+            if(checkOutDate!=null)
+            if(!checkOutDate.equals("0"))
+            {
+                checkInDateTv.setText(checkOutDate);
+            }
+        }
+        else
+        {
+            checkInDate=i.getStringExtra("checkInDate");
+            dueDate=i.getStringExtra("dueDate");
+            if(dueDate!=null)
+                dueDateTv.setText(dueDate);
+            if(checkInDate!=null)
+                checkInDateTv.setText(checkInDate);
+
+        }
         rn.setText(roomNo);
         rt.setText(roomType);
         rr.setText("\u20B9"+roomRent);

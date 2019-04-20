@@ -153,7 +153,7 @@ public class SendRequestActivity extends AppCompatActivity implements DatePicker
                     }
                 }
             });
-            task.execute("https://sleepy-atoll-65823.herokuapp.com/students/sendRoomRequest",requestObject.toString());
+            task.execute(LoginActivity.MAINURL+"/students/sendRoomRequest",requestObject.toString());
 
         } catch (JSONException e) {
             e.printStackTrace();

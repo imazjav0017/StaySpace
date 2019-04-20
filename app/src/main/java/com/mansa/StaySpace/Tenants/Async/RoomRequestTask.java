@@ -76,7 +76,7 @@ public class RoomRequestTask extends AsyncTask<String,Integer,String> {
             if(s.equals("adhaar"))
             {
                 dataCallBack.datacallBack(s,true);
-                Toast.makeText(context, "Please Update Your adhaar to send request!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Please Update Your ID Info to send request!", Toast.LENGTH_SHORT).show();
                 Intent i=new Intent(context, UpdateProfileActivity.class);
                 i.putExtra("sendingRequest",true);
                 (context).startActivity(i);

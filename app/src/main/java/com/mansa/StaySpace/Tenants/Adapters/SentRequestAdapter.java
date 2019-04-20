@@ -34,7 +34,7 @@ public class SentRequestAdapter extends RecyclerView.Adapter<SentRequestAdapter.
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final AvailableRoomModel model=availableRoomModelList.get(position);
         holder.roomNo.setText(model.getRoomNo());
-        holder.buildingName.setText(model.getBuildingName());
+        holder.buildingName.setText("Building:\n"+model.getBuildingName());
         holder.rent.setText("Rent: \u20B9"+model.getRoomRent());
         holder.ownerName.setText("Owner: Mr./Mrs."+model.getOwnerName());
         holder.bg.setOnClickListener(new View.OnClickListener() {
@@ -49,12 +49,12 @@ public class SentRequestAdapter extends RecyclerView.Adapter<SentRequestAdapter.
                 holder.context.startActivity(i);
             }
         });
-        holder.cancel.setOnClickListener(new View.OnClickListener() {
+        /*holder.cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("cancel ","request");
             }
-        });
+        });*/
 
     }
 
@@ -68,7 +68,7 @@ public class SentRequestAdapter extends RecyclerView.Adapter<SentRequestAdapter.
         Context context;
         RelativeLayout bg;
         TextView roomNo,buildingName,rent,ownerName;
-        Button cancel;
+      //  Button cancel;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -78,7 +78,7 @@ public class SentRequestAdapter extends RecyclerView.Adapter<SentRequestAdapter.
             buildingName=(TextView)itemView.findViewById(R.id.sentRBuildingName);
             rent=(TextView)itemView.findViewById(R.id.sentRRoomRent);
             ownerName=(TextView)itemView.findViewById(R.id.sentROwnerName);
-            cancel=(Button)itemView.findViewById(R.id.cancelRoomRequestBtn);
+            //cancel=(Button)itemView.findViewById(R.id.cancelRoomRequestBtn);
         }
     }
 }

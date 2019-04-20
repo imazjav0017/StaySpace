@@ -24,6 +24,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -71,7 +72,7 @@ public class GetAllTenantsService extends IntentService {
             data.put("buildingId", buildId);
             data.put("ownerId", ownerId);
             GetTentantsTask task = new GetTentantsTask();
-            task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/getAllStudents", data.toString());
+            task.execute(LoginActivity.MAINURL+"/rooms/getAllStudents", data.toString());
         }
     }
     public static ArrayList<StudentModel>studentsList;
@@ -102,12 +103,20 @@ public class GetAllTenantsService extends IntentService {
             String tenantId=tenantObject.getString("_id");
             String mobileNo=tenantObject.getString("mobileNo");
             JSONObject nameObject=tenantObject.getJSONObject("name");
+            JSONArray idProofs=tenantObject.getJSONArray("idProofPics");
+            List<String> idProofPics=new ArrayList<>();
+            if(idProofs.length()>0) {
+                for (int k = 0; k < idProofs.length(); k++) {
+                    idProofPics.add(idProofs.getString(k));
+                }
+            }
             String name=nameObject.getString("firstName")+" "+nameObject.getString("lastName");
             JSONObject roomObject=tenantObject.getJSONObject("room");
             String roomId=roomObject.getString("_id");
             String roomNo=roomObject.getString("roomNo");
             String adharNo=tenantObject.getString("adharNo");
-            studentsList.add(new StudentModel(name, mobileNo, roomNo, tenantId,adharNo,roomId,true));
+            studentsList.add(new StudentModel(name, mobileNo, roomNo, tenantId, adharNo, roomId, true, idProofPics));
+
 
         }
         TenantsFragment.updateView();

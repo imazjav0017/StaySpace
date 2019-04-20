@@ -54,7 +54,7 @@ public class ChangeOwnerPasswordService extends IntentService {
                 data.put("verifyPassword",np);
                 data.put("auth",auth);
                 ChangeTask task=new ChangeTask();
-                task.execute(LoginActivity.URL+"/users/change_password",data.toString());
+                task.execute(LoginActivity.MAINURL+"/users/change_password",data.toString());
             }
         }
     }

@@ -3,10 +3,8 @@ package com.mansa.StaySpace.Owner;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -21,20 +19,20 @@ import android.view.View;
 
 import com.mansa.StaySpace.AsyncTasks.LogoutTask;
 import com.mansa.StaySpace.Fragments.AllTenantsFragment;
+import com.mansa.StaySpace.Fragments.ComplaintsFragmentOwner;
 import com.mansa.StaySpace.Fragments.OwnerProfileFragment;
 import com.mansa.StaySpace.Fragments.ProfileFragment;
 import com.mansa.StaySpace.Fragments.RoomsFragment;
 import com.mansa.StaySpace.Fragments.TenantsFragment;
-import com.mansa.StaySpace.MyFirebaseInstanceIdService;
 import com.mansa.StaySpace.Services.DeleteTokenService;
 import com.mansa.StaySpace.Services.GetAllTenantsService;
+import com.mansa.StaySpace.Services.GetOwnerPeersService;
 import com.mansa.StaySpace.Services.GetRoomRequestsService;
 import com.mansa.StaySpace.LoginActivity;
 import com.mansa.StaySpace.R;
 import com.mansa.StaySpace.Services.GetRoomsService;
 import com.mansa.StaySpace.Services.SendTokenOwnerService;
 import com.mansa.StaySpace.Services.getOwnerDetailsService;
-import com.mansa.StaySpace.Tenants.SendRequestActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                                     try {
                                         data.put("auth", auth);
                                         data.put("nToken", nToken);
+                                        progressDialog.setCancelable(false);
                                         progressDialog.show();
                                         LogoutTask task=new LogoutTask(getApplicationContext(), new LogoutTask.LogoutResp() {
                                             @Override
@@ -91,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                                                 }
                                             }
                                         });
-                                        task.execute(LoginActivity.URL+"/users/logout",data.toString());
+                                        task.execute(LoginActivity.MAINURL+"/users/logout",data.toString());
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -173,6 +172,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 fab.setVisibility(View.INVISIBLE);
                 fragment=new AllTenantsFragment(MainActivity.this,requestNotification);
                 Log.i("current","tenants");
+                break;
+            case R.id.complaintsOwner:
+                fragment=new ComplaintsFragmentOwner();
                 break;
             case R.id.myProfileViewTab:
                 fab.setVisibility(View.INVISIBLE);
@@ -279,6 +281,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         startService(new Intent(getApplicationContext(), GetRoomRequestsService.class));
         startService(new Intent(getApplicationContext(), GetRoomsService.class));
         startService(new Intent(getApplicationContext(), GetAllTenantsService.class));
+        startService(new Intent(getApplicationContext(), GetOwnerPeersService.class));
         RoomsFragment.showProgress(true);
     }
     public void tryToAddRooms()

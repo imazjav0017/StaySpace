@@ -48,7 +48,7 @@ public class GetTenantHomeService extends IntentService {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            task.execute("https://sleepy-atoll-65823.herokuapp.com/students/tenantHome",data.toString());
+            task.execute(LoginActivity.MAINURL+"/students/tenantHome",data.toString());
         }
     }
      void save(String s) throws JSONException {
@@ -73,14 +73,16 @@ public class GetTenantHomeService extends IntentService {
 
             JSONObject roomDetails = mainObject.getJSONObject("roomDetail");
             JSONObject paymentDetail = mainObject.getJSONObject("payment");
-            JSONObject roomateObject = mainObject.getJSONObject("roommate");
+//            JSONObject roomateObject = mainObject.getJSONObject("roommate");
             JSONObject buildingInfo = mainObject.getJSONObject("building");
             JSONObject ownerInfo = mainObject.getJSONObject("owner");
+            JSONArray idProofPics=mainObject.getJSONArray("idProofPics");
+            LoginActivity.sharedPreferences.edit().putString("idProofPics",idProofPics.toString()).apply();
             LoginActivity.sharedPreferences.edit().putString("tenantBuildingInfo", buildingInfo.toString()).apply();
             LoginActivity.sharedPreferences.edit().putString("tenantOwnerInfo", ownerInfo.toString()).apply();
             LoginActivity.sharedPreferences.edit().putString("tenantRoomDetails", roomDetails.toString()).apply();
             LoginActivity.sharedPreferences.edit().putString("tenantPaymentDetail", paymentDetail.toString()).apply();
-            LoginActivity.sharedPreferences.edit().putString("roomateObject", roomateObject.toString()).apply();
+           // LoginActivity.sharedPreferences.edit().putString("roomateObject", roomateObject.toString()).apply();
 
         } catch (JSONException e) {
             e.printStackTrace();

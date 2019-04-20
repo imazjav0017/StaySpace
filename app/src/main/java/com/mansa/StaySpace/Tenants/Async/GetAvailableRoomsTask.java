@@ -78,6 +78,7 @@ public class GetAvailableRoomsTask extends AsyncTask<String,Integer,String> {
                 GetAvailableRoomsService.setAvailableroomsData(s,context);
             } catch (JSONException e) {
                 e.printStackTrace();
+                failed=true;
             }
         }
         else

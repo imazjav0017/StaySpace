@@ -23,14 +23,19 @@ import com.github.nkzawa.socketio.client.Socket;
 import com.mansa.StaySpace.AsyncTasks.LogoutTask;
 import com.mansa.StaySpace.LoginActivity;
 import com.mansa.StaySpace.MyFirebaseInstanceIdService;
+import com.mansa.StaySpace.Owner.BottomNavigationViewHelper;
 import com.mansa.StaySpace.Owner.MainActivity;
 import com.mansa.StaySpace.Services.DeleteTokenService;
 import com.mansa.StaySpace.R;
 import com.mansa.StaySpace.Services.GetRoomsService;
+import com.mansa.StaySpace.Tenants.Services.GetAvailableBuildingsService;
 import com.mansa.StaySpace.Tenants.Services.GetAvailableRoomsService;
 import com.mansa.StaySpace.Tenants.Services.GetTenantHomeService;
+import com.mansa.StaySpace.Tenants.Services.GetTenantPeersService;
 import com.mansa.StaySpace.Tenants.Services.SendTokenTenantService;
+import com.mansa.StaySpace.Tenants.TenantFragments.AvailableBuildingsFragment;
 import com.mansa.StaySpace.Tenants.TenantFragments.AvailableRoomsFragment;
+import com.mansa.StaySpace.Tenants.TenantFragments.ComplaintsFragmentTenant;
 import com.mansa.StaySpace.Tenants.TenantFragments.MainPageFragment;
 import com.mansa.StaySpace.Tenants.TenantFragments.TenantProfileFragment;
 
@@ -66,37 +71,31 @@ public class TenantActivity extends AppCompatActivity {
                     fragment = new MainPageFragment();
                      break;
                 case R.id.navigation_dashboard:
-                    fragment = new AvailableRoomsFragment(getApplicationContext());
+                    startService(new Intent(getApplicationContext(), GetAvailableBuildingsService.class));
+                    fragment = new AvailableBuildingsFragment();
                     break;
                 case R.id.navigation_notifications:
                     fragment = new TenantProfileFragment(getApplicationContext());
+                    break;
+                case R.id.complaintsTenant:
+                    fragment=new ComplaintsFragmentTenant();
                     break;
             }
             loadFragment(fragment);
             return true;
         }
     };
-    private Socket mSocket;
-
-    {
-        try {
-            mSocket = IO.socket("https://sleepy-atoll-65823.herokuapp.com/");
-        } catch (URISyntaxException e) {
-            Log.i("err", e.getMessage());
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tenant_main_activity);
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationViewHelper.removeShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("Stay Space");
         loadFragment(new MainPageFragment());
-        mSocket.connect();
     }
     void sendToken()
     {
@@ -123,7 +122,7 @@ public class TenantActivity extends AppCompatActivity {
         };
         registerReceiver(tokenReciever,new IntentFilter(MyFirebaseInstanceIdService.TOKEN_BROADCAST));*/
         startService(new Intent(getApplicationContext(), GetTenantHomeService.class));
-        startService(new Intent(getApplicationContext(), GetAvailableRoomsService.class));
+        startService(new Intent(getApplicationContext(), GetTenantPeersService.class));
     }
 
 
@@ -160,6 +159,7 @@ public class TenantActivity extends AppCompatActivity {
                                 try {
                                     data.put("auth", auth);
                                     data.put("nToken", nToken);
+                                    progressDialog.setCancelable(false);
                                     progressDialog.show();
                                     LogoutTask task=new LogoutTask(getApplicationContext(), new LogoutTask.LogoutResp() {
                                         @Override
@@ -168,7 +168,6 @@ public class TenantActivity extends AppCompatActivity {
                                                 progressDialog.dismiss();
                                                 if (isSuccess) {
                                                     LoginActivity.sharedPreferences.edit().clear().apply();
-                                                    mSocket.disconnect();
                                                     Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                                                     startActivity(i);
                                                     startService(new Intent(getApplicationContext(), DeleteTokenService.class));
@@ -176,7 +175,7 @@ public class TenantActivity extends AppCompatActivity {
                                             }
                                         }
                                     });
-                                    task.execute(LoginActivity.URL+"/users/logout",data.toString());
+                                    task.execute(LoginActivity.MAINURL+"/users/logout",data.toString());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -201,16 +200,18 @@ public class TenantActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (navigation.getSelectedItemId() != R.id.navigation_home) {
             if (navigation.getSelectedItemId() == R.id.navigation_dashboard) {
-                if (!(AvailableRoomsFragment.searchView.isIconified())) {
-                    AvailableRoomsFragment.searchView.setIconified(true);
-                } else {
+                if(AvailableBuildingsFragment.searchView.isIconified())
                     navigation.setSelectedItemId(R.id.navigation_home);
+                else
+                    AvailableBuildingsFragment.searchView.setIconified(true);
                 }
-            }
-            if (navigation.getSelectedItemId() == R.id.navigation_notifications) {
+          /* else if (navigation.getSelectedItemId() == R.id.navigation_notifications) {
+                navigation.setSelectedItemId(R.id.navigation_home);
+
+            }*/
+          else
                 navigation.setSelectedItemId(R.id.navigation_home);
             }
-        }
         else {
                 new AlertDialog.Builder(this).setTitle("Exit!").setMessage("Are You Sure You Wish To Exit?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {

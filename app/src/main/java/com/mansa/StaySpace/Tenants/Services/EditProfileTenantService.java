@@ -59,7 +59,7 @@ public class EditProfileTenantService extends IntentService {
                 data.put("adharNo",adNo);
                 data.put("mobileNo",mobNo);
                 EditTask task=new EditTask();
-                task.execute(LoginActivity.URL+"/students/tenantProfileEdit",data.toString());
+                task.execute(LoginActivity.MAINURL+"/students/tenantProfileEdit",data.toString());
             }
         }
     }

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Owner.EditBuildingActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include layout="@layout/actionbarlayout"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:layout_marginTop="55dp"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+            <EditText
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Building Name"
+                android:lines="1"
+                android:inputType="textPersonName"
+                android:id="@+id/editOwnerBuildingName"/>
+            <EditText
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="No.Of Floors"
+                android:inputType="number"
+                android:id="@+id/editOwnerFloorsInput"/>
+            <Spinner
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.Spinner.Underlined"
+                android:entries="@array/buildingTypeArray"
+                android:id="@+id/editBuildingTypeSpinner"></Spinner>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Address:"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#0d1dff"/>
+                <android.support.v4.widget.Space
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="getCurrentLocation"
+                    android:src="@drawable/ic_action_current_location"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#0d1dff"
+                    android:layout_marginTop="8dp"
+                    android:onClick="getCurrentLocation"
+                    android:text="Current Location"/>
+            </LinearLayout>
+            <EditText
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Address Line 1"
+                android:inputType="textMultiLine"
+                android:maxLines="2"
+                android:id="@+id/editOwnerAddressInput"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:hint="Locality (ex:Andheri,Bandra)"
+                android:id="@+id/editBuildingLocalityInput"/>
+            <EditText
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="City Name"
+                android:inputType="textPersonName"
+                android:id="@+id/editBuildingCityInput"/>
+            <Spinner
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/states"
+                style="@style/Widget.AppCompat.Spinner.Underlined"
+                android:id="@+id/editStateSpinner"></Spinner>
+            <EditText
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Pin Code"
+                android:inputType="textPostalAddress"
+                android:id="@+id/editBuildingPinCodeInput"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Save"
+                android:onClick="update"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

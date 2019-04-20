@@ -227,11 +227,12 @@ public class RoomsFragment extends Fragment implements SearchView.OnQueryTextLis
                     String dueAmount = String.valueOf(mainObject.getInt("dueAmount"));
                     String dueDays = mainObject.getString("dueDays");
                     String dueDate = mainObject.getString("dueDate");
+                    String checkInDate=mainObject.getString("checkInDate");
                     tRooms.add(new RoomModel(roomType, roomNo, roomRent, dueAmount, roomId,
-                            dueDate, isEmpty, isRentDue, dueDays,roomCapacity,totalRoomsCapacity));
+                            checkInDate,dueDate, isEmpty, isRentDue, dueDays,roomCapacity,totalRoomsCapacity));
                     if (isRentDue == true) {
                         oRooms.add(new RoomModel(roomType, roomNo, roomRent, dueAmount, roomId,
-                                dueDate, isEmpty, isRentDue, dueDays,roomCapacity,totalRoomsCapacity));
+                                checkInDate,dueDate, isEmpty, isRentDue, dueDays,roomCapacity,totalRoomsCapacity));
                     }
                 }
 

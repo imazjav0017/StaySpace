@@ -220,7 +220,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Adhaar No"
+                            android:text="ID Proof"
                             android:textSize="15sp"
                             android:textColor="#43b360"/>
                         <EditText
@@ -262,9 +262,12 @@
                         android:orientation="vertical"
 
                         >
+                        <android.support.v7.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tenantIdProofsRv">
 
-
-
+                        </android.support.v7.widget.RecyclerView>
                     </LinearLayout>
 
                 </LinearLayout>

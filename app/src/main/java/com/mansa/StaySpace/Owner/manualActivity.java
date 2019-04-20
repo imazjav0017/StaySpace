@@ -52,6 +52,7 @@ public class manualActivity extends AppCompatActivity {
     RecyclerView addedRoomsList;
     AddedRoomsAdapter adapter;
     ProgressDialog progressDialog;
+    boolean isFinished=false;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home)
@@ -100,8 +101,25 @@ public class manualActivity extends AppCompatActivity {
     }
     public void finishAdding(View v)
     {
+        isFinished=true;
         onBackPressed();
     }
+
+    @Override
+    public void onBackPressed() {
+        if(!isFinished) {
+            new AlertDialog.Builder(this).setTitle("Are You Sure You Want To Go Back?").setMessage("Click Yes If You Have Added All Rooms ").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    isFinished=true;
+                    onBackPressed();
+                }
+            }).setNegativeButton("No",null).show();
+        }
+        else
+        super.onBackPressed();
+    }
+
     void setPostData() throws JSONException {
         Toast.makeText(getApplicationContext(), "Processing!", Toast.LENGTH_SHORT).show();
         Log.i("addRoomsProcess","sending");
@@ -121,7 +139,7 @@ public class manualActivity extends AppCompatActivity {
         if(buildingId!=null)
         roomsData.put("buildingId",buildingId);
         manualActivity.SendToken task = new manualActivity.SendToken();
-        task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/addRooms",roomsData.toString());
+        task.execute(LoginActivity.MAINURL+"/rooms/addRooms",roomsData.toString());
         progressDialog=new ProgressDialog(manualActivity.this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setMessage("Adding Room No"+rooms);

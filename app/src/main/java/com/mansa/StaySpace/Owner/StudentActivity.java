@@ -207,7 +207,7 @@ public class StudentActivity extends AppCompatActivity implements DatePickerDial
             bg.setClickable(false);
             makeJson();
             AddStudentsTask task=new AddStudentsTask();
-            task.execute("https://sleepy-atoll-65823.herokuapp.com/rooms/addStudents",studentDetails.toString());
+            task.execute(LoginActivity.MAINURL+"/rooms/addStudents",studentDetails.toString());
         }
     }
     @Override

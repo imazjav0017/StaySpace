@@ -16,6 +16,12 @@
         android:icon="@drawable/tenant"
         app:showAsAction="always"
         android:orderInCategory="3"/>
+    <item android:id="@+id/complaintsOwner"
+        android:title="Complaints"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_complaints"
+        android:orderInCategory="4"
+        />
 
     <item android:id="@+id/myProfileViewTab"
         android:title="Profile"

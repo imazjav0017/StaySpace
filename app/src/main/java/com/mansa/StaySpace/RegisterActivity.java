@@ -120,7 +120,7 @@ public class RegisterActivity extends AppCompatActivity {
                 userDetails.put("isOwner", isOwner);
                 RegisterTask task = new RegisterTask();
                 Log.i("REGISTER JSON DATA:", userDetails.toString());
-                task.execute("https://sleepy-atoll-65823.herokuapp.com/users/signup", userDetails.toString());
+                task.execute(LoginActivity.MAINURL+"/users/signup", userDetails.toString());
             } catch (Exception e) {
                 progressBar.setVisibility(View.INVISIBLE);
                 Log.i("REGISTER ERROR", e.getMessage());

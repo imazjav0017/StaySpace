@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/building"
+    tools:context=".Tenants.TenantChatActivity">
+<include layout="@layout/actionbarlayout"/>
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tenantChatMessages"
+        android:layout_marginBottom="45dp"
+        android:padding="5dp">
+    </android.support.v7.widget.RecyclerView>
+    <EditText
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter A Message"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/square_blue"
+        android:layout_marginRight="50dp"
+        android:id="@+id/tenantChatInput"
+        />
+
+    <ImageButton
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:background="#00ffffff"
+        android:src="@drawable/ic_send_msg"
+        android:onClick="sendMessage"
+        android:layout_alignParentRight="true" />
+</RelativeLayout>

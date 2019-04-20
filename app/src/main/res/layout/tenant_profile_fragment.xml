@@ -81,7 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
-                    android:text="Tushar kuame jaiswal padit"
+                    android:text="N/A"
                     android:textColor="#000000"
 
                     android:textSize="18sp" />
@@ -188,6 +188,21 @@
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/c3"
+        android:layout_marginTop="10dp"
+        android:id="@+id/idImageButton"
+        android:text="Click To Upload ID Proof"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/c3"
+        android:layout_marginTop="60dp"
+        android:id="@+id/addImagebutton"
+        android:visibility="invisible"
+        android:text="Click To Upload More ID Proof"/>
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

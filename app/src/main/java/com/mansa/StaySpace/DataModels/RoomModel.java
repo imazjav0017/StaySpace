@@ -5,32 +5,36 @@ package com.mansa.StaySpace.DataModels;
  */
 
 public class RoomModel {
-    String roomType,roomNo,roomRent,_id,checkInDate,dueAmount,days;
+    String roomType,roomNo,roomRent,_id,checkInDate,dueAmount,days,dueDate,checkOutDate;
     int roomCapacity,totalRoomCapacity;
     public boolean isEmpty;
     public boolean isRentDue;
 
-
-    public RoomModel(String roomType, String roomNo, String roomRent, String _id,String checkInDate,boolean isEmpty,String days,
+//for vacant rooms
+    public RoomModel(String roomType, String roomNo, String roomRent, String _id,String checkOutDate,boolean isEmpty,String days,
                      int roomCapacity,int totalRoomCapacity) {
         this.roomType = roomType;
         this.roomNo = roomNo;
         this.roomRent = roomRent;
         this._id = _id;
         this.isEmpty=isEmpty;
-        this.checkInDate=checkInDate;
+        this.checkOutDate=checkOutDate;
         this.days=days;
         this.roomCapacity=roomCapacity;
         this.totalRoomCapacity=totalRoomCapacity;
     }
 
-    public RoomModel(String roomType, String roomNo, String roomRent, String dueAmount, String _id, String checkInDate,boolean isEmpty,boolean isRentDue,String days,
+
+    //for occupied Rooms
+
+    public RoomModel(String roomType, String roomNo, String roomRent, String dueAmount, String _id, String checkInDate,String dueDate,boolean isEmpty,boolean isRentDue,String days,
                      int roomCapacity,int totalRoomCapacity) {
         this.roomType = roomType;
         this.roomNo = roomNo;
         this.roomRent = roomRent;
         this._id = _id;
         this.checkInDate = checkInDate;
+        this.dueDate=dueDate;
         this.dueAmount = dueAmount;
         this.isEmpty=isEmpty;
         this.isRentDue=isRentDue;
@@ -81,5 +85,13 @@ public class RoomModel {
 
     public int getTotalRoomCapacity() {
         return totalRoomCapacity;
+    }
+
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    public String getCheckOutDate() {
+        return checkOutDate;
     }
 }

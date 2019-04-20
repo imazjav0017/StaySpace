@@ -43,7 +43,7 @@
             android:ems="10"
             android:id="@+id/emailInput"
             android:drawableLeft="@drawable/ic_action_username"
-            android:hint="Email"
+            android:hint="Email Or Mobile"
             android:fontFamily="serif" />
 
         <EditText

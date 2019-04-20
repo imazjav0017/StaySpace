@@ -45,7 +45,7 @@ public class SendTokenOwnerService extends IntentService {
             data.put("auth",auth);
             data.put("nToken",nToken);
             SendTask task=new SendTask();
-            task.execute(LoginActivity.URL+"/users/getTokenOwner",data.toString());
+            task.execute(LoginActivity.MAINURL+"/users/getTokenOwner",data.toString());
         }
         else
         {
